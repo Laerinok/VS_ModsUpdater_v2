@@ -19,7 +19,10 @@
     "main_logs_location_error": "Não foi possível recuperar a localização dos registos.",
     "main_show_changelog_prompt": "Deseja ver o registo de alterações? (y/n)",
     "main_changelog_title": "Registo de alterações",
-    
+    "main_incompatible_mods_found_without_update": "Mods incompatíveis encontrados sem atualização disponível:",
+    "main_aborting_due_to_incompatibility": "Abandonando a atualização devido à incompatibilidade.",
+    "main_continue_anyway_prompt": "Continuar mesmo assim?",
+
     "config_ask_mod_directory": "Introduza o caminho para a sua pasta de mods. Deixe em branco para o caminho predefinido",
     "config_configuration_migrated": "Configuração migrada com sucesso para a versão {EXPECTED_VERSION}.",
     "config_invalid_directory": "Erro: {mods_directory} não é um diretório válido.",

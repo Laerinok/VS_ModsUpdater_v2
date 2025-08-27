@@ -19,7 +19,10 @@
     "main_logs_location_error": "Could not retrieve logs location.",
     "main_show_changelog_prompt": "Do you want to see the changelog? (y/n)",
     "main_changelog_title": "Changelog",
-    
+    "main_incompatible_mods_found_without_update": "Incompatible mods found with no update available:",
+    "main_aborting_due_to_incompatibility": "Aborting update due to incompatibility.",
+    "main_continue_anyway_prompt": "Continue anyway?",
+
     "config_ask_mod_directory": "Enter the path to your mods folder. Leave blank for default path",
     "config_configuration_migrated": "Configuration migrated successfully to version {EXPECTED_VERSION}.",
     "config_invalid_directory": "Error: {mods_directory} is not a valid directory.",

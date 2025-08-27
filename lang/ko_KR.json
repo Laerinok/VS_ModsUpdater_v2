@@ -19,7 +19,10 @@
     "main_logs_location_error": "로그 위치를 검색할 수 없습니다.",
     "main_show_changelog_prompt": "변경 로그를 보시겠습니까? (y/n)",
     "main_changelog_title": "변경 로그",
-  
+    "main_incompatible_mods_found_without_update": "업데이트가 불가능한 호환되지 않는 모드를 찾았습니다:",
+    "main_aborting_due_to_incompatibility": "호환성 문제로 인해 업데이트를 중단합니다.",
+    "main_continue_anyway_prompt": "계속 하시겠습니까?",
+
     "config_ask_mod_directory": "모드 폴더의 경로를 입력하세요. 기본 경로를 사용하려면 비워두세요.",
     "config_configuration_migrated": "버전 {EXPECTED_VERSION}으로 구성을 성공적으로 이식했습니다.",
     "config_invalid_directory": "에러: {mods_directory} 가 유효한 경로가 아닙니다.",

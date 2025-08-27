@@ -19,7 +19,10 @@
     "main_logs_location_error": "Не вдалося отримати розташування журналів.",
     "main_show_changelog_prompt": "Хочете переглянути журнал змін? (y/n)",
     "main_changelog_title": "Журнал змін",
-    
+    "main_incompatible_mods_found_without_update": "Виявлено несумісні моди без доступного оновлення:",
+    "main_aborting_due_to_incompatibility": "Переривання оновлення через несумісність.",
+    "main_continue_anyway_prompt": "Продовжити все одно?",
+
     "config_ask_mod_directory": "Введіть шлях до папки з модами. Залиште порожнім для шляху за замовчуванням",
     "config_configuration_migrated": "Конфігурацію успішно перенесено до версії {EXPECTED_VERSION}.",
     "config_invalid_directory": "Помилка: {mods_directory} не є дійсним каталогом.",

@@ -19,7 +19,10 @@
     "main_logs_location_error": "Protokollspeicherort konnte nicht abgerufen werden.",
     "main_show_changelog_prompt": "Möchten Sie den Changelog sehen? (y/n)",
     "main_changelog_title": "Änderungsprotokoll",
-    
+    "main_incompatible_mods_found_without_update": "Inkompatible Mods gefunden, für die kein Update verfügbar ist:",
+    "main_aborting_due_to_incompatibility": "Abbrechen des Updates aufgrund von Inkompatibilität.",
+    "main_continue_anyway_prompt": "Möchten Sie trotzdem fortfahren?",
+
     "config_ask_mod_directory": "Geben Sie den Pfad zu Ihrem Mods-Ordner ein. Lassen Sie ihn leer für den Standardpfad",
     "config_configuration_migrated": "Konfiguration erfolgreich zu Version {EXPECTED_VERSION} migriert.",
     "config_invalid_directory": "Fehler: {mods_directory} ist kein gültiges Verzeichnis.",

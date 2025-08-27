@@ -19,7 +19,10 @@
     "main_logs_location_error": "ログの場所を取得できませんでした。",
     "main_show_changelog_prompt": "変更履歴を見ますか？ (y/n)",
     "main_changelog_title": "変更履歴",
-    
+    "main_incompatible_mods_found_without_update": "アップデートが利用できない互換性のないModが見つかりました：",
+    "main_aborting_due_to_incompatibility": "アップデートを中止します。",
+    "main_continue_anyway_prompt": "それでも続行しますか？",
+
     "config_ask_mod_directory": "Modフォルダへのパスを入力してください。デフォルトパスの場合は空白のままにしてください",
     "config_configuration_migrated": "構成はバージョン{EXPECTED_VERSION}に正常に移行されました。",
     "config_invalid_directory": "エラー：{mods_directory}は有効なディレクトリではありません。",

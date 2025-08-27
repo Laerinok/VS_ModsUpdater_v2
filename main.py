@@ -95,26 +95,26 @@ def initialize_config():
         auto_update = config.ask_auto_update()
 
         print(
-            f"\n- {language_cache["main_language_set_to"]}[dodger_blue1]{language[1]}[/dodger_blue1]")
+            f"\n- {language_cache['main_language_set_to']}[dodger_blue1]{language[1]}[/dodger_blue1]")
         print(
-            f"- {language_cache["main_mods_folder_path"]}[dodger_blue1]{mods_dir}[/dodger_blue1]")
+            f"- {language_cache['main_mods_folder_path']}[dodger_blue1]{mods_dir}[/dodger_blue1]")
         print(
-            f"- {language_cache["main_game_version"]}[dodger_blue1]{user_game_version}[/dodger_blue1]")
+            f"- {language_cache['main_game_version']}[dodger_blue1]{user_game_version}[/dodger_blue1]")
         auto_update_choice = lang.get_translation(
             "config_choose_update_mode_auto") if auto_update else lang.get_translation(
             "config_choose_update_mode_manual")
         print(
-            f"- {language_cache["main_mods_update_choice"]}[dodger_blue1]{auto_update_choice}[/dodger_blue1]")
+            f"- {language_cache['main_mods_update_choice']}[dodger_blue1]{auto_update_choice}[/dodger_blue1]")
 
         # Create config.ini file
         config.create_config(language, mods_dir, user_game_version, auto_update)
-        print(f"\n{language_cache["main_config_file_created"]}")
+        print(f"\n{language_cache['main_config_file_created']}")
 
         # Ask if we continue or quit to modify config.ini (e.g., to add mods to the exception list.)
-        print(f"{language_cache["main_update_or_modify_config"]}")
+        print(f"{language_cache['main_update_or_modify_config']}")
         while True:
             user_confirms_update = Prompt.ask(
-                f"{language_cache["main_continue_update_prompt"]}",
+                f"{language_cache['main_continue_update_prompt']}",
                 choices=[global_cache.language_cache["yes"][0],
                          global_cache.language_cache["no"][0]],
                 default=global_cache.language_cache["no"][0])
@@ -123,9 +123,9 @@ def initialize_config():
             if user_confirms_update == global_cache.language_cache["yes"][0].lower():
                 break
             elif user_confirms_update == global_cache.language_cache["no"][0].lower():
-                print(f"{language_cache["main_exiting_program"]}")
+                print(f"{language_cache['main_exiting_program']}")
                 utils.exit_program(
-                    extra_msg=f"{lang.get_translation("main_user_exits")}")
+                    extra_msg=f"{lang.get_translation('main_user_exits')}")
 
             else:
                 pass
@@ -146,7 +146,7 @@ def initialize_config():
 
     if migration_performed:
         print(
-            f"[dark_goldenrod]{lang.get_translation("config_configuration_migrated").format(EXPECTED_VERSION=config.EXPECTED_VERSION)}[/dark_goldenrod]")
+            f"[dark_goldenrod]{lang.get_translation('config_configuration_migrated').format(EXPECTED_VERSION=config.EXPECTED_VERSION)}[/dark_goldenrod]")
 
 
 def welcome_display():
@@ -195,7 +195,7 @@ def welcome_display():
         console.print(text_script_new_version, justify="center")
 
     # main_max_game_version
-    game_version_text = f'[dodger_blue1]{lang.get_translation("main_max_game_version")}{global_cache.config_cache['Game_Version']['user_game_version']}[/dodger_blue1]'
+    game_version_text = f'[dodger_blue1]{lang.get_translation("main_max_game_version")}{global_cache.config_cache["Game_Version"]["user_game_version"]}[/dodger_blue1]'
     console.print()  # Add a blank line
     console.print()  # Add another blank line
     console.print(game_version_text, justify="center")
@@ -239,6 +239,27 @@ if __name__ == "__main__":
     auto_update_cfg = auto_update_str.lower() == 'true'
 
     # Download
+    if global_cache.mods_data.get('incompatible_mods'):
+        # Handle incompatible mods
+        print(f"[yellow]{global_cache.language_cache['main_incompatible_mods_found_without_update']}[/yellow]")
+        for mod in global_cache.mods_data.get('incompatible_mods'):
+            print(f"[yellow] - {mod['Name']} ({mod['Old_version'] + (' for game version ' + mod['Old_version_game_Version'] if mod['Old_version_game_Version'] else '')})[/yellow]")
+        incompatibility_behavior = global_cache.config_cache.get("Incompatibility_behavior", 0)
+        if incompatibility_behavior == 0:
+            # Use Prompt.ask to get the user's input
+            user_confirms_abort = Prompt.ask(
+                f"{global_cache.language_cache['main_continue_anyway_prompt']}",
+                choices=[global_cache.language_cache["yes"][0],
+                         global_cache.language_cache["no"][0]],
+                default=global_cache.language_cache["no"][0])
+            user_confirms_abort = user_confirms_abort.strip().lower()
+            if user_confirms_abort == global_cache.language_cache["no"][0].lower():
+                exit_program()
+        elif incompatibility_behavior == 1:
+            print(f"[red]{global_cache.language_cache['main_aborting_due_to_incompatibility']}[/red]")
+            if not args.no_pause:
+                input(f"\n{global_cache.language_cache['main_press_enter_to_exit']}")
+            sys.exit()
     if auto_update_cfg:
         # Auto update mods
         if global_cache.mods_data.get('mods_to_update'):
@@ -310,5 +331,5 @@ if __name__ == "__main__":
     # End of programm
     utils.exit_program(extra_msg="", do_exit=False)
     if not args.no_pause:
-        input(f"\n{lang.get_translation("main_press_enter_to_exit")}")
+        input(f"\n{lang.get_translation('main_press_enter_to_exit')}")
     sys.exit()

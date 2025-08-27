@@ -19,7 +19,10 @@
     "main_logs_location_error": "无法检索日志位置。",
     "main_show_changelog_prompt": "您想查看更新日志吗？ (y/n)",
     "main_changelog_title": "更新日志",
-    
+    "main_incompatible_mods_found_without_update": "发现了没有可用更新的不兼容模组：",
+    "main_aborting_due_to_incompatibility": "由于不兼容，正在中止更新。",
+    "main_continue_anyway_prompt": "您想继续吗？",
+
     "config_ask_mod_directory": "输入您的模组文件夹的路径。留空使用默认路径",
     "config_configuration_migrated": "配置已成功迁移到版本{EXPECTED_VERSION}。",
     "config_invalid_directory": "错误：{mods_directory}不是有效的目录。",

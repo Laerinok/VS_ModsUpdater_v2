@@ -19,7 +19,10 @@
     "main_logs_location_error": "Impossibile recuperare la posizione dei log.",
     "main_show_changelog_prompt": "Vuoi vedere il changelog? (y/n)",
     "main_changelog_title": "Changelog",
-    
+    "main_incompatible_mods_found_without_update": "Sono stati trovati mod incompatibili senza aggiornamenti disponibili:",
+    "main_aborting_due_to_incompatibility": "Interruzione dell'aggiornamento a causa di incompatibilità.",
+    "main_continue_anyway_prompt": "Continuare comunque?",
+
     "config_ask_mod_directory": "Inserisci il percorso della tua cartella dei mod. Lascia vuoto per il percorso predefinito",
     "config_configuration_migrated": "Configurazione migrata con successo alla versione {EXPECTED_VERSION}.",
     "config_invalid_directory": "Errore: {mods_directory} non è una directory valida.",
