@@ -10,7 +10,7 @@
     "main_user_exits": "用户选择退出更新过程。",
     "main_no_new_version_available": "没有可用的新版本",
     "main_new_version_available": "有新版本可用！！！",
-    "main_title": "Vintage Story的ModsUpdater - v{ModsUpdater_version} (作者：Laerinok)",
+    "main_title": "Vintage Story的ModsUpdater - v{ModsUpdater_version} (作者：{ModsUpdater_author})",
     "main_mods_no_update": "没有可用的模组更新。",
     "main_max_game_version": "已安装的游戏版本：",
     "main_press_enter_to_exit": "按Enter键退出...",

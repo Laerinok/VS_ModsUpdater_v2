@@ -156,7 +156,7 @@ def welcome_display():
     new_version, urlscript, latest_version, changelog_text = mu_script_update.modsupdater_update()
 
     # Center the main title first
-    title_text = f"\n\n[dodger_blue1]{lang.get_translation('main_title').format(ModsUpdater_version=__version__)}[/dodger_blue1]"
+    title_text = f"\n\n[dodger_blue1]{lang.get_translation('main_title').format(ModsUpdater_version=__version__, ModsUpdater_author=__author__)}[/dodger_blue1]"
     console.print(title_text, justify="center")
 
     # Handles the update message and logs
@@ -209,7 +209,7 @@ if __name__ == "__main__":
     # Initialize config
     initialize_config()
     set_console_title(
-        lang.get_translation("main_title").format(ModsUpdater_version=__version__))
+        lang.get_translation("main_title").format(ModsUpdater_version=__version__, ModsUpdater_author=__author__))
 
     import mu_script_update
 
