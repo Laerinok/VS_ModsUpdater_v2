@@ -17,6 +17,8 @@
     "main_excluded_mods_title": "Następujące mody są wykluczone z aktualizacji: ",
     "main_logs_location": "Logi są zapisywane tutaj: ",
     "main_logs_location_error": "Nie udało się pobrać lokalizacji logów.",
+    "main_show_changelog_prompt": "Czy chcesz zobaczyć listę zmian? (t/n)",
+    "main_changelog_title": "Lista zmian",
     
     "config_ask_mod_directory": "Podaj ścieżkę do folderu modów. Pozostaw puste dla domyślnej ścieżki",
     "config_configuration_migrated": "Konfiguracja pomyślnie przeniesiona do wersji {EXPECTED_VERSION}.",
