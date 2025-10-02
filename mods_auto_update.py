@@ -44,6 +44,7 @@ import os
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
+import urllib.parse
 
 from rich import print
 from rich.console import Console
@@ -69,8 +70,23 @@ def download_file(url, destination_path):
         logging.info(f"Skipping download - for TEST")
         return  # Skip download if disabled
 
-    response = client.get(url, stream=True, timeout=int(global_cache.config_cache["Options"]["timeout"]))
-    response.raise_for_status()  # Will raise an HTTPError for bad responses (4xx, 5xx)
+    mod_filename = Path(destination_path).name
+    try:
+        decoded_url = urllib.parse.unquote(url)
+
+        response = client.get(decoded_url, stream=True, timeout=int(
+            global_cache.config_cache["Options"]["timeout"]))
+
+        if response is None:
+            raise Exception("HTTPClient reached max retries or returned None.")
+
+        response.raise_for_status()
+
+    except Exception as e:
+        logging.error(f"FATAL DOWNLOAD ERROR for {mod_filename} ({url}): {e}")
+        print(
+            f"[bold red]{lang.get_translation('auto_download_failed')} ({mod_filename}): {escape_rich_tags(str(e))}[/bold red]")
+        return
 
     # Get the total size of the file (if available)
     total_size = int(response.headers.get('content-length', 0))

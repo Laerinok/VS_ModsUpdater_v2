@@ -32,7 +32,7 @@ Key functionalities include:
 
 __author__ = "Laerinok"
 __version__ = "2.3.0"
-__date__ = "2025-08-26"  # Last update
+__date__ = "2025-10-02"  # Last update
 
 # fetch_mod_info.py
 
@@ -41,7 +41,6 @@ import logging
 import re
 import sys
 import time
-import urllib.parse
 import zipfile
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
@@ -281,8 +280,9 @@ def get_mod_api_data(mod):
 
     encoded_installed_download_url = None
     if mod['Filename'] in installed_download_urls_dict:
-        url_to_encode = installed_download_urls_dict[mod['Filename']]
-        encoded_installed_download_url = urllib.parse.quote(url_to_encode, safe=':/=?&')
+        installed_download_url = installed_download_urls_dict[mod['Filename']]
+        # Correction 1: Assign the URL directly, fixing the missing assignment and potential double-encoding
+        encoded_installed_download_url = installed_download_url
 
     sorted_releases = get_compatible_releases(mod_json,
                                               global_cache.config_cache['Game_Version'][
@@ -298,7 +298,8 @@ def get_mod_api_data(mod):
            global_cache.mods_data['excluded_mods']):
         if mainfile_excluded_file:
             mainfile_url = mainfile_excluded_file[0]
-            encoded_mainfile_url = urllib.parse.quote(mainfile_url, safe=':/=?&')
+            # Correction 2: Removing redundant urllib.parse.quote (double encoding fix)
+            encoded_mainfile_url = mainfile_url
             mod_latest_version_for_game_version = sorted_releases[0]['modversion']
             return mod_assetid, mod_url, encoded_mainfile_url, mod_latest_version_for_game_version, side, None, changelog
         else:
@@ -312,7 +313,8 @@ def get_mod_api_data(mod):
         return mod_assetid, mod_url, None, None, side, encoded_installed_download_url, changelog
 
     mainfile_url = sorted_releases[0]['mainfile']
-    encoded_mainfile_url = urllib.parse.quote(mainfile_url, safe=':/=?&')
+    # Correction 3: Removing redundant urllib.parse.quote (double encoding fix)
+    encoded_mainfile_url = mainfile_url
 
     mod_latest_version_for_game_version = sorted_releases[0]['modversion']
     return mod_assetid, mod_url, encoded_mainfile_url, mod_latest_version_for_game_version, side, encoded_installed_download_url, changelog
