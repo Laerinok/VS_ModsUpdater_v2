@@ -17,7 +17,7 @@
     "main_excluded_mods_title": "The following mods are excluded from the update: ",
     "main_logs_location": "Logs are saved here: ",
     "main_logs_location_error": "Could not retrieve logs location.",
-    "main_show_changelog_prompt": "Do you want to see the changelog? (y/n)",
+    "main_show_changelog_prompt": "Do you want to see the changelog?",
     "main_changelog_title": "Changelog",
     
     "config_ask_mod_directory": "Enter the path to your mods folder. Leave blank for default path",
@@ -25,7 +25,7 @@
     "config_invalid_directory": "Error: {mods_directory} is not a valid directory.",
     "config_game_version_prompt": "Block updates up to game version (1.2.3, blank = no blocking): ",
     "config_invalid_game_version": "Error: Please provide a valid version in the format major.minor.patch (e.g., 1.20.5).",
-    "config_choose_update_mode": "Choose update mode (manual/auto)",
+    "config_choose_update_mode": "Choose update mode (1: Manual / 2: Auto)",
     "config_choose_update_mode_auto": "auto",
     "config_choose_update_mode_manual": "manual",
     "config_invalid_update_choice": "Invalid choice. Please enter 'manual' or 'auto'.",
@@ -43,7 +43,7 @@
     "auto_downloading_mod_name": "Downloading",
     "auto_mods_updated_resume": "Following mods have been updated:",
     
-    "manual_download_mod_prompt": "Download this mod? (y/n)",
+    "manual_download_mod_prompt": "Download this mod?",
     "manual_skipping_download": "Skipping download for",
     "manual_downloading_mod": "Downloading",
     "manual_download_completed": "Download completed for",

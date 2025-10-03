@@ -23,7 +23,7 @@
 
 __author__ = "Laerinok"
 __version__ = "2.3.0"  # Don't forget to change EXPECTED_VERSION
-__date__ = "2025-08-25"  # Last update
+__date__ = "2025-10-03"  # Last update
 
 
 # config.py
@@ -36,7 +36,6 @@ import shutil
 from pathlib import Path
 
 from rich import print
-from rich.prompt import Prompt
 
 import global_cache
 import lang
@@ -422,7 +421,7 @@ def ask_mods_directory():
     """Ask the user to choose a folder for the mods."""
     default_path = str(MODS_PATHS[SYSTEM])  # Convert Path to string for Prompt
     while True:
-        mods_directory = Prompt.ask(
+        mods_directory = utils.Prompt.ask(
             lang.get_translation("config_ask_mod_directory"),
             default=default_path
         )
@@ -452,12 +451,12 @@ def ask_language_choice():
         language_name = SUPPORTED_LANGUAGES[region][1]
         print(f"    [bold]{index}.[/bold] {language_name} ({region})")
 
-    # Use Prompt.ask to get the user's input
-    choice_index = Prompt.ask(
+    # Use utils.prompt_choice to get the user's input
+    choice_index = utils.prompt_choice(
         "Enter the number of your language choice (leave blank for default English)",
         choices=[str(i) for i in range(1, len(language_options) + 1)],
-        show_choices=False,
-        default=2
+        show_choices=False, # <-- This is now correctly handled by **kwargs
+        default="2" # L'index 2 correspond à l'anglais
     )
 
     # Convert the user's choice to the corresponding language key
@@ -471,7 +470,7 @@ def ask_language_choice():
 def ask_game_version():
     """Ask the user to select the game version the first script launch."""
     while True:
-        user_game_version = Prompt.ask(
+        user_game_version = utils.Prompt.ask(
             lang.get_translation("config_game_version_prompt"),
             default=""
         )
@@ -491,22 +490,48 @@ def ask_game_version():
 
 
 def ask_auto_update():
-    """Ask the user to choose between manual or auto update."""
-    while True:
-        auto_update_input = Prompt.ask(
-            lang.get_translation("config_choose_update_mode"),
-            choices=[lang.get_translation("config_choose_update_mode_manual"),
-                     lang.get_translation("config_choose_update_mode_auto")],
-            default=lang.get_translation("config_choose_update_mode_auto")
-        ).lower()
+    """Ask the user to choose between manual or auto update (using words or numbers)."""
 
-        if auto_update_input == lang.get_translation("config_choose_update_mode_auto").lower():
+    # Normalize the translated words for comparison
+    auto_key = lang.get_translation("config_choose_update_mode_auto").lower()
+    manual_key = lang.get_translation("config_choose_update_mode_manual").lower()
+
+    # Define the set of ALL acceptable inputs (numbers + normalized words)
+    # 1 is for manual, 2 is for auto (using 1/2 is clearer than 1/2 depending on the order)
+    # Let's assume 1 for Manual, 2 for Auto. We must stick to one mapping.
+
+    # Define the choices presented to Rich, which must be unique and normalized
+    # The first element listed is often shown as the default choice by Rich if the 'default'
+    # value is missing, but here 'default' is explicitly set.
+    choices_list = ['1', manual_key, '2', auto_key]  # All valid inputs
+
+    # The default key (used for comparison AND as the default value for Rich)
+    default_key = auto_key
+
+    # Construct the message to display options clearly (e.g., "Choose mode: [1: Manual, 2: Auto]")
+    # We must ensure the message is updated in the language files to be generic:
+    # "config_choose_update_mode": "Choose update mode (1: Manual / 2: Auto):"
+
+    prompt_msg = lang.get_translation("config_choose_update_mode")
+
+    while True:
+        # We use utils.prompt_choice (which handles case-insensitivity and strips spaces)
+        auto_update_input = utils.prompt_choice(
+            prompt_msg,
+            choices=choices_list,
+            default=default_key  # Rich will try to display this if possible
+        )
+
+        # Check against the normalized word key OR the number key
+        if auto_update_input == auto_key or auto_update_input == '2':
             logging.info("Auto update selected.")
             return True
-        elif auto_update_input == lang.get_translation("config_choose_update_mode_manual").lower():
+        elif auto_update_input == manual_key or auto_update_input == '1':
             logging.info("Manual update selected.")
             return False
         else:
+            # This path is theoretically unreachable if Rich's validation works,
+            # but it's good practice to keep it for debugging.
             print(lang.get_translation("config_invalid_update_choice"))
 
 

@@ -17,7 +17,7 @@
     "main_excluded_mods_title": "Следующие моды исключены из обновления:",
     "main_logs_location": "Журналы сохранены здесь: ",
     "main_logs_location_error": "Не удалось получить местоположение журналов.",
-    "main_show_changelog_prompt": "Хотите увидеть список изменений? (y/n)",
+    "main_show_changelog_prompt": "Хотите увидеть список изменений?",
     "main_changelog_title": "Список изменений",
     
     "config_ask_mod_directory": "Введите путь к папке с модами. Оставьте пустым для пути по умолчанию",
@@ -25,7 +25,7 @@
     "config_invalid_directory": "Ошибка: {mods_directory} не является действительным каталогом.",
     "config_game_version_prompt": "Блокировать обновления до версии игры (1.2.3, пусто = без блокировки)",
     "config_invalid_game_version": "Ошибка: Пожалуйста, укажите действительную версию в формате major.minor.patch (например, 1.20.5).",
-    "config_choose_update_mode": "Выберите режим обновления (вручную/автоматически)",
+    "config_choose_update_mode": "Выберите режим обновления (1: вручную / 2: автоматически)",
     "config_choose_update_mode_auto": "автоматически",
     "config_choose_update_mode_manual": "вручную",
     "config_invalid_update_choice": "Неверный выбор. Пожалуйста, введите 'вручную' или 'автоматически'.",
@@ -43,7 +43,7 @@
     "auto_downloading_mod_name": "Загрузка",
     "auto_mods_updated_resume": "Следующие моды были обновлены:",
     
-    "manual_download_mod_prompt": "Загрузить этот мод? (y/n)",
+    "manual_download_mod_prompt": "Загрузить этот мод?",
     "manual_skipping_download": "Пропуск загрузки для",
     "manual_downloading_mod": "Загрузка",
     "manual_download_completed": "Загрузка завершена для",

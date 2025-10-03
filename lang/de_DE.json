@@ -17,7 +17,7 @@
     "main_excluded_mods_title": "Die folgenden Mods sind von der Aktualisierung ausgeschlossen:",
     "main_logs_location": "Logs werden hier gespeichert: ",
     "main_logs_location_error": "Protokollspeicherort konnte nicht abgerufen werden.",
-    "main_show_changelog_prompt": "Möchten Sie den Changelog sehen? (y/n)",
+    "main_show_changelog_prompt": "Möchten Sie den Changelog sehen?",
     "main_changelog_title": "Änderungsprotokoll",
     
     "config_ask_mod_directory": "Geben Sie den Pfad zu Ihrem Mods-Ordner ein. Lassen Sie ihn leer für den Standardpfad",
@@ -43,7 +43,7 @@
     "auto_downloading_mod_name": "Herunterladen",
     "auto_mods_updated_resume": "Folgende Mods wurden aktualisiert:",
     
-    "manual_download_mod_prompt": "Diesen Mod herunterladen? (j/n)",
+    "manual_download_mod_prompt": "Diesen Mod herunterladen?",
     "manual_skipping_download": "Download wird übersprungen für",
     "manual_downloading_mod": "Herunterladen",
     "manual_download_completed": "Download abgeschlossen für",

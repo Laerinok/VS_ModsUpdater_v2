@@ -18,7 +18,7 @@
 
 __author__ = "Laerinok"
 __version__ = "2.3.0"
-__date__ = "2025-08-24"  # Last update
+__date__ = "2025-10-03"  # Last update
 
 
 # utils.py
@@ -31,12 +31,14 @@ import re
 import sys
 import zipfile
 from pathlib import Path
+from typing import Any
 from urllib.parse import urlparse, parse_qs
 
 import html2text
 from packaging.version import Version, InvalidVersion
 from rich import print
 from rich.console import Console
+from rich.prompt import Prompt
 
 import cli
 import config
@@ -83,6 +85,92 @@ def print_mods_data():
 def setup_directories(path_dir):
     if not path_dir.exists():
         path_dir.mkdir(parents=True, exist_ok=True)
+
+
+def prompt_yes_no(prompt_message: str, default: bool = True, **kwargs: Any) -> bool:
+    """
+    Prompts the user for a Yes/No question using manual validation to ensure
+    both localized characters (from the 'yes'/'no' keys) and universal 'y'/'n'
+    characters are accepted (case-insensitive).
+
+    This version bypasses rich.prompt.Prompt validation for cross-language robustness.
+    """
+    # 1. Get localized characters (extract the first character from the translation)
+    yes_word = lang.get_translation("yes").strip().lower()
+    no_word = lang.get_translation("no").strip().lower()
+
+    # Extract the first character for validation and display
+    yes_local_char = yes_word[0]
+    no_local_char = no_word[0]
+
+    # 2. Define ALL acceptable inputs
+    yes_inputs = {yes_local_char, 'y'}
+    no_inputs = {no_local_char, 'n'}
+
+    # 3. Determine display and default value
+    display_choices = [yes_local_char, no_local_char]
+    default_char = no_local_char if not default else yes_local_char
+
+    # 4. Loop until valid input is given
+    while True:
+        # Construct the final prompt string with the default value displayed
+        prompt_str = f"{prompt_message} ({'/'.join(display_choices)}) [{default_char}]: "
+
+        # *** CRITICAL CHANGE: Use console.input() for raw input! ***
+        # This bypasses all rich.prompt.Prompt validation logic that was failing.
+        try:
+            # We use 'console.input' to get the raw string.
+            raw_input = console.input(prompt_str, **kwargs)
+        except EOFError:
+            # Handle Ctrl+D/Ctrl+Z case gracefully
+            raw_input = ""
+        except KeyboardInterrupt:
+            # Handle Ctrl+C gracefully
+            print("[indian_red1]Aborting prompt...[/indian_red1]")
+            return False  # Assuming No/Exit on interruption
+
+        normalized_input = raw_input.strip().lower()
+
+        # 5. Handle empty input (accepting the default)
+        if not normalized_input:
+            normalized_input = default_char
+
+        # 6. Validation
+        if normalized_input in yes_inputs:
+            return True
+        elif normalized_input in no_inputs:
+            return False
+        else:
+            # Error message using rich print
+            all_valid_chars = sorted(list(yes_inputs.union(no_inputs)))
+            print(
+                f"[indian_red1]Please select one of the available options: {', '.join(all_valid_chars)}[/indian_red1]")
+
+
+def prompt_choice(prompt_message: str, choices: list[str], default: str,
+                  **kwargs: Any) -> str:
+    """
+    Prompts the user to choose from a list of strings.
+    Handles case-insensitivity and strips spaces after input is received.
+
+    Args:
+        prompt_message (str): The question to ask.
+        choices (list[str]): The list of valid options.
+        default (str): The default choice.
+        **kwargs: Additional arguments for rich.prompt.Prompt.ask (e.g., show_choices).
+
+    Returns:
+        str: The selected, lowercased, and stripped choice.
+    """
+    raw_input = Prompt.ask(
+        prompt_message,
+        choices=choices,
+        default=default,
+        **kwargs
+    )
+
+    # Normalize the input (lowercase and strip spaces) on return
+    return raw_input.strip().lower()
 
 
 def check_mods_directory(mods_dir):

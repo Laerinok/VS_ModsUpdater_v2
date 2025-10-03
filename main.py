@@ -36,7 +36,7 @@ __author__ = "Laerinok"
 __version__ = "2.3.0"
 __license__ = "GNU GPL v3"
 __description__ = "Mods Updater for Vintage Story"
-__date__ = "2025-08-26"  # Last update
+__date__ = "2025-10-03"  # Last update
 
 # main.py
 
@@ -112,23 +112,17 @@ def initialize_config():
 
         # Ask if we continue or quit to modify config.ini (e.g., to add mods to the exception list.)
         print(f"{language_cache["main_update_or_modify_config"]}")
-        while True:
-            user_confirms_update = Prompt.ask(
-                f"{language_cache["main_continue_update_prompt"]}",
-                choices=[global_cache.language_cache["yes"][0],
-                         global_cache.language_cache["no"][0]],
-                default=global_cache.language_cache["no"][0])
-            user_confirms_update = user_confirms_update.strip().lower()
+        user_confirms_update = utils.prompt_yes_no(
+            lang.get_translation("main_continue_update_prompt"),
+            default=False  # Défaut est 'No', donc le programme doit sortir.
+        )
 
-            if user_confirms_update == global_cache.language_cache["yes"][0].lower():
-                break
-            elif user_confirms_update == global_cache.language_cache["no"][0].lower():
-                print(f"{language_cache["main_exiting_program"]}")
-                utils.exit_program(
-                    extra_msg=f"{lang.get_translation("main_user_exits")}")
-
-            else:
-                pass
+        # 2. Gestion du résultat (si 'No', on quitte)
+        if not user_confirms_update:
+            # Si l'utilisateur répond 'No' (ce qui correspond à False), nous sortons.
+            print(f"{lang.get_translation("main_exiting_program")}")
+            utils.exit_program(
+                extra_msg=f"{lang.get_translation("main_user_exits")}")
 
     migration_performed = config.migrate_config_if_needed()
 

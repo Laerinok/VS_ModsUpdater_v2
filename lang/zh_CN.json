@@ -17,7 +17,7 @@
     "main_excluded_mods_title": "以下模组已从更新中排除：",
     "main_logs_location": "日志保存在这里：",
     "main_logs_location_error": "无法检索日志位置。",
-    "main_show_changelog_prompt": "您想查看更新日志吗？ (y/n)",
+    "main_show_changelog_prompt": "您想查看更新日志吗？",
     "main_changelog_title": "更新日志",
     
     "config_ask_mod_directory": "输入您的模组文件夹的路径。留空使用默认路径",
@@ -43,7 +43,7 @@
     "auto_downloading_mod_name": "正在下载",
     "auto_mods_updated_resume": "以下模组已更新：",
     
-    "manual_download_mod_prompt": "下载这个模组吗？（y/n）",
+    "manual_download_mod_prompt": "下载这个模组吗？",
     "manual_skipping_download": "跳过下载",
     "manual_downloading_mod": "正在下载",
     "manual_download_completed": "下载完成",

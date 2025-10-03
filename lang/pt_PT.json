@@ -17,7 +17,7 @@
     "main_excluded_mods_title": "As seguintes mods estão excluídas da atualização:",
     "main_logs_location": "Os registos são guardados aqui: ",
     "main_logs_location_error": "Não foi possível recuperar a localização dos registos.",
-    "main_show_changelog_prompt": "Deseja ver o registo de alterações? (y/n)",
+    "main_show_changelog_prompt": "Deseja ver o registo de alterações?",
     "main_changelog_title": "Registo de alterações",
     
     "config_ask_mod_directory": "Introduza o caminho para a sua pasta de mods. Deixe em branco para o caminho predefinido",
@@ -43,7 +43,7 @@
     "auto_downloading_mod_name": "A descarregar",
     "auto_mods_updated_resume": "As seguintes mods foram atualizadas:",
     
-    "manual_download_mod_prompt": "Descarregar esta mod? (s/n)",
+    "manual_download_mod_prompt": "Descarregar esta mod?",
     "manual_skipping_download": "A ignorar o download para",
     "manual_downloading_mod": "A descarregar",
     "manual_download_completed": "Download concluído para",

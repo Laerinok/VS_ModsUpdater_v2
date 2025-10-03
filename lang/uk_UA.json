@@ -17,7 +17,7 @@
     "main_excluded_mods_title": "Наступні моди виключено з оновлення:",
     "main_logs_location": "Журнали збережено тут: ",
     "main_logs_location_error": "Не вдалося отримати розташування журналів.",
-    "main_show_changelog_prompt": "Хочете переглянути журнал змін? (y/n)",
+    "main_show_changelog_prompt": "Хочете переглянути журнал змін?",
     "main_changelog_title": "Журнал змін",
     
     "config_ask_mod_directory": "Введіть шлях до папки з модами. Залиште порожнім для шляху за замовчуванням",
@@ -43,7 +43,7 @@
     "auto_downloading_mod_name": "Завантаження",
     "auto_mods_updated_resume": "Наступні моди було оновлено:",
     
-    "manual_download_mod_prompt": "Завантажити цей мод? (y/n)",
+    "manual_download_mod_prompt": "Завантажити цей мод?",
     "manual_skipping_download": "Пропуск завантаження для",
     "manual_downloading_mod": "Завантаження",
     "manual_download_completed": "Завантаження завершено для",

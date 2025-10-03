@@ -17,7 +17,7 @@
     "main_excluded_mods_title": "다음 모드는 업데이트에서 제외됩니다:",
     "main_logs_location": "로그는 여기에 저장됩니다: ",
     "main_logs_location_error": "로그 위치를 검색할 수 없습니다.",
-    "main_show_changelog_prompt": "변경 로그를 보시겠습니까? (y/n)",
+    "main_show_changelog_prompt": "변경 로그를 보시겠습니까?",
     "main_changelog_title": "변경 로그",
   
     "config_ask_mod_directory": "모드 폴더의 경로를 입력하세요. 기본 경로를 사용하려면 비워두세요.",
@@ -43,7 +43,7 @@
     "auto_downloading_mod_name": "다운로드 중",
     "auto_mods_updated_resume": "다음 모드가 업데이트되었습니다: ",
   
-    "manual_download_mod_prompt": "이 모드를 다운로드 하시겠습니까? (y/n)",
+    "manual_download_mod_prompt": "이 모드를 다운로드 하시겠습니까?",
     "manual_skipping_download": "다운로드를 넘기는 중",
     "manual_downloading_mod": "다운로딩",
     "manual_download_completed": "다운로드를 완료함",

@@ -17,7 +17,7 @@
     "main_excluded_mods_title": "以下のModはアップデートから除外されます：",
     "main_logs_location": "ログはここに保存されます：",
     "main_logs_location_error": "ログの場所を取得できませんでした。",
-    "main_show_changelog_prompt": "変更履歴を見ますか？ (y/n)",
+    "main_show_changelog_prompt": "変更履歴を見ますか？",
     "main_changelog_title": "変更履歴",
     
     "config_ask_mod_directory": "Modフォルダへのパスを入力してください。デフォルトパスの場合は空白のままにしてください",
@@ -43,7 +43,7 @@
     "auto_downloading_mod_name": "ダウンロード",
     "auto_mods_updated_resume": "以下のModがアップデートされました：",
     
-    "manual_download_mod_prompt": "このModをダウンロードしますか？（y/n）",
+    "manual_download_mod_prompt": "このModをダウンロードしますか？",
     "manual_skipping_download": "ダウンロードをスキップ：",
     "manual_downloading_mod": "ダウンロード",
     "manual_download_completed": "ダウンロード完了：",
