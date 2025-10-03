@@ -10,7 +10,7 @@
     "main_user_exits": "Пользователь решил выйти из процесса обновления.",
     "main_no_new_version_available": "Нет доступной новой версии",
     "main_new_version_available": "Доступна новая версия!!!",
-    "main_title": "ModsUpdater для Vintage Story / v{ModsUpdater_version} (от Laerinok)",
+    "main_title": "ModsUpdater для Vintage Story / v{ModsUpdater_version} (от {ModsUpdater_author})",
     "main_mods_no_update": "Нет доступных обновлений модов.",
     "main_max_game_version": "Установленная версия игры: ",
     "main_press_enter_to_exit": "Нажмите Enter, чтобы выйти...",

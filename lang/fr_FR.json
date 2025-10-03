@@ -10,7 +10,7 @@
     "main_user_exits": "L'utilisateur a décidé de quitter la mise à jour.",
     "main_no_new_version_available": "Aucune nouvelle version disponible",
     "main_new_version_available": "Nouvelle version disponible !!!",
-    "main_title": "ModsUpdater pour Vintage Story / v{ModsUpdater_version} (par Laerinok)",
+    "main_title": "ModsUpdater pour Vintage Story / v{ModsUpdater_version} (par {ModsUpdater_author})",
     "main_mods_no_update": "Aucune mise à jour de mod disponible.",
     "main_max_game_version": "Version du jeu installée : ",
     "main_press_enter_to_exit": "Appuyez sur Entrée pour quitter...",

@@ -10,7 +10,7 @@
     "main_user_exits": "Benutzer hat sich entschieden, den Update-Prozess zu beenden.",
     "main_no_new_version_available": "Keine neue Version verfügbar",
     "main_new_version_available": "Neue Version verfügbar!!!",
-    "main_title": "ModsUpdater für Vintage Story / v{ModsUpdater_version} (von Laerinok)",
+    "main_title": "ModsUpdater für Vintage Story / v{ModsUpdater_version} (von {ModsUpdater_author})",
     "main_mods_no_update": "Keine Mods-Updates verfügbar.",
     "main_max_game_version": "Installierte Spielversion: ",
     "main_press_enter_to_exit": "Drücken Sie die Eingabetaste, um zu beenden...",
