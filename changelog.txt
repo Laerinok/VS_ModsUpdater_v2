@@ -1,9 +1,14 @@
-v2.3.1:
-- Fixed: Download/API: Resolved a critical issue causing download failures for certain mods due to **double URL encoding**. Download URLs retrieved from the Vintage Story mod API are no longer being redundantly quoted.
-- Fixed a fatal crash (`AttributeError: 'NoneType' object has no attribute 'raise_for_status'`) that occurred when the HTTP client failed to complete a download request after all retry attempts. Download failures are now logged and handled gracefully.
-- Fixed: Fix (i18n) - Resolved a critical issue where the 'Yes/No' prompts failed to accept universal ASCII input (like 'n' for No) when the locale used non-ASCII characters (e.g., Russian 'н'/'д').
-- Refactor: Centralized the entire 'Yes/No' user input logic into the robust `utils.prompt_yes_no` function.
-- Refactor: Removed the superfluous and rigid validation loop from `main.py`, making the application flow cleaner and more maintainable.
+v2.4.0
+- feat (UX): Added display of the specific reason for mod exclusion in the final summary (e.g., 'Excluded by user in config.ini' or 'API data unavailable').
+- feat (i18n): Added language support for Polish (pl_PL).
+- i18n: Added translation keys across all 12 supported languages to ensure full support for the new exclusion messages.
+- fixed (Critical): Resolved a critical issue causing download failures for certain mods due to **double URL encoding** in download URLs retrieved from the Vintage Story mod API.
+- fixed (Critical): Fixed a fatal crash (`AttributeError: 'NoneType'`) that occurred when the HTTP client failed to complete a download request after all retry attempts. Download failures are now logged and handled gracefully.
+- fixed (i18n): Resolved a critical issue where the 'Yes/No' prompts failed to accept universal ASCII input (like 'n' for No) when the locale used non-ASCII characters (e.g., Russian 'н'/'д').
+- refactor (i18n): Reworked title string logic to use a dynamic variable (`{ModsUpdater_author}`) instead of hardcoding the author's name, preparing the codebase for easier redistribution or branding changes.
+- refactor (Logic): Reworked the mod update check logic (`mods_update_checker.py`) to sequentially pre-filter user-excluded mods. This centralizes exclusion logic and **prevents unnecessary network calls** during concurrent processing.
+- refactor (Core): Centralized the entire 'Yes/No' user input logic into the robust `utils.prompt_yes_no` function and removed the superfluous and rigid validation loop from `main.py`, making the application flow cleaner and more maintainable.
+- refactor (Data): Enriched the `excluded_mods` data in `global_cache` to store the specific `Reason` for exclusion, improving debugging and logging.
 
 v2.3.0:
 - Added: a user prompt that allows displaying the changelog for new script updates on demand.
