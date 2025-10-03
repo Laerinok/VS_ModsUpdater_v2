@@ -1,7 +1,9 @@
 v2.3.1:
 - Fixed: Download/API: Resolved a critical issue causing download failures for certain mods due to **double URL encoding**. Download URLs retrieved from the Vintage Story mod API are no longer being redundantly quoted.
 - Fixed a fatal crash (`AttributeError: 'NoneType' object has no attribute 'raise_for_status'`) that occurred when the HTTP client failed to complete a download request after all retry attempts. Download failures are now logged and handled gracefully.
-
+- Fixed: Fix (i18n) - Resolved a critical issue where the 'Yes/No' prompts failed to accept universal ASCII input (like 'n' for No) when the locale used non-ASCII characters (e.g., Russian 'н'/'д').
+- Refactor: Centralized the entire 'Yes/No' user input logic into the robust `utils.prompt_yes_no` function.
+- Refactor: Removed the superfluous and rigid validation loop from `main.py`, making the application flow cleaner and more maintainable.
 
 v2.3.0:
 - Added: a user prompt that allows displaying the changelog for new script updates on demand.

@@ -19,6 +19,7 @@
     "main_logs_location_error": "无法检索日志位置。",
     "main_show_changelog_prompt": "您想查看更新日志吗？",
     "main_changelog_title": "更新日志",
+    "main_reason_label_unknown": "未知原因",
     
     "config_ask_mod_directory": "输入您的模组文件夹的路径。留空使用默认路径",
     "config_configuration_migrated": "配置已成功迁移到版本{EXPECTED_VERSION}。",
@@ -37,6 +38,7 @@
     "fetch_mod_info_scanning_mods": "正在扫描模组...",
     "fetch_mod_info_fetching_mod_info": "正在从API获取模组信息...",
     "fetch_mod_info_fetching_mod_info_name": "正在获取模组信息",
+    "fetch_mod_info_exclusion_reason_api_failure": "此 Mod 的 API 数据不可用。可能已被删除或迁移。",
     
     "auto_file_size_unknown": "警告：文件大小未知或为零。下载可能无法正确完成。[/bold indian_red1]",
     "auto_downloading_mods": "正在下载模组...",
@@ -54,6 +56,7 @@
     "utils_no_valid_mod_files_found": "在模组文件夹中未找到有效的模组文件。",
     "utils_error_invalid_max_workers": "错误：max_workers的输入无效。必须是整数。",
     "utils_prg_terminated": "程序已终止。",
+    "utils_exclusion_reason_user_config": "用户在 config.ini 中排除",
     
     "export_json_modilst": "模组列表导出为JSON：",
     "export_pdf_modilst": "模组列表导出为PDF：",

@@ -281,13 +281,32 @@ if __name__ == "__main__":
 
     if excluded_mods:
         excluded_title_style = Style(color="dark_goldenrod", bold=True)
-        excluded_mod_style = Style(color="indian_red1")
+        mod_name_style = Style(color="indian_red1")
+        reason_style = Style(color="dodger_blue1",
+                             italic=True)  # Nouveau style pour la raison
 
         print(Text(f"\n{lang.get_translation('main_excluded_mods_title')}",
                    style=excluded_title_style))
+
         for mod in excluded_mods:
             mod_name = mod.get('Name', mod.get('Filename', 'Unknown name'))
-            print(Text(f"- {mod_name}", style=excluded_mod_style))
+            # Récupérer la raison stockée par utils.py ou fetch_mod_info.py
+            reason = mod.get('Reason')
+
+            # Construire l'affichage du mod et de la raison
+            if reason:
+                # Créer un objet Text pour l'affichage stylisé en ligne
+                text_to_print = Text("- ", style=mod_name_style)
+                text_to_print.append(mod_name, style=mod_name_style)
+                # Utiliser Text.append pour ajouter la raison entre parenthèses
+                # On assume ici l'existence d'une clé de traduction générique si besoin,
+                # mais la raison (reason) est déjà la traduction complète (ex: "Excluded by user...")
+                text_to_print.append(f" ({reason})", style=reason_style)
+                print(text_to_print)
+            else:
+                # Fallback pour un mod sans raison (devrait être rare après les modifications)
+                print(Text(f"- {mod_name}", style=mod_name_style))
+
         print()
     else:
         logging.info("No mods were found in the exclusion list.")

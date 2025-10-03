@@ -22,7 +22,7 @@
 """
 __author__ = "Laerinok"
 __version__ = "2.3.0"
-__date__ = "2025-08-25"  # Last update
+__date__ = "2025-10-03"  # Last update
 
 # mods_update_checker.py
 
@@ -35,47 +35,60 @@ from utils import version_compare, check_excluded_mods, convert_html_to_markdown
 
 def check_for_mod_updates(force_update=False):
     """
-    This module automates the process of checking for updates to installed mods.
-    It compares local mod versions with the latest available versions and retrieves changelogs for mods that require updates.
-
-    Key functionalities include:
-    - Checking for mod updates by comparing local and latest available versions.
-    - Handling excluded mods to skip them during the update check.
-    - Fetching changelogs for updated mods using the fetch_changelog module.
-    - Populating the global_cache['mods_to_update'] list with relevant mod information.
-    - Utilizing multithreading to efficiently process multiple mods.
-    - Providing detailed logging for debugging and monitoring.
+    Automates the mod update checking process, comparing local versions
+    with latest available versions after filtering out user-excluded mods.
     """
-    check_excluded_mods()  # Update excluded mods list
-    excluded_filenames = [mod['Filename'] for mod in
-                          global_cache.mods_data.get("excluded_mods", [])]
+
+    # Reset excluded_mods list. (Technical Debt Note: Review if fetch_mod_info runs first
+    # and if clearing its API failures here is desirable.)
+    global_cache.mods_data["excluded_mods"] = []
+
+    mods_to_process = []
+
+    # Pre-filter mods excluded by user configuration (Case 1)
+    for mod in global_cache.mods_data.get("installed_mods", []):
+        mod_filename = mod.get('Filename')
+        mod_name = mod.get('Name')
+
+        # If excluded, utils.check_excluded_mods adds the reason to global_cache.
+        if check_excluded_mods(mod_filename, mod_name):
+            continue
+
+        mods_to_process.append(mod)
+
     mods_to_update = []
 
+    # Launch parallel processing on the remaining mods
     with ThreadPoolExecutor() as executor:
         futures = []
-        for mod in global_cache.mods_data.get("installed_mods", []):
-            # Pass the force_update flag to the worker function
-            futures.append(executor.submit(process_mod, mod, excluded_filenames, force_update))
+        for mod in mods_to_process:
+            # IMPORTANT: Removed 'excluded_filenames' argument.
+            futures.append(executor.submit(process_mod, mod, force_update))
 
-        # We collect the results from the threads
         for future in as_completed(futures):
             mod_data = future.result()
             if mod_data:
                 mods_to_update.append(mod_data)
 
     global_cache.mods_data['mods_to_update'] = sorted(mods_to_update,
-                                                      key=lambda mod: mod[
+                                                      key=lambda item: item[
                                                           "Name"].lower())
 
 
-def process_mod(mod, excluded_filenames, force_update):
+def process_mod(mod, force_update):
     """
     Processes a single mod to check for updates and fetch changelog.
     Returns the mod data if an update is found, otherwise None.
     """
-    if mod['Filename'] in excluded_filenames:
-        logging.info(f"Skipping excluded mod: {mod['Name']}")
-        return None  # We return None if the mod is excluded
+    mod_name = mod.get('Name')
+
+    if not mod.get("Mod_url"):
+        # This mod failed API fetch in fetch_mod_info.py (Case 2),
+        # so it has incomplete data and should be skipped for update check.
+        # It should already be in the 'excluded_mods' list.
+        logging.warning(
+            f"Skipping update check for {mod_name}: missing API data (Mod_url).")
+        return None
 
     # Determine the correct download URL
     download_url = mod.get("latest_version_dl_url")

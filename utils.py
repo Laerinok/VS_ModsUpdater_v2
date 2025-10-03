@@ -352,27 +352,35 @@ def extract_filename_from_url(url):
     return filename
 
 
-def check_excluded_mods():
+def check_excluded_mods(mod_filename: str, mod_name: str) -> bool:
     """
-    Retrieve excluded mods from the config file and ensure they exist in the mods folder.
+    Checks if a mod is explicitly excluded by the user configuration (config.ini).
+
+    Args:
+        mod_filename (str): The filename of the mod (e.g., ModName.zip).
+        mod_name (str): The friendly name of the mod (from modinfo.json).
+
+    Returns:
+        bool: True if the mod is explicitly excluded by the user, False otherwise.
     """
-    # Correct usage of the get method
-    excluded_mods = global_cache.config_cache.get("Mod_Exclusion", {}).get("mods", "").split(", ")
+    excluded_list = global_cache.config_cache.get("Mod_Exclusion", {}).get("mods",
+                                                                           "").split(
+        ", ")
 
-    # Ensure we don't have empty strings in the list
-    excluded_mods = [mod.strip() for mod in excluded_mods if mod.strip()]
+    excluded_filenames = {name.strip() for name in excluded_list if name.strip()}
 
-    # Retrieve the absolute path of the mods folder
-    mods_folder_path = global_cache.config_cache["MODS_PATHS"][global_cache.config_cache["SYSTEM"]].resolve()
+    if mod_filename in excluded_filenames:
+        reason_message = lang.get_translation("utils_exclusion_reason_user_config")
 
-    # Clear the previous excluded mods in global_cache
-    global_cache.mods_data["excluded_mods"] = []
-    for mod in excluded_mods:
-        # Check if the file exists in the mods folder
-        mod_file_path = mods_folder_path / mod  # Build the path to the mod file
-        if mod_file_path.exists():
-            global_cache.mods_data["excluded_mods"].append({"Filename": mod})
-            logging.info(f"Excluded mod added: {mod}")
+        global_cache.mods_data["excluded_mods"].append({
+            "Filename": mod_filename,
+            "Name": mod_name,
+            "Reason": reason_message
+        })
+        logging.info(f"Mod excluded by user configuration: {mod_name}")
+        return True
+
+    return False
 
 
 def backup_mods(mods_to_backup):

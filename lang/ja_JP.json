@@ -19,6 +19,7 @@
     "main_logs_location_error": "ログの場所を取得できませんでした。",
     "main_show_changelog_prompt": "変更履歴を見ますか？",
     "main_changelog_title": "変更履歴",
+    "main_reason_label_unknown": "不明な理由",
     
     "config_ask_mod_directory": "Modフォルダへのパスを入力してください。デフォルトパスの場合は空白のままにしてください",
     "config_configuration_migrated": "構成はバージョン{EXPECTED_VERSION}に正常に移行されました。",
@@ -37,6 +38,7 @@
     "fetch_mod_info_scanning_mods": "Modをスキャン中...",
     "fetch_mod_info_fetching_mod_info": "APIからMod情報を取得中...",
     "fetch_mod_info_fetching_mod_info_name": "Mod情報を取得中",
+    "fetch_mod_info_exclusion_reason_api_failure": "この Mod の API データは利用できません。削除または移行された可能性があります。",
     
     "auto_file_size_unknown": "警告：ファイルサイズが不明またはゼロです。ダウンロードが正しく完了しない可能性があります。[/bold indian_red1]",
     "auto_downloading_mods": "Modをダウンロード中...",
@@ -54,6 +56,7 @@
     "utils_no_valid_mod_files_found": "Modフォルダに有効なModファイルが見つかりませんでした。",
     "utils_error_invalid_max_workers": "エラー：max_workersの入力が無効です。整数である必要があります。",
     "utils_prg_terminated": "プログラムを終了しました。",
+    "utils_exclusion_reason_user_config": "config.ini でユーザーによって除外されました",
     
     "export_json_modilst": "ModリストをJSONとしてエクスポート：",
     "export_pdf_modilst": "ModリストをPDFとしてエクスポート：",

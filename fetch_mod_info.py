@@ -32,7 +32,7 @@ Key functionalities include:
 
 __author__ = "Laerinok"
 __version__ = "2.3.0"
-__date__ = "2025-10-02"  # Last update
+__date__ = "2025-10-03"  # Last update
 
 # fetch_mod_info.py
 
@@ -410,8 +410,9 @@ def scan_and_fetch_mod_info(mods_folder):
                     logging.debug(
                         f"Received assetid: {mod_assetid}, mod_url: {mod_url}, and changelog for mod: {mod['Name']}")
                 else:
+                    reason_message = lang.get_translation("fetch_mod_info_exclusion_reason_api_failure")
                     # Add local mods to the excluded list here
-                    global_cache.mods_data["excluded_mods"].append({"Filename": mod['Filename'], "Name": mod['Name']})
+                    global_cache.mods_data["excluded_mods"].append({"Filename": mod['Filename'], "Name": mod['Name'], "Reason": reason_message})
                     logging.warning(
                         f"Failed to retrieve API data for mod: {mod['Name']}. Skipping update for this mod.")
                 progress.update(api_task, advance=1,

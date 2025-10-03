@@ -19,6 +19,7 @@
     "main_logs_location_error": "로그 위치를 검색할 수 없습니다.",
     "main_show_changelog_prompt": "변경 로그를 보시겠습니까?",
     "main_changelog_title": "변경 로그",
+    "main_reason_label_unknown": "알 수 없는 이유",
   
     "config_ask_mod_directory": "모드 폴더의 경로를 입력하세요. 기본 경로를 사용하려면 비워두세요.",
     "config_configuration_migrated": "버전 {EXPECTED_VERSION}으로 구성을 성공적으로 이식했습니다.",
@@ -37,6 +38,7 @@
     "fetch_mod_info_scanning_mods": "모드 스캔중...",
     "fetch_mod_info_fetching_mod_info": "API에서 모드 정보 가져오는 중...",
     "fetch_mod_info_fetching_mod_info_name": "모드 정보 가져오는 중",
+    "fetch_mod_info_exclusion_reason_api_failure": "이 모드의 API 데이터를 사용할 수 없습니다. 제거되거나 마이그레이션되었을 수 있습니다.",
   
     "auto_file_size_unknown": "경고: 파일 크기를 알 수 없거나 0입니다. 다운로드가 제대로 완료되지 않을 수 있습니다.",
     "auto_downloading_mods": "모드 다운로드 중...",
@@ -54,6 +56,7 @@
     "utils_no_valid_mod_files_found": "모드 폴더에 유효한 모드 파일을 찾을 수 없습니다.",
     "utils_error_invalid_max_workers": "에러: max_workers에 대한 입력이 잘못되었습니다. 정수여야 합니다.",
     "utils_prg_terminated": "프로그램 실행됨.",
+    "utils_exclusion_reason_user_config": "config.ini에서 사용자에 의해 제외됨",
   
     "export_json_modilst": "JSON으로 내보낸 모드 목록: ",
     "export_pdf_modilst": "PDF로 내보낸 모드 목록: ",

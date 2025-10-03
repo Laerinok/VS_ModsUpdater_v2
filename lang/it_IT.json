@@ -19,6 +19,7 @@
     "main_logs_location_error": "Impossibile recuperare la posizione dei log.",
     "main_show_changelog_prompt": "Vuoi vedere il changelog?",
     "main_changelog_title": "Changelog",
+    "main_reason_label_unknown": "Motivo sconosciuto",
     
     "config_ask_mod_directory": "Inserisci il percorso della tua cartella dei mod. Lascia vuoto per il percorso predefinito",
     "config_configuration_migrated": "Configurazione migrata con successo alla versione {EXPECTED_VERSION}.",
@@ -37,6 +38,7 @@
     "fetch_mod_info_scanning_mods": "Scansione dei mod...",
     "fetch_mod_info_fetching_mod_info": "Recupero delle informazioni dei mod dall'API...",
     "fetch_mod_info_fetching_mod_info_name": "Recupero delle informazioni dei mod",
+    "fetch_mod_info_exclusion_reason_api_failure": "Dati API non disponibili. Potrebbe essere stato rimosso o migrato.",
     
     "auto_file_size_unknown": "Attenzione: La dimensione del file è sconosciuta o zero. Il download potrebbe non completarsi correttamente.[/bold indian_red1]",
     "auto_downloading_mods": "Download dei mod...",
@@ -54,6 +56,7 @@
     "utils_no_valid_mod_files_found": "Nessun file mod valido trovato nella cartella dei mod.",
     "utils_error_invalid_max_workers": "Errore: Input non valido per max_workers. Deve essere un numero intero.",
     "utils_prg_terminated": "Programma terminato.",
+    "utils_exclusion_reason_user_config": "Escluso dall'utente in config.ini",
     
     "export_json_modilst": "Elenco mod esportato come JSON:",
     "export_pdf_modilst": "Elenco mod esportato come PDF:",
