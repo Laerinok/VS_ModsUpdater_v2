@@ -95,19 +95,37 @@ else:  # Linux or other systems (where AppImage will run)
 LANG_PATH = APPLICATION_PATH / 'lang'
 
 # Constants for supported languages
+# The following dictionary defines the languages supported by the application.
+# To add a new language, add a new entry with the country code as the key
+# and a list containing the language code (e.g., "en") and the language name
+# (e.g., "English") as the value.
+# The numeric index for user selection is generated automatically.
+_languages_to_process = {
+    "DE": ["de", "Deutsch"],
+    "US": ["en", "English"],
+    "ES": ["es", "Español"],
+    "FR": ["fr", "Français"],
+    "IT": ["it", "Italiano"],
+    "JP": ["ja", "日本語"],
+    "KR": ["ko", "한국어"],
+    "PL": ["pl", "Polski"],
+    "BR": ["pt", "Português (Brasil)"],
+    "PT": ["pt", "Português (Portugal)"],
+    "RU": ["ru", "Русский"],
+    "UA": ["uk", "Yкраїнська"],
+    "CN": ["zh", "简体中文"],
+}
+
+# Sort by language code (value[0]), then by country code (key) for stability.
+# This ensures a consistent order for the user, regardless of how the dictionary
+# is defined above.
+_sorted_languages = sorted(_languages_to_process.items(), key=lambda item: (item[1][0], item[0]))
+
+# Dynamically create the final SUPPORTED_LANGUAGES dictionary with numeric indices.
+# This avoids having to manually re-number languages when adding or removing one.
 SUPPORTED_LANGUAGES = {
-    "DE": ["de", "Deutsch", '1'],
-    "US": ["en", "English", '2'],
-    "ES": ["es", "Español", '3'],
-    "FR": ["fr", "Français", '4'],
-    "IT": ["it", "Italiano", '5'],
-    "JP": ["ja", "日本語", '6'],
-    "BR": ["pt", "Português (Brasil)", '7'],
-    "PT": ["pt", "Português (Portugal)", '8'],
-    "RU": ["ru", "Русский", '9'],
-    "UA": ["uk", "Yкраїнська", '10'],
-    "CN": ["zh", "简体中文", '11'],
-    "KR": ["ko", "한국어", '12']
+    key: value + [str(i)]
+    for i, (key, value) in enumerate(_sorted_languages, 1)
 }
 DEFAULT_LANGUAGE = "en_US"
 
@@ -275,7 +293,7 @@ def migrate_config(old_config):
         logging.debug("Migrated log_level: %s", log_level)
     else:
         new_config["Logging"]["log_level"] = DEFAULT_CONFIG['Logging']["log_level"]
-        logging.debug(f"Set log_level to default: {DEFAULT_CONFIG['Logging']["log_level"]}")
+        logging.debug(f"Set log_level to default: {DEFAULT_CONFIG['Logging']['log_level']}")
 
     # Step 4: Remove obsolete sections
     for section in list(new_config.keys()):
@@ -455,8 +473,8 @@ def ask_language_choice():
     choice_index = utils.prompt_choice(
         "Enter the number of your language choice (leave blank for default English)",
         choices=[str(i) for i in range(1, len(language_options) + 1)],
-        show_choices=False, # <-- This is now correctly handled by **kwargs
-        default="2" # L'index 2 correspond à l'anglais
+        show_choices=False,  # <-- This is now correctly handled by **kwargs
+        default=SUPPORTED_LANGUAGES["US"][2]  # Default to English (US)
     )
 
     # Convert the user's choice to the corresponding language key
@@ -486,7 +504,7 @@ def ask_game_version():
         else:
             # If the format is invalid, display an error message and ask for the version again.
             print(
-                f"[bold indian_red1]{lang.get_translation("config_invalid_game_version")}[/bold indian_red1]")
+                f"[bold indian_red1]{lang.get_translation('config_invalid_game_version')}[/bold indian_red1]")
 
 
 def ask_auto_update():
