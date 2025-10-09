@@ -52,6 +52,7 @@ def parse_args():
     parser.add_argument('--timeout', type=int, help='Set the timeout for downloads')
     parser.add_argument('--install-modlist', action='store_true', help='Download mods from modlist.json to the mods folder.')
     parser.add_argument('--force-update', action='store_true', help='Force a re-download and re-install of all mods, regardless of version.')
+    parser.add_argument('--dry-run', action='store_true', help='List mods with updates without downloading them.')
 
     args = parser.parse_args()
 

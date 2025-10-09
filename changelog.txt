@@ -1,4 +1,8 @@
 v2.4.0
+- Added: `--dry-run` command-line argument.
+  - Displays a detailed list of mods with available updates (installed version, new version, and changelog) in the console without downloading them.
+  - Generates a `dry_run_report.txt` text report in the logs directory.
+  - All messages related to this feature are now internationalized.
 - refactor(config): Dynamically generate the language selection list to improve maintainability. This removes the need for manual re-numbering when adding/removing languages and ensures the default language selection is always correct.
 - feat (UX): Added display of the specific reason for mod exclusion in the final summary (e.g., 'Excluded by user in config.ini' or 'API data unavailable').
 - feat (i18n): Added language support for Polish (pl_PL).

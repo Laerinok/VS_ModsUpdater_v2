@@ -68,5 +68,20 @@
     "error": "에러:",
     "yes": "y",
     "no": "n",
-    "to": "까지"
-  }
+    "to": "까지",
+
+    "dry_run_console_updates_available": "다음 모드에 사용 가능한 업데이트가 있습니다:",
+    "dry_run_console_no_updates": "모든 모드가 최신 버전입니다.",
+    "dry_run_console_report_saved": "보고서가 다음 위치에 저장되었습니다:",
+    "dry_run_console_installed": "설치됨",
+    "dry_run_console_latest": "최신",
+    "dry_run_console_changelog": "변경 로그",
+
+    "dry_run_report_header": "Vintage Story Mods Updater - 드라이 런 보고서",
+    "dry_run_report_generated_on": "생성 날짜:",
+    "dry_run_report_no_updates": "모든 모드가 최신 버전입니다.",
+    "dry_run_report_installed": "설치됨",
+    "dry_run_report_available": "사용 가능",
+    "dry_run_report_changelog": "변경 로그",
+    "dry_run_report_changelog_unavailable": "변경 로그: 사용할 수 없음."
+}

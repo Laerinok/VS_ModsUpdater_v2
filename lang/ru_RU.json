@@ -68,5 +68,20 @@
     "error": "Ошибка:",
     "yes": "да",
     "no": "нет",
-    "to": "к"
+    "to": "к",
+
+    "dry_run_console_updates_available": "Для следующих модов доступны обновления:",
+    "dry_run_console_no_updates": "Все моды обновлены.",
+    "dry_run_console_report_saved": "Отчет сохранен в:",
+    "dry_run_console_installed": "Установлено",
+    "dry_run_console_latest": "Последняя",
+    "dry_run_console_changelog": "Список изменений",
+
+    "dry_run_report_header": "Vintage Story Mods Updater - Отчет о пробном запуске",
+    "dry_run_report_generated_on": "Сгенерировано:",
+    "dry_run_report_no_updates": "Все моды обновлены.",
+    "dry_run_report_installed": "Установлено",
+    "dry_run_report_available": "Доступно",
+    "dry_run_report_changelog": "Список изменений",
+    "dry_run_report_changelog_unavailable": "Список изменений: недоступен."
 }

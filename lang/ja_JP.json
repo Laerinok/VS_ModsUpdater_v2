@@ -68,5 +68,20 @@
     "error": "エラー：",
     "yes": "はい",
     "no": "いいえ",
-    "to": "へ"
+    "to": "へ",
+
+    "dry_run_console_updates_available": "以下のModに利用可能なアップデートがあります：",
+    "dry_run_console_no_updates": "すべてのModは最新です。",
+    "dry_run_console_report_saved": "レポートが保存されました：",
+    "dry_run_console_installed": "インストール済み",
+    "dry_run_console_latest": "最新",
+    "dry_run_console_changelog": "変更履歴",
+
+    "dry_run_report_header": "Vintage Story Mods Updater - ドライランレポート",
+    "dry_run_report_generated_on": "生成日：",
+    "dry_run_report_no_updates": "すべてのModは最新です。",
+    "dry_run_report_installed": "インストール済み",
+    "dry_run_report_available": "利用可能",
+    "dry_run_report_changelog": "変更履歴",
+    "dry_run_report_changelog_unavailable": "変更履歴：利用不可。"
 }

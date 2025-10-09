@@ -36,7 +36,7 @@ __author__ = "Laerinok"
 __version__ = "2.3.0"
 __license__ = "GNU GPL v3"
 __description__ = "Mods Updater for Vintage Story"
-__date__ = "2025-10-03"  # Last update
+__date__ = "2025-10-09"  # Last update
 
 # main.py
 
@@ -59,6 +59,7 @@ import config
 import export_html
 import export_json
 import export_pdf
+import export_report
 import fetch_mod_info
 import global_cache
 import lang
@@ -227,6 +228,33 @@ if __name__ == "__main__":
 
     # Check for updates and pass the --force-update flag
     mods_update_checker.check_for_mod_updates(args.force_update)
+
+    # Dry run: list mods with updates and exit
+    if args.dry_run:
+        mods_to_update = global_cache.mods_data.get('mods_to_update', [])
+        print("\n[bold green]-- Dry Run --[/bold green]")
+        if mods_to_update:
+            print(f"[bold green]{lang.get_translation('dry_run_console_updates_available')}[/bold green]\n")
+            for mod in mods_to_update:
+                title = f"[bold]{mod.get('Name', 'Unknown Name')}[/bold]"
+                text = f"{lang.get_translation('dry_run_console_installed')}: [red]{mod.get('Old_version', 'N/A')}[/red] -> {lang.get_translation('dry_run_console_latest')}: [green]{mod.get('New_version', 'N/A')}[/green]"
+                
+                changelog = mod.get('Changelog', 'No changelog available.')
+                if changelog:
+                    text += f"\n\n[bold]{lang.get_translation('dry_run_console_changelog')}:[/bold]"
+                    text += f"\n{changelog}"
+
+                print(Panel(text, title=title, border_style="blue"))
+
+        else:
+            print(f"[bold green]{lang.get_translation('dry_run_console_no_updates')}[/bold green]")
+        
+        # Generate and save the dry run report
+        report_path = export_report.generate_dry_run_report(mods_to_update)
+        if report_path:
+            print(f"\n[bold green]{lang.get_translation('dry_run_console_report_saved')}[/bold green] [blue]{report_path}[/blue]")
+
+        exit_program()
 
     # Choice for auto/manual update
     auto_update_str = global_cache.config_cache['Options']['auto_update']

@@ -68,5 +68,20 @@
     "error": "错误：",
     "yes": "是",
     "no": "否",
-    "to": "至"
+    "to": "至",
+
+    "dry_run_console_updates_available": "以下模组有可用更新：",
+    "dry_run_console_no_updates": "所有模组都是最新的。",
+    "dry_run_console_report_saved": "报告已保存到：",
+    "dry_run_console_installed": "已安装",
+    "dry_run_console_latest": "最新",
+    "dry_run_console_changelog": "更新日志",
+
+    "dry_run_report_header": "Vintage Story Mods Updater - 空运行报告",
+    "dry_run_report_generated_on": "生成于：",
+    "dry_run_report_no_updates": "所有模组都是最新的。",
+    "dry_run_report_installed": "已安装",
+    "dry_run_report_available": "可用",
+    "dry_run_report_changelog": "更新日志",
+    "dry_run_report_changelog_unavailable": "更新日志：不可用。"
 }

@@ -68,5 +68,20 @@
     "error": "Błąd:",
     "yes": "tak",
     "no": "nie",
-    "to": "do"
+    "to": "do",
+
+    "dry_run_console_updates_available": "Dostępne są aktualizacje dla następujących modów:",
+    "dry_run_console_no_updates": "Wszystkie mody są aktualne.",
+    "dry_run_console_report_saved": "Raport został zapisany w:",
+    "dry_run_console_installed": "Zainstalowana",
+    "dry_run_console_latest": "Najnowsza",
+    "dry_run_console_changelog": "Lista zmian",
+
+    "dry_run_report_header": "Vintage Story Mods Updater - Raport z uruchomienia próbnego",
+    "dry_run_report_generated_on": "Wygenerowano:",
+    "dry_run_report_no_updates": "Wszystkie mody są aktualne.",
+    "dry_run_report_installed": "Zainstalowana",
+    "dry_run_report_available": "Dostępna",
+    "dry_run_report_changelog": "Lista zmian",
+    "dry_run_report_changelog_unavailable": "Lista zmian: Niedostępna."
 }
