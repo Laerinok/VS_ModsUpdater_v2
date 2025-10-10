@@ -285,11 +285,49 @@ def get_mod_api_data(mod):
         encoded_installed_download_url = installed_download_url
 
     sorted_releases = get_compatible_releases(mod_json,
-                                              global_cache.config_cache['Game_Version'][
-                                                  'user_game_version'],
+                                              global_cache.config_cache['Game_Version']['user_game_version'],
                                               exclude_prerelease)
     if sorted_releases:
-        changelog = sorted_releases[0].get('changelog')
+        latest_compatible_version_str = sorted_releases[0].get('modversion')
+        all_changelogs = []
+        local_version_str = mod.get("Local_Version")
+        all_api_releases = mod_json.get("mod", {}).get("releases", [])
+
+        if local_version_str and latest_compatible_version_str and all_api_releases:
+            try:
+                local_version = Version(local_version_str)
+                latest_compatible_version = Version(latest_compatible_version_str)
+
+                releases_for_changelog = []
+                for release in all_api_releases:
+                    release_version_str = release.get("modversion")
+                    if not release_version_str:
+                        continue
+                    try:
+                        release_version = Version(release_version_str)
+                        if local_version < release_version <= latest_compatible_version:
+                            releases_for_changelog.append(release)
+                    except Exception:
+                        logging.warning(f"Could not parse release version: {release_version_str} for mod {mod['ModId']}")
+
+                releases_for_changelog.sort(key=lambda r: Version(r.get("modversion", "0")))
+
+                for release in releases_for_changelog:
+                    changelog_text = release.get('changelog')
+                    if changelog_text:
+                        all_changelogs.append(
+                            f"### {lang.get_translation('changelog_version_title')} {release.get('modversion')}\n{changelog_text}")
+
+            except Exception as e:
+                logging.warning(f"Error processing changelogs for mod {mod['ModId']}: {e}")
+                all_changelogs = []
+
+        if all_changelogs:
+            changelog = "\n\n".join(all_changelogs)
+        else:
+            changelog = sorted_releases[0].get('changelog')
+    else:
+        changelog = None
 
     mainfile_excluded_file = get_mainfile_from_excluded_mods(sorted_releases,
                                                              global_cache.mods_data[

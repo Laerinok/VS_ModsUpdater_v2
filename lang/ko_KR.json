@@ -69,6 +69,7 @@
     "yes": "y",
     "no": "n",
     "to": "까지",
+    "changelog_version_title": "버전",
 
     "dry_run_console_updates_available": "다음 모드에 사용 가능한 업데이트가 있습니다:",
     "dry_run_console_no_updates": "모든 모드가 최신 버전입니다.",

@@ -10,6 +10,7 @@ v2.4.0
 - fixed (Critical): Resolved a critical issue causing download failures for certain mods due to **double URL encoding** in download URLs retrieved from the Vintage Story mod API.
 - fixed (Critical): Fixed a fatal crash (`AttributeError: 'NoneType'`) that occurred when the HTTP client failed to complete a download request after all retry attempts. Download failures are now logged and handled gracefully.
 - fixed (i18n): Resolved a critical issue where the 'Yes/No' prompts failed to accept universal ASCII input (like 'n' for No) when the locale used non-ASCII characters (e.g., Russian 'н'/'д').
+- fixed: The application now correctly displays the changelogs for all intermediate versions when updating a mod, instead of only showing the changelog for the latest version. This provides a complete picture of the changes included in an update.
 - refactor (i18n): Reworked title string logic to use a dynamic variable (`{ModsUpdater_author}`) instead of hardcoding the author's name, preparing the codebase for easier redistribution or branding changes.
 - refactor (Logic): Reworked the mod update check logic (`mods_update_checker.py`) to sequentially pre-filter user-excluded mods. This centralizes exclusion logic and **prevents unnecessary network calls** during concurrent processing.
 - refactor (Core): Centralized the entire 'Yes/No' user input logic into the robust `utils.prompt_yes_no` function and removed the superfluous and rigid validation loop from `main.py`, making the application flow cleaner and more maintainable.

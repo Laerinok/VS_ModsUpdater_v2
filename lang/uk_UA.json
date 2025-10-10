@@ -69,6 +69,7 @@
     "yes": "так",
     "no": "ні",
     "to": "до",
+    "changelog_version_title": "Версія",
 
     "dry_run_console_updates_available": "Для наступних модів доступні оновлення:",
     "dry_run_console_no_updates": "Усі моди оновлено.",

@@ -69,6 +69,7 @@
     "yes": "sì",
     "no": "no",
     "to": "a",
+    "changelog_version_title": "Versione",
 
     "dry_run_console_updates_available": "I seguenti mod hanno aggiornamenti disponibili:",
     "dry_run_console_no_updates": "Tutti i mod sono aggiornati.",

@@ -69,6 +69,7 @@
     "yes": "да",
     "no": "нет",
     "to": "к",
+    "changelog_version_title": "Версия",
 
     "dry_run_console_updates_available": "Для следующих модов доступны обновления:",
     "dry_run_console_no_updates": "Все моды обновлены.",

@@ -69,6 +69,7 @@
     "yes": "是",
     "no": "否",
     "to": "至",
+    "changelog_version_title": "版本",
 
     "dry_run_console_updates_available": "以下模组有可用更新：",
     "dry_run_console_no_updates": "所有模组都是最新的。",
