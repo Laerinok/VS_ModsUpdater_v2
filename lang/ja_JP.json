@@ -34,6 +34,11 @@
     "config_choose_update_mode_auto": "自動",
     "config_choose_update_mode_manual": "手動",
     "config_invalid_update_choice": "無効な選択です。「手動」または「自動」を入力してください。",
+    "config_incompatibility_prompt": "アップデートが利用できない互換性のないModをどのように処理しますか？",
+    "config_incompatibility_ask": "どうするか尋ねる",
+    "config_incompatibility_abort": "アップデートプロセスを中止する",
+    "config_incompatibility_ignore": "無視して続行する",
+    "config_choose_behavior_prompt": "選択を入力してください",
     
     "fetch_changelog_unknown_version": "不明なバージョン",
     

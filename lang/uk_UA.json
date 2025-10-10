@@ -33,7 +33,12 @@
     "config_choose_update_mode_auto": "автоматично",
     "config_choose_update_mode_manual": "вручну",
     "config_invalid_update_choice": "Невірний вибір. Будь ласка, введіть 'вручну' або 'автоматично'.",
-    
+    "config_incompatibility_prompt": "Як поводитися з несумісними модами, коли оновлення недоступне?",
+    "config_incompatibility_ask": "Запитати, що робити",
+    "config_incompatibility_abort": "Перервати процес оновлення",
+    "config_incompatibility_ignore": "Ігнорувати та продовжити",
+    "config_choose_behavior_prompt": "Введіть ваш вибір",
+
     "fetch_changelog_unknown_version": "невідома версія",
     
     "fetch_mod_info_error_mods_path_missing": "У конфігурації відсутній ModsPath або ключ 'path'.",

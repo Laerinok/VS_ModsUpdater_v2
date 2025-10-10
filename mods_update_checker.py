@@ -17,12 +17,13 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 """
-
-
+This module automates the process of checking for updates to installed mods.
+It compares local mod versions with the latest available versions and retrieves changelogs for mods that require updates.
 """
+
 __author__ = "Laerinok"
 __version__ = "2.3.0"
-__date__ = "2025-08-25"  # Last update
+__date__ = "2025-10-10"  # Last update
 
 # mods_update_checker.py
 
@@ -32,7 +33,7 @@ from packaging.version import Version
 from enum import Enum
 
 import global_cache
-from utils import version_compare, check_excluded_mods, convert_html_to_markdown
+from utils import version_compare, VersionCompareState, check_excluded_mods, convert_html_to_markdown
 
 class ModUpdateStatus(Enum):
     UP_TO_DATE = "up_to_date"
@@ -49,59 +50,54 @@ class ProcessModResult:
 
 def check_for_mod_updates(force_update=False):
     """
-    This module automates the process of checking for updates to installed mods.
-    It compares local mod versions with the latest available versions and retrieves changelogs for mods that require updates.
-
-    Key functionalities include:
-    - Checking for mod updates by comparing local and latest available versions.
-    - Handling excluded mods to skip them during the update check.
-    - Fetching changelogs for updated mods using the fetch_changelog module.
-    - Populating the global_cache['mods_to_update'] list with relevant mod information.
-    - Utilizing multithreading to efficiently process multiple mods.
-    - Providing detailed logging for debugging and monitoring.
+    Automates the mod update checking process, comparing local versions
+    with latest available versions after filtering out user-excluded mods.
     """
-    check_excluded_mods()  # Update excluded mods list
-    excluded_filenames = [mod['Filename'] for mod in
-                          global_cache.mods_data.get("excluded_mods", [])]
+    mods_to_process = []
     mods_to_update: list[dict[str, str]] = []
     incompatible_mods: list[dict[str, str]] = []
+
+    # Pre-filter mods excluded by user configuration
+    for mod in global_cache.mods_data.get("installed_mods", []):
+        if check_excluded_mods(mod.get('Filename'), mod.get('Name')):
+            continue
+        mods_to_process.append(mod)
+
     with ThreadPoolExecutor() as executor:
         futures = []
-        for mod in global_cache.mods_data.get("installed_mods", []):
-            # Pass the force_update flag to the worker function
-            futures.append(executor.submit(process_mod, mod, excluded_filenames, force_update))
+        for mod in mods_to_process:
+            futures.append(executor.submit(process_mod, mod, force_update))
 
         # We collect the results from the threads
         for future in as_completed(futures):
             mod_data: ProcessModResult = future.result()
-            if mod_data.status == ModUpdateStatus.UPDATE_AVAILABLE:
-                mods_to_update.append(mod_data.update_info)
-            elif mod_data.status == ModUpdateStatus.NO_COMPATIBILITY:
-                incompatible_mods.append(mod_data.update_info)
+            if mod_data:
+                if mod_data.status == ModUpdateStatus.UPDATE_AVAILABLE:
+                    mods_to_update.append(mod_data.update_info)
+                elif mod_data.status == ModUpdateStatus.NO_COMPATIBILITY:
+                    incompatible_mods.append(mod_data.update_info)
 
     global_cache.mods_data['mods_to_update'] = sorted(mods_to_update,
                                                       key=lambda mod: mod['Name'].lower())
     global_cache.mods_data['incompatible_mods'] = sorted(incompatible_mods,
                                                           key=lambda mod: mod['Name'].lower())
 
-def process_mod(mod, excluded_filenames, force_update) -> ProcessModResult:
+
+def process_mod(mod, force_update) -> ProcessModResult:
     """
     Processes a single mod to check for updates and fetch changelog.
     Returns the mod data if an update is found, otherwise None.
     """
-    if mod['Filename'] in excluded_filenames:
-        logging.info(f"Skipping excluded mod: {mod['Name']}")
-        return None  # We return None if the mod is excluded
-
     # Determine the correct download URL
     download_url = mod.get("latest_version_dl_url")
     changelog_markdown = ""
     user_game_ver = Version(global_cache.config_cache['Game_Version']['user_game_version'])
 
     # Check if a new version is available or if a force update is requested
-    if mod.get("mod_latest_version_for_game_version") and version_compare(
-            mod["Local_Version"], mod["mod_latest_version_for_game_version"]):
-        # A new version is available, use its URL and changelog
+    mod_latest_version_for_game_version = mod.get("mod_latest_version_for_game_version", None)
+    version_compare_result = version_compare(mod["Local_Version"], mod_latest_version_for_game_version) if mod_latest_version_for_game_version else None
+    if version_compare_result in [VersionCompareState.LOCAL_VERSION_BEHIND, VersionCompareState.LOCAL_VERSION_AHEAD]:
+        # A new version is available or the current version is too recent, use its URL and changelog
         raw_changelog_html = mod.get("Changelog")
         if raw_changelog_html is not None:
             changelog_markdown = convert_html_to_markdown(raw_changelog_html)
@@ -120,7 +116,7 @@ def process_mod(mod, excluded_filenames, force_update) -> ProcessModResult:
         if mod_game_version:
             mod_game_version = Version(mod_game_version)
             if (mod_game_version.major, mod_game_version.minor) != (user_game_ver.major, user_game_ver.minor):
-                return ProcessModResult(ModUpdateStatus.NO_COMPATIBILITY, 
+                return ProcessModResult(ModUpdateStatus.NO_COMPATIBILITY,
                                         {
                                             "Name": mod['Name'],
                                             "Old_version": mod['Local_Version'],
@@ -135,7 +131,7 @@ def process_mod(mod, excluded_filenames, force_update) -> ProcessModResult:
         return ProcessModResult(ModUpdateStatus.UP_TO_DATE)
 
     if download_url:
-        return ProcessModResult(ModUpdateStatus.UPDATE_AVAILABLE, 
+        return ProcessModResult(ModUpdateStatus.UPDATE_AVAILABLE,
                                 {
                                     "Name": mod['Name'],
                                     "Old_version": mod['Local_Version'],

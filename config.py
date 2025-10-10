@@ -23,7 +23,7 @@
 
 __author__ = "Laerinok"
 __version__ = "2.3.0"  # Don't forget to change EXPECTED_VERSION
-__date__ = "2025-10-03"  # Last update
+__date__ = "2025-10-10"  # Last update
 
 
 # config.py
@@ -143,7 +143,8 @@ URL_SCRIPT = {
 DEFAULT_CONFIG = {
     "ModsUpdater": {"version": __version__},
     "Logging": {"log_level": "DEBUG"},
-    "Options": {"exclude_prerelease_mods": "false", "auto_update": "true", "max_workers": str(4), "timeout": str(10)},
+    # Dans DEFAULT_CONFIG
+    "Options": {"exclude_prerelease_mods": "false", "auto_update": "true", "max_workers": str(4), "timeout": str(10), "incompatibility_behavior": "0"},
     "Backup_Mods": {"backup_folder": "backup_mods", "max_backups": str(3), "modlist_folder": "modlist"},
     "ModsPath": {"path": MODS_PATHS[SYSTEM]},
     "Language": {"language": DEFAULT_LANGUAGE},
@@ -318,7 +319,7 @@ def migrate_config(old_config):
         logging.error("Error occurred while writing the migrated config: %s", str(e))
 
 
-def create_config(language, mod_folder, user_game_version, auto_update):
+def create_config(language, mod_folder, user_game_version, auto_update, behavior_choice):
     """
     Create the config.ini file with default or user-specified values.
     """
@@ -331,6 +332,7 @@ def create_config(language, mod_folder, user_game_version, auto_update):
     DEFAULT_CONFIG["ModsPath"]["path"] = mod_folder
     DEFAULT_CONFIG["Game_Version"]["user_game_version"] = user_game_version
     DEFAULT_CONFIG["Options"]["auto_update"] = auto_update
+    DEFAULT_CONFIG["Options"]["incompatibility_behavior"] = behavior_choice
 
     config_parser = configparser.ConfigParser()
     for section, options in DEFAULT_CONFIG.items():
@@ -551,6 +553,21 @@ def ask_auto_update():
             # This path is theoretically unreachable if Rich's validation works,
             # but it's good practice to keep it for debugging.
             print(lang.get_translation("config_invalid_update_choice"))
+
+
+def ask_incompatibility_behavior():
+    """Ask the user how to handle incompatible mods."""
+    print(f"\n{lang.get_translation('config_incompatibility_prompt')}")
+    print(f"  [bold]0.[/bold] {lang.get_translation('config_incompatibility_ask')}")
+    print(f"  [bold]1.[/bold] {lang.get_translation('config_incompatibility_abort')}")
+    print(f"  [bold]2.[/bold] {lang.get_translation('config_incompatibility_ignore')}")
+
+    choice = utils.prompt_choice(
+        lang.get_translation("config_choose_behavior_prompt"),
+        choices=['0', '1', '2'],
+        default='0'
+    )
+    return choice
 
 
 def configure_logging(logging_level):

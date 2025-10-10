@@ -34,7 +34,12 @@
     "config_choose_update_mode_auto": "автоматически",
     "config_choose_update_mode_manual": "вручную",
     "config_invalid_update_choice": "Неверный выбор. Пожалуйста, введите 'вручную' или 'автоматически'.",
-    
+    "config_incompatibility_prompt": "Как обрабатывать несовместимые моды, если обновление недоступно?",
+    "config_incompatibility_ask": "Спросить, что делать",
+    "config_incompatibility_abort": "Прервать процесс обновления",
+    "config_incompatibility_ignore": "Игнорировать и продолжить",
+    "config_choose_behavior_prompt": "Введите ваш выбор",
+
     "fetch_changelog_unknown_version": "неизвестная версия",
     
     "fetch_mod_info_error_mods_path_missing": "В конфигурации отсутствует ModsPath или ключ 'path'.",

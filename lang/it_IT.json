@@ -33,6 +33,11 @@
     "config_choose_update_mode_auto": "auto",
     "config_choose_update_mode_manual": "manuale",
     "config_invalid_update_choice": "Scelta non valida. Inserisci 'manuale' o 'auto'.",
+    "config_incompatibility_prompt": "Come gestire le mod incompatibili quando non è disponibile un aggiornamento?",
+    "config_incompatibility_ask": "Chiedi cosa fare",
+    "config_incompatibility_abort": "Interrompi il processo di aggiornamento",
+    "config_incompatibility_ignore": "Ignora e continua",
+    "config_choose_behavior_prompt": "Inserisci la tua scelta",
     
     "fetch_changelog_unknown_version": "versione sconosciuta",
     

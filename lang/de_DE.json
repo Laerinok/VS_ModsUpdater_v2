@@ -20,6 +20,9 @@
     "main_show_changelog_prompt": "Möchten Sie den Changelog sehen?",
     "main_changelog_title": "Änderungsprotokoll",
     "main_reason_label_unknown": "Unbekannter Grund",
+    "main_incompatible_mods_found_without_update": "Inkompatible Mods gefunden, für die kein Update verfügbar ist:",
+    "main_aborting_due_to_incompatibility": "Abbrechen des Updates aufgrund von Inkompatibilität.",
+    "main_continue_anyway_prompt": "Möchten Sie trotzdem fortfahren?",
     
     "config_ask_mod_directory": "Geben Sie den Pfad zu Ihrem Mods-Ordner ein. Lassen Sie ihn leer für den Standardpfad",
     "config_configuration_migrated": "Konfiguration erfolgreich zu Version {EXPECTED_VERSION} migriert.",
@@ -30,6 +33,11 @@
     "config_choose_update_mode_auto": "auto",
     "config_choose_update_mode_manual": "manuell",
     "config_invalid_update_choice": "Ungültige Auswahl. Bitte geben Sie 'manuell' oder 'auto' ein.",
+    "config_incompatibility_prompt": "Wie sollen inkompatible Mods behandelt werden, wenn kein Update verfügbar ist?",
+    "config_incompatibility_ask": "Fragen, was zu tun ist",
+    "config_incompatibility_abort": "Update-Vorgang abbrechen",
+    "config_incompatibility_ignore": "Ignorieren und fortfahren",
+    "config_choose_behavior_prompt": "Geben Sie Ihre Wahl ein",
     
     "fetch_changelog_unknown_version": "unbekannte Version",
     

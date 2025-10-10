@@ -34,6 +34,11 @@
     "config_choose_update_mode_auto": "자동",
     "config_choose_update_mode_manual": "수동",
     "config_invalid_update_choice": "잘못된 선택. '수동'이나 '자동'을 입력해 주세요.",
+    "config_incompatibility_prompt": "사용 가능한 업데이트가 없을 때 호환되지 않는 모드를 어떻게 처리할까요?",
+    "config_incompatibility_ask": "어떻게 할지 묻기",
+    "config_incompatibility_abort": "업데이트 프로세스 중단",
+    "config_incompatibility_ignore": "무시하고 계속하기",
+    "config_choose_behavior_prompt": "선택을 입력하세요",
   
     "fetch_changelog_unknown_version": "알 수 없는 버전",
   

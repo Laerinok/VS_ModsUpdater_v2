@@ -32,7 +32,7 @@ Key functionalities include:
 
 __author__ = "Laerinok"
 __version__ = "2.3.0"
-__date__ = "2025-10-03"  # Last update
+__date__ = "2025-10-10"  # Last update
 
 # fetch_mod_info.py
 

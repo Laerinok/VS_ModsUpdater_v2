@@ -36,7 +36,7 @@ __author__ = "Laerinok"
 __version__ = "2.3.0"
 __license__ = "GNU GPL v3"
 __description__ = "Mods Updater for Vintage Story"
-__date__ = "2025-08-26"  # Last update
+__date__ = "2025-10-10"  # Last update
 
 # main.py
 
@@ -93,6 +93,7 @@ def initialize_config():
         mods_dir = config.ask_mods_directory()
         user_game_version = config.ask_game_version()
         auto_update = config.ask_auto_update()
+        behavior_choice = config.ask_incompatibility_behavior()
 
         print(
             f"\n- {language_cache['main_language_set_to']}[dodger_blue1]{language[1]}[/dodger_blue1]")
@@ -107,7 +108,7 @@ def initialize_config():
             f"- {language_cache['main_mods_update_choice']}[dodger_blue1]{auto_update_choice}[/dodger_blue1]")
 
         # Create config.ini file
-        config.create_config(language, mods_dir, user_game_version, auto_update)
+        config.create_config(language, mods_dir, user_game_version, auto_update, behavior_choice)
         print(f"\n{language_cache['main_config_file_created']}")
 
         # Ask if we continue or quit to modify config.ini (e.g., to add mods to the exception list.)
@@ -156,7 +157,7 @@ def welcome_display():
     new_version, urlscript, latest_version, changelog_text = mu_script_update.modsupdater_update()
 
     # Center the main title first
-    title_text = f"\n\n[dodger_blue1]{lang.get_translation('main_title').format(ModsUpdater_version=__version__)}[/dodger_blue1]"
+    title_text = f"\n\n[dodger_blue1]{lang.get_translation('main_title').format(ModsUpdater_version=__version__, ModsUpdater_author=__author__)}[/dodger_blue1]"
     console.print(title_text, justify="center")
 
     # Handles the update message and logs
@@ -209,7 +210,7 @@ if __name__ == "__main__":
     # Initialize config
     initialize_config()
     set_console_title(
-        lang.get_translation("main_title").format(ModsUpdater_version=__version__))
+        lang.get_translation("main_title").format(ModsUpdater_version=__version__, ModsUpdater_author=__author__))
 
     import mu_script_update
 

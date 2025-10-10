@@ -34,7 +34,12 @@
     "config_choose_update_mode_auto": "自动",
     "config_choose_update_mode_manual": "手动",
     "config_invalid_update_choice": "无效的选择。请输入“手动”或“自动”。",
-    
+    "config_incompatibility_prompt": "当没有可用更新时，如何处理不兼容的模组？",
+    "config_incompatibility_ask": "询问如何操作",
+    "config_incompatibility_abort": "中止更新过程",
+    "config_incompatibility_ignore": "忽略并继续",
+    "config_choose_behavior_prompt": "请输入您的选择",
+
     "fetch_changelog_unknown_version": "未知版本",
     
     "fetch_mod_info_error_mods_path_missing": "配置中缺少ModsPath或“path”键。",

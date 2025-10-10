@@ -1,4 +1,7 @@
 v2.4.0
+- feat(update): Implement mod downgrade capability. If an installed mod is too new for the selected game version, the updater will now offer to downgrade it to the latest compatible version.
+- feat(check): Add proactive incompatibility check. The application now warns the user if an installed mod is incompatible with the game version, even when no alternative version is available for download.
+- feat(config): Add 'incompatibility_behavior' option. Users can now configure how the application reacts to incompatible mods: ask to continue (0), abort automatically (1), or ignore (2).
 - Added: `--dry-run` command-line argument.
   - Displays a detailed list of mods with available updates (installed version, new version, and changelog) in the console without downloading them.
   - Generates a `dry_run_report.txt` text report in the logs directory.
