@@ -19,7 +19,7 @@ v2.4.0
 - refactor (Data): Enriched the `excluded_mods` data in `global_cache` to store the specific `Reason` for exclusion, improving debugging and logging.
 - i18n: Added translation keys across all 12 supported languages to ensure full support for the new exclusion messages.
 
-v2.3.0:
+v2.4.0:
 - Added: a user prompt that allows displaying the changelog for new script updates on demand.
 - Added: support for a new API to check for ModsUpdater updates.
 - Added: Improved console output with clickable links and better-centered text.

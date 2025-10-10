@@ -22,7 +22,7 @@ It retrieves changelogs for mods that need updates and prompts the user to downl
 """
 
 __author__ = "Laerinok"
-__version__ = "2.3.0"
+__version__ = "2.4.0"
 __date__ = "2025-08-24"  # Last update
 
 # mods_manual_update.py
