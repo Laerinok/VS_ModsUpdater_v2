@@ -36,7 +36,7 @@ __author__ = "Laerinok"
 __version__ = "2.3.0"
 __license__ = "GNU GPL v3"
 __description__ = "Mods Updater for Vintage Story"
-__date__ = "2025-10-09"  # Last update
+__date__ = "2025-10-10"  # Last update
 
 # main.py
 
@@ -59,7 +59,6 @@ import config
 import export_html
 import export_json
 import export_pdf
-import export_report
 import fetch_mod_info
 import global_cache
 import lang
@@ -94,36 +93,43 @@ def initialize_config():
         mods_dir = config.ask_mods_directory()
         user_game_version = config.ask_game_version()
         auto_update = config.ask_auto_update()
+        behavior_choice = config.ask_incompatibility_behavior()
 
         print(
-            f"\n- {language_cache["main_language_set_to"]}[dodger_blue1]{language[1]}[/dodger_blue1]")
+            f"\n- {language_cache['main_language_set_to']}[dodger_blue1]{language[1]}[/dodger_blue1]")
         print(
-            f"- {language_cache["main_mods_folder_path"]}[dodger_blue1]{mods_dir}[/dodger_blue1]")
+            f"- {language_cache['main_mods_folder_path']}[dodger_blue1]{mods_dir}[/dodger_blue1]")
         print(
-            f"- {language_cache["main_game_version"]}[dodger_blue1]{user_game_version}[/dodger_blue1]")
+            f"- {language_cache['main_game_version']}[dodger_blue1]{user_game_version}[/dodger_blue1]")
         auto_update_choice = lang.get_translation(
             "config_choose_update_mode_auto") if auto_update else lang.get_translation(
             "config_choose_update_mode_manual")
         print(
-            f"- {language_cache["main_mods_update_choice"]}[dodger_blue1]{auto_update_choice}[/dodger_blue1]")
+            f"- {language_cache['main_mods_update_choice']}[dodger_blue1]{auto_update_choice}[/dodger_blue1]")
 
         # Create config.ini file
-        config.create_config(language, mods_dir, user_game_version, auto_update)
-        print(f"\n{language_cache["main_config_file_created"]}")
+        config.create_config(language, mods_dir, user_game_version, auto_update, behavior_choice)
+        print(f"\n{language_cache['main_config_file_created']}")
 
         # Ask if we continue or quit to modify config.ini (e.g., to add mods to the exception list.)
-        print(f"{language_cache["main_update_or_modify_config"]}")
-        user_confirms_update = utils.prompt_yes_no(
-            lang.get_translation("main_continue_update_prompt"),
-            default=False  # Défaut est 'No', donc le programme doit sortir.
-        )
+        print(f"{language_cache['main_update_or_modify_config']}")
+        while True:
+            user_confirms_update = Prompt.ask(
+                f"{language_cache['main_continue_update_prompt']}",
+                choices=[global_cache.language_cache["yes"][0],
+                         global_cache.language_cache["no"][0]],
+                default=global_cache.language_cache["no"][0])
+            user_confirms_update = user_confirms_update.strip().lower()
 
-        # 2. Gestion du résultat (si 'No', on quitte)
-        if not user_confirms_update:
-            # Si l'utilisateur répond 'No' (ce qui correspond à False), nous sortons.
-            print(f"{lang.get_translation("main_exiting_program")}")
-            utils.exit_program(
-                extra_msg=f"{lang.get_translation("main_user_exits")}")
+            if user_confirms_update == global_cache.language_cache["yes"][0].lower():
+                break
+            elif user_confirms_update == global_cache.language_cache["no"][0].lower():
+                print(f"{language_cache['main_exiting_program']}")
+                utils.exit_program(
+                    extra_msg=f"{lang.get_translation('main_user_exits')}")
+
+            else:
+                pass
 
     migration_performed = config.migrate_config_if_needed()
 
@@ -141,7 +147,7 @@ def initialize_config():
 
     if migration_performed:
         print(
-            f"[dark_goldenrod]{lang.get_translation("config_configuration_migrated").format(EXPECTED_VERSION=config.EXPECTED_VERSION)}[/dark_goldenrod]")
+            f"[dark_goldenrod]{lang.get_translation('config_configuration_migrated').format(EXPECTED_VERSION=config.EXPECTED_VERSION)}[/dark_goldenrod]")
 
 
 def welcome_display():
@@ -190,7 +196,7 @@ def welcome_display():
         console.print(text_script_new_version, justify="center")
 
     # main_max_game_version
-    game_version_text = f'[dodger_blue1]{lang.get_translation("main_max_game_version")}{global_cache.config_cache['Game_Version']['user_game_version']}[/dodger_blue1]'
+    game_version_text = f'[dodger_blue1]{lang.get_translation("main_max_game_version")}{global_cache.config_cache["Game_Version"]["user_game_version"]}[/dodger_blue1]'
     console.print()  # Add a blank line
     console.print()  # Add another blank line
     console.print(game_version_text, justify="center")
@@ -229,38 +235,32 @@ if __name__ == "__main__":
     # Check for updates and pass the --force-update flag
     mods_update_checker.check_for_mod_updates(args.force_update)
 
-    # Dry run: list mods with updates and exit
-    if args.dry_run:
-        mods_to_update = global_cache.mods_data.get('mods_to_update', [])
-        print("\n[bold green]-- Dry Run --[/bold green]")
-        if mods_to_update:
-            print(f"[bold green]{lang.get_translation('dry_run_console_updates_available')}[/bold green]\n")
-            for mod in mods_to_update:
-                title = f"[bold]{mod.get('Name', 'Unknown Name')}[/bold]"
-                text = f"{lang.get_translation('dry_run_console_installed')}: [red]{mod.get('Old_version', 'N/A')}[/red] -> {lang.get_translation('dry_run_console_latest')}: [green]{mod.get('New_version', 'N/A')}[/green]"
-                
-                changelog = mod.get('Changelog', 'No changelog available.')
-                if changelog:
-                    text += f"\n\n[bold]{lang.get_translation('dry_run_console_changelog')}:[/bold]"
-                    text += f"\n{changelog}"
-
-                print(Panel(text, title=title, border_style="blue"))
-
-        else:
-            print(f"[bold green]{lang.get_translation('dry_run_console_no_updates')}[/bold green]")
-        
-        # Generate and save the dry run report
-        report_path = export_report.generate_dry_run_report(mods_to_update)
-        if report_path:
-            print(f"\n[bold green]{lang.get_translation('dry_run_console_report_saved')}[/bold green] [blue]{report_path}[/blue]")
-
-        exit_program()
-
     # Choice for auto/manual update
     auto_update_str = global_cache.config_cache['Options']['auto_update']
     auto_update_cfg = auto_update_str.lower() == 'true'
 
     # Download
+    if global_cache.mods_data.get('incompatible_mods'):
+        # Handle incompatible mods
+        print(f"[yellow]{global_cache.language_cache['main_incompatible_mods_found_without_update']}[/yellow]")
+        for mod in global_cache.mods_data.get('incompatible_mods'):
+            print(f"[yellow] - {mod['Name']} ({mod['Old_version'] + (' for game version ' + mod['Old_version_game_Version'] if mod['Old_version_game_Version'] else '')})[/yellow]")
+        incompatibility_behavior = global_cache.config_cache.get("Incompatibility_behavior", 0)
+        if incompatibility_behavior == 0:
+            # Use Prompt.ask to get the user's input
+            user_confirms_abort = Prompt.ask(
+                f"{global_cache.language_cache['main_continue_anyway_prompt']}",
+                choices=[global_cache.language_cache["yes"][0],
+                         global_cache.language_cache["no"][0]],
+                default=global_cache.language_cache["no"][0])
+            user_confirms_abort = user_confirms_abort.strip().lower()
+            if user_confirms_abort == global_cache.language_cache["no"][0].lower():
+                exit_program()
+        elif incompatibility_behavior == 1:
+            print(f"[red]{global_cache.language_cache['main_aborting_due_to_incompatibility']}[/red]")
+            if not args.no_pause:
+                input(f"\n{global_cache.language_cache['main_press_enter_to_exit']}")
+            sys.exit()
     if auto_update_cfg:
         # Auto update mods
         if global_cache.mods_data.get('mods_to_update'):
@@ -309,32 +309,13 @@ if __name__ == "__main__":
 
     if excluded_mods:
         excluded_title_style = Style(color="dark_goldenrod", bold=True)
-        mod_name_style = Style(color="indian_red1")
-        reason_style = Style(color="dodger_blue1",
-                             italic=True)  # Nouveau style pour la raison
+        excluded_mod_style = Style(color="indian_red1")
 
         print(Text(f"\n{lang.get_translation('main_excluded_mods_title')}",
                    style=excluded_title_style))
-
         for mod in excluded_mods:
             mod_name = mod.get('Name', mod.get('Filename', 'Unknown name'))
-            # Récupérer la raison stockée par utils.py ou fetch_mod_info.py
-            reason = mod.get('Reason')
-
-            # Construire l'affichage du mod et de la raison
-            if reason:
-                # Créer un objet Text pour l'affichage stylisé en ligne
-                text_to_print = Text("- ", style=mod_name_style)
-                text_to_print.append(mod_name, style=mod_name_style)
-                # Utiliser Text.append pour ajouter la raison entre parenthèses
-                # On assume ici l'existence d'une clé de traduction générique si besoin,
-                # mais la raison (reason) est déjà la traduction complète (ex: "Excluded by user...")
-                text_to_print.append(f" ({reason})", style=reason_style)
-                print(text_to_print)
-            else:
-                # Fallback pour un mod sans raison (devrait être rare après les modifications)
-                print(Text(f"- {mod_name}", style=mod_name_style))
-
+            print(Text(f"- {mod_name}", style=excluded_mod_style))
         print()
     else:
         logging.info("No mods were found in the exclusion list.")
@@ -351,5 +332,5 @@ if __name__ == "__main__":
     # End of programm
     utils.exit_program(extra_msg="", do_exit=False)
     if not args.no_pause:
-        input(f"\n{lang.get_translation("main_press_enter_to_exit")}")
+        input(f"\n{lang.get_translation('main_press_enter_to_exit')}")
     sys.exit()

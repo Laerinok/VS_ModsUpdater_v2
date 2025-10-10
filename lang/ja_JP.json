@@ -20,7 +20,11 @@
     "main_show_changelog_prompt": "変更履歴を見ますか？",
     "main_changelog_title": "変更履歴",
     "main_reason_label_unknown": "不明な理由",
-    
+
+    "main_incompatible_mods_found_without_update": "アップデートが利用できない互換性のないModが見つかりました：",
+    "main_aborting_due_to_incompatibility": "アップデートを中止します。",
+    "main_continue_anyway_prompt": "それでも続行しますか？",
+
     "config_ask_mod_directory": "Modフォルダへのパスを入力してください。デフォルトパスの場合は空白のままにしてください",
     "config_configuration_migrated": "構成はバージョン{EXPECTED_VERSION}に正常に移行されました。",
     "config_invalid_directory": "エラー：{mods_directory}は有効なディレクトリではありません。",
@@ -30,6 +34,11 @@
     "config_choose_update_mode_auto": "自動",
     "config_choose_update_mode_manual": "手動",
     "config_invalid_update_choice": "無効な選択です。「手動」または「自動」を入力してください。",
+    "config_incompatibility_prompt": "アップデートが利用できない互換性のないModをどのように処理しますか？",
+    "config_incompatibility_ask": "どうするか尋ねる",
+    "config_incompatibility_abort": "アップデートプロセスを中止する",
+    "config_incompatibility_ignore": "無視して続行する",
+    "config_choose_behavior_prompt": "選択を入力してください",
     
     "fetch_changelog_unknown_version": "不明なバージョン",
     
@@ -39,7 +48,7 @@
     "fetch_mod_info_fetching_mod_info": "APIからMod情報を取得中...",
     "fetch_mod_info_fetching_mod_info_name": "Mod情報を取得中",
     "fetch_mod_info_exclusion_reason_api_failure": "この Mod の API データは利用できません。削除または移行された可能性があります。",
-    
+
     "auto_file_size_unknown": "警告：ファイルサイズが不明またはゼロです。ダウンロードが正しく完了しない可能性があります。[/bold indian_red1]",
     "auto_downloading_mods": "Modをダウンロード中...",
     "auto_downloading_mod_name": "ダウンロード",
@@ -57,7 +66,7 @@
     "utils_error_invalid_max_workers": "エラー：max_workersの入力が無効です。整数である必要があります。",
     "utils_prg_terminated": "プログラムを終了しました。",
     "utils_exclusion_reason_user_config": "config.ini でユーザーによって除外されました",
-    
+
     "export_json_modilst": "ModリストをJSONとしてエクスポート：",
     "export_pdf_modilst": "ModリストをPDFとしてエクスポート：",
     "export_html_modilst": "ModリストをHTMLにエクスポートしました: ",

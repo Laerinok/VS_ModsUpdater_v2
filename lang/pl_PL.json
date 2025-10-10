@@ -20,6 +20,9 @@
     "main_show_changelog_prompt": "Czy chcesz zobaczyć listę zmian?",
     "main_changelog_title": "Lista zmian",
     "main_reason_label_unknown": "Nieznany powód",
+    "main_incompatible_mods_found_without_update": "Znaleziono niekompatybilne mody bez dostępnej aktualizacji:",
+    "main_aborting_due_to_incompatibility": "Przerywanie aktualizacji z powodu niekompatybilności.",
+    "main_continue_anyway_prompt": "Czy kontynuować mimo to?",
     
     "config_ask_mod_directory": "Podaj ścieżkę do folderu modów. Pozostaw puste dla domyślnej ścieżki",
     "config_configuration_migrated": "Konfiguracja pomyślnie przeniesiona do wersji {EXPECTED_VERSION}.",
@@ -30,6 +33,11 @@
     "config_choose_update_mode_auto": "auto",
     "config_choose_update_mode_manual": "manual",
     "config_invalid_update_choice": "Nieprawidłowy wybór. Podaj 'manual' lub 'auto'.",
+    "config_incompatibility_prompt": "Jak postępować z niekompatybilnymi modami, gdy aktualizacja nie jest dostępna?",
+    "config_incompatibility_ask": "Zapytaj, co robić",
+    "config_incompatibility_abort": "Przerwij proces aktualizacji",
+    "config_incompatibility_ignore": "Ignoruj i kontynuuj",
+    "config_choose_behavior_prompt": "Wprowadź swój wybór",
     
     "fetch_changelog_unknown_version": "nieznana wersja",
     

@@ -39,7 +39,8 @@ config_cache.setdefault("Options", {"timeout": 10})
 language_cache = {}  # Translation cache
 mods_data = {"installed_mods": [],
              "excluded_mods": [],
-             "mods_to_update": []
+             "mods_to_update": [],
+             "incompatible_mods": []
              }  # Mod cache
 modinfo_json_cache = {}
 total_mods = 0

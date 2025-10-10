@@ -20,7 +20,10 @@
     "main_show_changelog_prompt": "¿Quieres ver el registro de cambios?",
     "main_changelog_title": "Registro de cambios",
     "main_reason_label_unknown": "Razón desconocida",
-    
+    "main_incompatible_mods_found_without_update": "Se encontraron mods incompatibles sin actualización disponible:",
+    "main_aborting_due_to_incompatibility": "Abandonando la actualización debido a incompatibilidad.",
+    "main_continue_anyway_prompt": "¿Continuar de todos modos?",
+
     "config_ask_mod_directory": "Introduzca la ruta a su carpeta de mods. Deje en blanco para la ruta predeterminada",
     "config_configuration_migrated": "Configuración migrada con éxito a la versión {EXPECTED_VERSION}.",
     "config_invalid_directory": "Error: {mods_directory} no es un directorio válido.",
@@ -30,6 +33,11 @@
     "config_choose_update_mode_auto": "auto",
     "config_choose_update_mode_manual": "manual",
     "config_invalid_update_choice": "Opción no válida. Por favor, introduzca 'manual' o 'auto'.",
+    "config_incompatibility_prompt": "¿Cómo manejar los mods incompatibles cuando no hay una actualización disponible?",
+    "config_incompatibility_ask": "Preguntar qué hacer",
+    "config_incompatibility_abort": "Abortar el proceso de actualización",
+    "config_incompatibility_ignore": "Ignorar y continuar",
+    "config_choose_behavior_prompt": "Introduzca su elección",
     
     "fetch_changelog_unknown_version": "versión desconocida",
     
@@ -39,7 +47,7 @@
     "fetch_mod_info_fetching_mod_info": "Obteniendo información de los mods desde la API...",
     "fetch_mod_info_fetching_mod_info_name": "Obteniendo información de los mods",
     "fetch_mod_info_exclusion_reason_api_failure": "Datos de la API no disponibles para este mod. Puede haber sido eliminado o migrado.",
-    
+
     "auto_file_size_unknown": "Advertencia: El tamaño del archivo es desconocido o cero. Es posible que la descarga no se complete correctamente.[/bold indian_red1]",
     "auto_downloading_mods": "Descargando mods...",
     "auto_downloading_mod_name": "Descargando",
@@ -57,7 +65,7 @@
     "utils_error_invalid_max_workers": "Error: Entrada no válida para max_workers. Debe ser un número entero.",
     "utils_prg_terminated": "Programa terminado.",
     "utils_exclusion_reason_user_config": "Excluido por el usuario en config.ini",
-    
+
     "export_json_modilst": "Lista de mods exportada como JSON:",
     "export_pdf_modilst": "Lista de mods exportada como PDF:",
     "export_html_modilst": "Lista de mods exportada a HTML: ",

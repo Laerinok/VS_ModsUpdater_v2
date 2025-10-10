@@ -20,7 +20,10 @@
     "main_show_changelog_prompt": "Do you want to see the changelog?",
     "main_changelog_title": "Changelog",
     "main_reason_label_unknown": "Reason unknown",
-    
+    "main_incompatible_mods_found_without_update": "Incompatible mods found with no update available:",
+    "main_aborting_due_to_incompatibility": "Aborting update due to incompatibility.",
+    "main_continue_anyway_prompt": "Continue anyway?",
+
     "config_ask_mod_directory": "Enter the path to your mods folder. Leave blank for default path",
     "config_configuration_migrated": "Configuration migrated successfully to version {EXPECTED_VERSION}.",
     "config_invalid_directory": "Error: {mods_directory} is not a valid directory.",
@@ -30,6 +33,11 @@
     "config_choose_update_mode_auto": "auto",
     "config_choose_update_mode_manual": "manual",
     "config_invalid_update_choice": "Invalid choice. Please enter 'manual' or 'auto'.",
+    "config_incompatibility_prompt": "How to handle incompatible mods when no update is available?",
+    "config_incompatibility_ask": "Ask what to do",
+    "config_incompatibility_abort": "Abort the update process",
+    "config_incompatibility_ignore": "Ignore and continue",
+    "config_choose_behavior_prompt": "Enter your choice",
     
     "fetch_changelog_unknown_version": "unknown version",
     
@@ -39,7 +47,7 @@
     "fetch_mod_info_fetching_mod_info": "Fetching mod info from API...",
     "fetch_mod_info_fetching_mod_info_name": "Fetching mod info",
     "fetch_mod_info_exclusion_reason_api_failure": "API data for this mod is unavailable. It may have been removed or migrated.",
-    
+
     "auto_file_size_unknown": "Warning: The file size is unknown or zero. Download may not complete properly.[/bold indian_red1]",
     "auto_downloading_mods": "Downloading mods...",
     "auto_downloading_mod_name": "Downloading",
@@ -57,7 +65,7 @@
     "utils_error_invalid_max_workers": "Error: Invalid input for max_workers. Must be an integer.",
     "utils_prg_terminated": "Program terminated.",
     "utils_exclusion_reason_user_config": "Excluded by user in config.ini",
-    
+
     "export_json_modilst": "Mod list exported as JSON:",
     "export_pdf_modilst": "Mod list exported as PDF:",
     "export_html_modilst": "Mod list exported to HTML: ",

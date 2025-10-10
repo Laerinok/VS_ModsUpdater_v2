@@ -20,7 +20,11 @@
     "main_show_changelog_prompt": "Deseja ver o registo de alterações?",
     "main_changelog_title": "Registo de alterações",
     "main_reason_label_unknown": "Razão desconhecida",
-    
+
+    "main_incompatible_mods_found_without_update": "Mods incompatíveis encontrados sem atualização disponível:",
+    "main_aborting_due_to_incompatibility": "Abandonando a atualização devido à incompatibilidade.",
+    "main_continue_anyway_prompt": "Continuar mesmo assim?",
+
     "config_ask_mod_directory": "Introduza o caminho para a sua pasta de mods. Deixe em branco para o caminho predefinido",
     "config_configuration_migrated": "Configuração migrada com sucesso para a versão {EXPECTED_VERSION}.",
     "config_invalid_directory": "Erro: {mods_directory} não é um diretório válido.",
@@ -30,6 +34,11 @@
     "config_choose_update_mode_auto": "automático",
     "config_choose_update_mode_manual": "manual",
     "config_invalid_update_choice": "Opção inválida. Por favor, introduza 'manual' ou 'automático'.",
+    "config_incompatibility_prompt": "Como lidar com mods incompatíveis quando não há uma atualização disponível?",
+    "config_incompatibility_ask": "Perguntar o que fazer",
+    "config_incompatibility_abort": "Abortar o processo de atualização",
+    "config_incompatibility_ignore": "Ignorar e continuar",
+    "config_choose_behavior_prompt": "Insira a sua escolha",
     
     "fetch_changelog_unknown_version": "versão desconhecida",
     
@@ -39,7 +48,7 @@
     "fetch_mod_info_fetching_mod_info": "A obter informações das mods da API...",
     "fetch_mod_info_fetching_mod_info_name": "A obter informações das mods",
     "fetch_mod_info_exclusion_reason_api_failure": "Dados da API indisponíveis. Pode ter sido removido ou migrado.",
-    
+
     "auto_file_size_unknown": "Aviso: O tamanho do ficheiro é desconhecido ou zero. O download pode não ser concluído corretamente.[/bold indian_red1]",
     "auto_downloading_mods": "A descarregar mods...",
     "auto_downloading_mod_name": "A descarregar",
@@ -57,7 +66,7 @@
     "utils_error_invalid_max_workers": "Erro: Entrada inválida para max_workers. Deve ser um número inteiro.",
     "utils_prg_terminated": "Programa terminado.",
     "utils_exclusion_reason_user_config": "Excluído pelo utilizador em config.ini",
-    
+
     "export_json_modilst": "Lista de mods exportada como JSON:",
     "export_pdf_modilst": "Lista de mods exportada como PDF:",
     "export_html_modilst": "Lista de mods exportada para HTML: ",
