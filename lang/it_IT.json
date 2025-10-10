@@ -20,7 +20,10 @@
     "main_show_changelog_prompt": "Vuoi vedere il changelog?",
     "main_changelog_title": "Changelog",
     "main_reason_label_unknown": "Motivo sconosciuto",
-    
+    "main_incompatible_mods_found_without_update": "Sono stati trovati mod incompatibili senza aggiornamenti disponibili:",
+    "main_aborting_due_to_incompatibility": "Interruzione dell'aggiornamento a causa di incompatibilità.",
+    "main_continue_anyway_prompt": "Continuare comunque?",
+
     "config_ask_mod_directory": "Inserisci il percorso della tua cartella dei mod. Lascia vuoto per il percorso predefinito",
     "config_configuration_migrated": "Configurazione migrata con successo alla versione {EXPECTED_VERSION}.",
     "config_invalid_directory": "Errore: {mods_directory} non è una directory valida.",
@@ -39,7 +42,7 @@
     "fetch_mod_info_fetching_mod_info": "Recupero delle informazioni dei mod dall'API...",
     "fetch_mod_info_fetching_mod_info_name": "Recupero delle informazioni dei mod",
     "fetch_mod_info_exclusion_reason_api_failure": "Dati API non disponibili. Potrebbe essere stato rimosso o migrato.",
-    
+
     "auto_file_size_unknown": "Attenzione: La dimensione del file è sconosciuta o zero. Il download potrebbe non completarsi correttamente.[/bold indian_red1]",
     "auto_downloading_mods": "Download dei mod...",
     "auto_downloading_mod_name": "Download di",
@@ -57,7 +60,7 @@
     "utils_error_invalid_max_workers": "Errore: Input non valido per max_workers. Deve essere un numero intero.",
     "utils_prg_terminated": "Programma terminato.",
     "utils_exclusion_reason_user_config": "Escluso dall'utente in config.ini",
-    
+
     "export_json_modilst": "Elenco mod esportato come JSON:",
     "export_pdf_modilst": "Elenco mod esportato come PDF:",
     "export_html_modilst": "Lista di mod esportata in HTML: ",

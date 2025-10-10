@@ -101,7 +101,7 @@ def get_modinfo_from_zip(zip_path):
                     (f for f in file_list if f.endswith('/modinfo.json')), None)
 
                 if not modinfo_path:
-                    return None, None, None, None
+                    return None, None, None, None, None
 
             with zip_ref.open(modinfo_path) as modinfo_file:
                 raw_json = modinfo_file.read().decode('utf-8-sig')
@@ -109,11 +109,15 @@ def get_modinfo_from_zip(zip_path):
                 modinfo = json.loads(fixed_json)
 
                 modinfo_lower = {k.lower(): v for k, v in modinfo.items()}
+                dependencies = modinfo_lower.get('dependencies', {})
+                if dependencies:
+                    game_version_dependency: str | None = dependencies.get('game', None)
                 return (
                     modinfo_lower.get('modid'),
                     modinfo_lower.get('name'),
                     modinfo_lower.get('version'),
-                    modinfo_lower.get('description')
+                    modinfo_lower.get('description'),
+                    game_version_dependency
                 )
 
     except zipfile.BadZipFile:
@@ -123,7 +127,7 @@ def get_modinfo_from_zip(zip_path):
     except Exception as e:
         logging.error(f"Unexpected error processing {zip_path}: {e}")
 
-    return None, None, None, None
+    return None, None, None, None, None
 
 
 def get_cs_info(cs_path):
@@ -148,14 +152,15 @@ def process_mod_file(file, mods_data, invalid_files):
     """Process a mod file (zip or cs), and add the results to mods_data or invalid_files."""
     if file.suffix == '.zip':
         if is_zip_valid(file):
-            modid, modname, local_mod_version, description = get_modinfo_from_zip(file)
+            modid, modname, local_mod_version, description, game_version_dependency = get_modinfo_from_zip(file)
             if modid and modname and local_mod_version:
                 mods_data["installed_mods"].append({
                     "Name": modname,
                     "Local_Version": local_mod_version,
                     "ModId": modid,
                     "Description": description,
-                    "Filename": file.name
+                    "Filename": file.name,
+                    "Game_Version": game_version_dependency
                 })
             else:
                 invalid_files.append(file.name)

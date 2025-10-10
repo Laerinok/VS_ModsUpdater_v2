@@ -20,7 +20,10 @@
     "main_show_changelog_prompt": "Хочете переглянути журнал змін?",
     "main_changelog_title": "Журнал змін",
     "main_reason_label_unknown": "Невідома причина",
-    
+    "main_incompatible_mods_found_without_update": "Виявлено несумісні моди без доступного оновлення:",
+    "main_aborting_due_to_incompatibility": "Переривання оновлення через несумісність.",
+    "main_continue_anyway_prompt": "Продовжити все одно?",
+
     "config_ask_mod_directory": "Введіть шлях до папки з модами. Залиште порожнім для шляху за замовчуванням",
     "config_configuration_migrated": "Конфігурацію успішно перенесено до версії {EXPECTED_VERSION}.",
     "config_invalid_directory": "Помилка: {mods_directory} не є дійсним каталогом.",
@@ -39,7 +42,7 @@
     "fetch_mod_info_fetching_mod_info": "Отримання інформації про моди з API...",
     "fetch_mod_info_fetching_mod_info_name": "Отримання інформації про моди",
     "fetch_mod_info_exclusion_reason_api_failure": "Дані API недоступні. Можливо, мод було видалено або перенесено.",
-    
+
     "auto_file_size_unknown": "Попередження: Розмір файлу невідомий або нульовий. Завантаження може завершитися некоректно.[/bold indian_red1]",
     "auto_downloading_mods": "Завантаження модів...",
     "auto_downloading_mod_name": "Завантаження",
@@ -57,7 +60,7 @@
     "utils_error_invalid_max_workers": "Помилка: Недійсне введення для max_workers. Має бути цілим числом.",
     "utils_prg_terminated": "Програму завершено.",
     "utils_exclusion_reason_user_config": "Виключено користувачем у config.ini",
-    
+
     "export_json_modilst": "Список модів експортовано як JSON:",
     "export_pdf_modilst": "Список модів експортовано як PDF:",
     "export_html_modilst": "Список модов експортовано до HTML: ",
