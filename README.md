@@ -1,7 +1,6 @@
+# - ModsUpdater for Vintage Story (Windows/Linux) -
 
-# - ModsUpdater for Vintage Story (Windows/Linux)-
-
-This program automates the management of your mods for the game Vintage Story. It allows you to check for updates, download them (automatically or manually), and generate a list of your installed mods in JSON and PDF format.
+This program automates the management of your mods for the game Vintage Story. It allows you to check for updates, download them (automatically or manually), and generate a list of your installed mods in JSON, PDF, and HTML format.
 
 [ModsUpdater on ModDB](https://mods.vintagestory.at/modsupdater) / [ModsUpdater for Linux on ModDB](https://mods.vintagestory.at/modsupdaterforlinux)
 
@@ -10,11 +9,14 @@ This program automates the management of your mods for the game Vintage Story. I
 - Script Update Check: Checks if a new version of the ModsUpdater tool is available.
 - Configuration Migration: Automatically manages the migration of the old configuration file format to the new one, ensuring compatibility during application updates.
 - Update Check: Compares the local versions of your mods with the latest versions available on ModDB.
+- **Mod Downgrade**: If an installed mod is too new for the selected game version, the updater will offer to downgrade it to the latest compatible version.
+- **Incompatibility Check**: The application warns if an installed mod is incompatible with the selected game version, even when no alternative version is available.
 - Automatic Download: Automatically downloads available updates (configurable).
 - Manual Download: Displays changelogs and allows you to choose which updates to download.
 - Backup Management: Creates backups of your mods before updating them, with a configurable retention policy.
 - Excluded Mods Management: Allows you to ignore certain mods during update checks and downloads.
-- Mod List Generation (PDF/JSON): Creates a PDF/JSON document listing your installed mods.
+- **Detailed Exclusion Reasons**: Displays the specific reason for a mod's exclusion in the final summary (e.g., 'Excluded by user in config.ini' or 'API data unavailable').
+- Mod List Generation (PDF/JSON/HTML): Creates a PDF, JSON, or HTML document listing your installed mods.
 - Command Line Interface (CLI): Integration with arguments to customize execution.
 - Multilingual Support: The interface is available in several languages (configurable).
 
@@ -28,7 +30,7 @@ The `config.ini` file contains the configuration parameters for the application.
 
 ```ini
 [ModsUpdater]
-version = 2.0.1
+version = 2.4.0
 ```
 * `version`: Current version of the ModsUpdater application (information).
 
@@ -78,7 +80,16 @@ user_game_version = 1.20.5
 ```    
 * `user_game_version`:    Maximum game version target for mod updates.
   * If you specify a version (for example, 1.20.5), the application will not download mod updates that are only compatible with Vintage Story versions higher than the one specified.
-  * If this option is left empty (``) or set to None, the application will download the latest available update for each mod, regardless of the compatible Vintage Story version. Caution: this means you might download mods that are not compatible with your current game version. If you want to stay on a specific Vintage Story version, define the version, but remember to change it when you update the game.
+  * If this option is left empty (``), set to `None`, or set to `latest_version`, the application will download the latest available update for each mod, regardless of the compatible Vintage Story version. Caution: this means you might download mods that are not compatible with your current game version. If you want to stay on a specific Vintage Story version, define the version, but remember to change it when you update the game.
+
+```ini
+[Incompatibility]
+incompatibility_behavior = 0
+```
+* `incompatibility_behavior`: Defines how the application handles incompatible mods.
+  * `0` (ask): Prompts the user for action before continuing. (Default)
+  * `1` (abort): Stops the process automatically if an incompatibility is detected.
+  * `2` (ignore): Continues the process, ignoring the incompatibility.
 
 ```ini
 [Mod_Exclusion]
@@ -101,6 +112,7 @@ The script can be executed with arguments to customize its behavior:
 - `--timeout <seconds>`: Sets the timeout in seconds for HTTP requests during update checks and mod downloads. This argument replaces the `timeout` value defined in the `[Options]` section of `config.ini`.
 - `--install-modlist`: Download mods from modlist.json to the mods folder.
 - `--force-update`: Force a re-download and re-install of all mods, regardless of version.
+- `--dry-run`: Performs a trial run that checks for updates and incompatibilities without downloading or modifying any files.
 
 **Usage Examples:**
 
@@ -133,6 +145,7 @@ Supported Languages:
     Italiano
     日本語
     한국어 (From gitHub. Thanks purple8cloud)
+    Polski (From gitHub. Thanks MaLiN2223)
     Português (Brasil)
     Português (Portugal)
     Русский
@@ -140,4 +153,4 @@ Supported Languages:
     简体中文
 
 =============================    
-(Latest update: 2025-08-24)
+(Latest update: 2024-10-10 / v2.4.0)
