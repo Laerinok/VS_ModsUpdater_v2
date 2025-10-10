@@ -46,11 +46,16 @@ exclude_prerelease_mods = false
 auto_update = true
 max_workers = 4
 timeout = 10
+incompatibility_behavior = 0
 ```
 * `exclude_prerelease_mods`: true to exclude pre-release mod versions during update checks, false to include them.
 * `auto_update`: true to enable automatic downloading of updates (after checking), false to use manual mode where you confirm each download.
 * `max_workers`: Maximum number of threads to use for downloading mods in parallel. Increasing this value may speed up downloads but may also consume more system resources. **The maximum value allowed for this setting is 10.**
 * `timeout`: Timeout in seconds for HTTP requests during update checks and mod downloads. **A typical useful range is between 5 and 30 seconds. Setting it too low might cause connection errors on slower networks, while setting it too high might make the application wait unnecessarily long if a server is unresponsive.**
+* `incompatibility_behavior`: Defines how the application handles incompatible mods.
+  * `0` (ask): Prompts the user for action before continuing. (Default)
+  * `1` (abort): Stops the process automatically if an incompatibility is detected.
+  * `2` (ignore): Continues the process, ignoring the incompatibility.
 
 ```ini
 [Backup_Mods]
@@ -81,15 +86,6 @@ user_game_version = 1.20.5
 * `user_game_version`:    Maximum game version target for mod updates.
   * If you specify a version (for example, 1.20.5), the application will not download mod updates that are only compatible with Vintage Story versions higher than the one specified.
   * If this option is left empty (``), set to `None`, or set to `latest_version`, the application will download the latest available update for each mod, regardless of the compatible Vintage Story version. Caution: this means you might download mods that are not compatible with your current game version. If you want to stay on a specific Vintage Story version, define the version, but remember to change it when you update the game.
-
-```ini
-[Incompatibility]
-incompatibility_behavior = 0
-```
-* `incompatibility_behavior`: Defines how the application handles incompatible mods.
-  * `0` (ask): Prompts the user for action before continuing. (Default)
-  * `1` (abort): Stops the process automatically if an incompatibility is detected.
-  * `2` (ignore): Continues the process, ignoring the incompatibility.
 
 ```ini
 [Mod_Exclusion]
