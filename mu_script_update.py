@@ -88,7 +88,7 @@ def modsupdater_update():
         # Convert the HTML changelog to a readable Markdown format for the console.
         changelog_text = utils.convert_html_to_markdown(changelog_html)
 
-        new_version = utils.version_compare(__version__, latest_version)
+        new_version = utils.version_compare(__version__, latest_version) == utils.VersionCompareState.LOCAL_VERSION_BEHIND
 
         logging.info(
             f"Current version: {__version__}, Latest version: {latest_version}")

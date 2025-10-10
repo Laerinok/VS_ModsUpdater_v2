@@ -44,6 +44,7 @@ import cli
 import config
 import global_cache
 import lang
+from enum import Enum
 from http_client import HTTPClient
 
 console = Console()
@@ -296,15 +297,27 @@ def fix_json(json_data):
     json_data_fixed = json.dumps(data, indent=2)
     return json_data_fixed
 
+class VersionCompareState(Enum):
+    LOCAL_VERSION_BEHIND = "local_version_behind"
+    IDENTICAL_VERSION = "identical_version"
+    LOCAL_VERSION_AHEAD = "local_version_ahead"
 
-def version_compare(local_version, online_version):
+def version_compare(local_version, online_version) -> VersionCompareState:
+    """
+    Compares the local version with the online version.
+    Args:
+        local_version (str): The local version string.
+        online_version (str): The online version string.
+    Returns:
+        VersionCompareState: The comparison result.
+    """
     # Compare local and online version
     if Version(local_version) < Version(online_version):
-        new_version = True
-        return new_version
+        return VersionCompareState.LOCAL_VERSION_BEHIND
+    elif Version(local_version) > Version(online_version):
+        return VersionCompareState.LOCAL_VERSION_AHEAD
     else:
-        new_version = False
-        return new_version
+        return VersionCompareState.IDENTICAL_VERSION
 
 
 def is_valid_version(version_string):
