@@ -107,6 +107,16 @@ def initialize_config():
         print(
             f"- {language_cache['main_mods_update_choice']}[dodger_blue1]{auto_update_choice}[/dodger_blue1]")
 
+        # Display incompatibility behavior choice
+        behavior_map = {
+            '0': language_cache['config_incompatibility_ask'],
+            '1': language_cache['config_incompatibility_abort'],
+            '2': language_cache['config_incompatibility_ignore']
+        }
+        behavior_summary = behavior_map.get(behavior_choice, "Unknown")
+        print(
+            f"- {language_cache['config_incompatibility_prompt']}: [dodger_blue1]{behavior_summary}[/dodger_blue1]")
+
         # Create config.ini file
         config.create_config(language, mods_dir, user_game_version, auto_update, behavior_choice)
         print(f"\n{language_cache['main_config_file_created']}")

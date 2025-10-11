@@ -4,6 +4,7 @@ v2.4.0
 - feat(check): Add proactive incompatibility check. The application now warns the user if an installed mod is incompatible with the game version, even when no alternative version is available for download.
 - feat(config): Add 'incompatibility_behavior' option. Users can now configure how the application reacts to incompatible mods: ask to continue (0), abort automatically (1), or ignore (2).
 - feat (UX): Added display of the specific reason for mod exclusion in the final summary (e.g., 'Excluded by user in config.ini' or 'API data unavailable').
+- feat(UX): The summary displayed during the initial configuration now includes the user's choice for incompatibility behavior, improving clarity.
 - Added: `--dry-run` command-line argument.
 - feat (i18n): Added language support for Polish (pl_PL) (thanks to MaLiN2223: https://github.com/Laerinok/VS_ModsUpdater_v2/pull/36).
 ### Fixed
@@ -13,6 +14,7 @@ v2.4.0
 - fixed: The application now correctly displays the changelogs for all intermediate versions when updating a mod, instead of only showing the changelog for the latest version. This provides a complete picture of the changes included in an update.
 - fixed (i18n): Resolved a critical issue where the 'Yes/No' prompts failed to accept universal ASCII input (like 'n' for No) when the locale used non-ASCII characters (e.g., Russian 'н'/'д').
 ### Changed
+- refactor(deps): Removed multiple unused Python dependencies (e.g., beautifulsoup4, Pygments, striprtf) from requirements.txt, reducing the final application size by ~15MB.
 - refactor(config): Dynamically generate the language selection list to improve maintainability. This removes the need for manual re-numbering when adding/removing languages and ensures the default language selection is always correct.
 - refactor (Logic): Reworked the mod update check logic (`mods_update_checker.py`) to sequentially pre-filter user-excluded mods. This centralizes exclusion logic and **prevents unnecessary network calls** during concurrent processing.
 - refactor (Core): Centralized the entire 'Yes/No' user input logic into the robust `utils.prompt_yes_no` function and removed the superfluous and rigid validation loop from `main.py`, making the application flow cleaner and more maintainable.
