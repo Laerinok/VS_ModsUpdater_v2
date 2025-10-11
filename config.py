@@ -23,7 +23,7 @@
 
 __author__ = "Laerinok"
 __version__ = "2.4.0"  # Don't forget to change EXPECTED_VERSION
-__date__ = "2025-10-10"  # Last update
+__date__ = "2025-10-11"  # Last update
 
 
 # config.py
@@ -215,7 +215,7 @@ def migrate_config_if_needed():
     if current_version != EXPECTED_VERSION:
         # If the configuration version is outdated, initiate the migration
         old_config = configparser.ConfigParser()
-        old_config.read(CONFIG_FILE)  # Read the current configuration file
+        old_config.read(CONFIG_FILE, encoding='utf-8')  # Read the current configuration file
         rename_old_config(CONFIG_FILE)
         migrate_config(old_config)  # Migrate the configuration to the new version
         return True  # Migration done
@@ -293,7 +293,7 @@ def migrate_config(old_config):
         new_config["Logging"]["log_level"] = log_level
         logging.debug("Migrated log_level: %s", log_level)
     else:
-        new_config["Logging"]["log_level"] = DEFAULT_CONFIG['Logging']["log_level"]
+        new_config["Logging"]["log_level"] = DEFAULT_CONFIG['Logging']['log_level']
         logging.debug(f"Set log_level to default: {DEFAULT_CONFIG['Logging']['log_level']}")
 
     # Step 4: Remove obsolete sections
