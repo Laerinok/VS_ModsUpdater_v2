@@ -8,6 +8,9 @@ v2.4.0
 - Added: `--dry-run` command-line argument.
 - feat (i18n): Added language support for Polish (pl_PL) (thanks to MaLiN2223: https://github.com/Laerinok/VS_ModsUpdater_v2/pull/36).
 ### Fixed
+- fix(core): Overhauled update detection logic. The application now retrieves the game version of installed mods directly from the ModDB API, ensuring reliable update and downgrade decisions even when the local modinfo.json is missing compatibility data.
+- fix(cli): Restored the --dry-run functionality, which was broken during a recent refactoring. The application now correctly displays the simulation report and exits as expected.
+- fix(UX): Changelogs displayed in the console are now converted from HTML to Markdown for improved readability.
 - fix(config): Resolved a critical encoding issue (`UnicodeDecodeError`) during configuration migration that could corrupt paths with special characters (e.g., accents). The migration process now correctly reads the old configuration file using UTF-8.
 - fixed (Critical): Resolved a critical issue causing download failures for certain mods due to **double URL encoding** in download URLs retrieved from the Vintage Story mod API.
 - fixed (Critical): Fixed a fatal crash (`AttributeError: 'NoneType'`) that occurred when the HTTP client failed to complete a download request after all retry attempts. Download failures are now logged and handled gracefully.
@@ -22,7 +25,7 @@ v2.4.0
 - refactor (Data): Enriched the `excluded_mods` data in `global_cache` to store the specific `Reason` for exclusion, improving debugging and logging.
 - i18n: Added translation keys across all 12 supported languages to ensure full support for the new exclusion messages.
 
-v2.4.0:
+v2.3.0:
 - Added: a user prompt that allows displaying the changelog for new script updates on demand.
 - Added: support for a new API to check for ModsUpdater updates.
 - Added: Improved console output with clickable links and better-centered text.

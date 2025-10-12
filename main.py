@@ -36,7 +36,7 @@ __author__ = "Laerinok"
 __version__ = "2.4.0"
 __license__ = "GNU GPL v3"
 __description__ = "Mods Updater for Vintage Story"
-__date__ = "2025-10-10"  # Last update
+__date__ = "2025-10-11"  # Last update
 
 # main.py
 
@@ -45,6 +45,7 @@ import ctypes
 import logging
 import platform
 import sys
+import datetime
 from pathlib import Path
 
 from rich import print
@@ -211,6 +212,60 @@ def welcome_display():
     console.print()  # Add another blank line
     console.print(game_version_text, justify="center")
 
+def handle_dry_run():
+    """
+    Displays the results of a dry run, listing mods that have updates
+    and saving a detailed report to a file. Then exits the program.
+    """
+    mods_to_update = global_cache.mods_data.get('mods_to_update', [])
+    
+    # Console output
+    if mods_to_update:
+        print(f"\n[bold green]{lang.get_translation('dry_run_console_updates_available')}[/bold green]")
+        for mod in mods_to_update:
+            installed_str = f"{lang.get_translation('dry_run_console_installed')}: {mod['Old_version']}"
+            latest_str = f"{lang.get_translation('dry_run_console_latest')}: {mod['New_version']}"
+            print(f"\n- [bold]{mod['Name']}[/bold] ({installed_str} -> {latest_str})")
+            if mod.get('Changelog'):
+                changelog_panel = Panel(
+                    mod['Changelog'],
+                    title=f"{lang.get_translation('dry_run_console_changelog')} for v{mod['New_version']}",
+                    border_style="dodger_blue1",
+                    expand=False
+                )
+                console.print(changelog_panel)
+    else:
+        print(f"\n[bold green]{lang.get_translation('dry_run_console_no_updates')}[/bold green]")
+
+    # File report generation
+    report_path = Path(config.LOGS_PATH) / 'dry_run_report.txt'
+    try:
+        with open(report_path, 'w', encoding='utf-8') as f:
+            f.write(f"{lang.get_translation('dry_run_report_header')}\n")
+            f.write(f"{'=' * 60}\n")
+            f.write(f"{lang.get_translation('dry_run_report_generated_on')} {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+
+            if mods_to_update:
+                for mod in mods_to_update:
+                    f.write(f"- {mod['Name']}\n")
+                    f.write(f"  {lang.get_translation('dry_run_report_installed')}: {mod['Old_version']}\n")
+                    f.write(f"  {lang.get_translation('dry_run_report_available')}: {mod['New_version']}\n")
+                    if mod.get('Changelog'):
+                        f.write(f"  {lang.get_translation('dry_run_report_changelog')}:\n{mod['Changelog']}\n")
+                    else:
+                        f.write(f"  {lang.get_translation('dry_run_report_changelog_unavailable')}\n")
+                    f.write("\n")
+            else:
+                f.write(f"{lang.get_translation('dry_run_report_no_updates')}\n")
+        
+        print(f"\n[green]{lang.get_translation('dry_run_console_report_saved')} [bold]{report_path}[/bold][/green]")
+        logging.info(f"Dry run report saved to {report_path}")
+
+    except Exception as e:
+        logging.error(f"Failed to write dry run report: {e}")
+
+    # Exit the program
+    exit_program()
 
 if __name__ == "__main__":
     args = cli.parse_args()
@@ -238,12 +293,15 @@ if __name__ == "__main__":
     utils.check_mods_directory(mods_path)
 
     # Fetch mods info
-    # fetch_mod_info.scan_and_fetch_mod_info(mods_path)
     mod_data = fetch_mod_info.scan_and_fetch_mod_info(mods_path)
     excluded_mods = mod_data['excluded_mods']
 
     # Check for updates and pass the --force-update flag
     mods_update_checker.check_for_mod_updates(args.force_update)
+
+    # Handle --dry-run
+    if args.dry_run:
+        handle_dry_run()
 
     # Choice for auto/manual update
     auto_update_str = global_cache.config_cache['Options']['auto_update']
