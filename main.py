@@ -243,7 +243,8 @@ def handle_dry_run():
         with open(report_path, 'w', encoding='utf-8') as f:
             f.write(f"{lang.get_translation('dry_run_report_header')}\n")
             f.write(f"{'=' * 60}\n")
-            f.write(f"{lang.get_translation('dry_run_report_generated_on')} {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+            f.write(f"{lang.get_translation('dry_run_report_generated_on')} {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write(f"{lang.get_translation('main_max_game_version')}{global_cache.config_cache['Game_Version']['user_game_version']}\n\n")
 
             if mods_to_update:
                 for mod in mods_to_update:
@@ -378,12 +379,18 @@ if __name__ == "__main__":
     if excluded_mods:
         excluded_title_style = Style(color="dark_goldenrod", bold=True)
         excluded_mod_style = Style(color="indian_red1")
+        reason_style = Style(color="grey50", italic=True)
 
         print(Text(f"\n{lang.get_translation('main_excluded_mods_title')}",
                    style=excluded_title_style))
         for mod in excluded_mods:
             mod_name = mod.get('Name', mod.get('Filename', 'Unknown name'))
-            print(Text(f"- {mod_name}", style=excluded_mod_style))
+            reason = mod.get('Reason')
+            text_to_print = Text()
+            text_to_print.append(f"- {mod_name}", style=excluded_mod_style)
+            if reason:
+                text_to_print.append(f" ({reason})", style=reason_style)
+            console.print(text_to_print)
         print()
     else:
         logging.info("No mods were found in the exclusion list.")

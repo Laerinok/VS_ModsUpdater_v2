@@ -5,11 +5,14 @@ v2.4.0
 - feat(config): Add 'incompatibility_behavior' option. Users can now configure how the application reacts to incompatible mods: ask to continue (0), abort automatically (1), or ignore (2).
 - feat (UX): Added display of the specific reason for mod exclusion in the final summary (e.g., 'Excluded by user in config.ini' or 'API data unavailable').
 - feat(UX): The summary displayed during the initial configuration now includes the user's choice for incompatibility behavior, improving clarity.
+- feat(UX): The dry-run report now includes the game version used for the simulation, providing better context.
 - Added: `--dry-run` command-line argument.
 - feat (i18n): Added language support for Polish (pl_PL) (thanks to MaLiN2223: https://github.com/Laerinok/VS_ModsUpdater_v2/pull/36).
 ### Fixed
 - fix(core): Overhauled update detection logic. The application now retrieves the game version of installed mods directly from the ModDB API, ensuring reliable update and downgrade decisions even when the local modinfo.json is missing compatibility data.
+- fix(core): Fixed a critical `ValueError` crash that occurred when processing local mods (mods not present on the ModDB) due to an incorrect number of return values in the API data fetching function.
 - fix(cli): Restored the --dry-run functionality, which was broken during a recent refactoring. The application now correctly displays the simulation report and exits as expected.
+- fix(UX): Restored the display of the exclusion reason in the final summary, which had disappeared during a refactoring.
 - fix(UX): Changelogs displayed in the console are now converted from HTML to Markdown for improved readability.
 - fix(config): Resolved a critical encoding issue (`UnicodeDecodeError`) during configuration migration that could corrupt paths with special characters (e.g., accents). The migration process now correctly reads the old configuration file using UTF-8.
 - fixed (Critical): Resolved a critical issue causing download failures for certain mods due to **double URL encoding** in download URLs retrieved from the Vintage Story mod API.

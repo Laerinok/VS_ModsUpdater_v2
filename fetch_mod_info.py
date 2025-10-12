@@ -265,13 +265,13 @@ def get_mod_api_data(mod):
         logging.warning(
             f"Failed to retrieve mod info for mod: {modid} at link {mod_url_api}. Error: {e}")
         mod["Mod_url"] = "Local mod"
-        return None, None, None, None, None, None, None
+        return None, None, None, None, None, None, None, None
 
     if mod_json['statuscode'] != '200':
         logging.warning(
             f"Failed to retrieve mod info for mod: {modid} (status code {mod_json['statuscode']}) at link {mod_url_api}")
         mod["Mod_url"] = "Local mod"
-        return None, None, None, None, None, None, None
+        return None, None, None, None, None, None, None, None
 
     mod_assetid = mod_json["mod"]["assetid"]
     side = mod_json["mod"]["side"]
