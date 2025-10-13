@@ -65,29 +65,3 @@ jobs:
         with:
           name: VS_ModsUpdater-${{ github.ref_name }}-Linux
           path: dist/*.AppImage
-
-  build_macos:
-    name: Build DMG (macOS)
-    runs-on: macos-latest
-    steps:
-      - name: Check out the repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install Python dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Build the DMG
-        run: python setup.py bdist_dmg
-
-      - name: Upload macOS DMG artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: VS_ModsUpdater-${{ github.ref_name }}-macOS
-          path: dist/*.dmg
