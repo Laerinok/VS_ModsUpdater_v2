@@ -20,6 +20,19 @@ This program automates the management of your mods for the game Vintage Story. I
 - Command Line Interface (CLI): Integration with arguments to customize execution.
 - Multilingual Support: The interface is available in several languages (configurable).
 
+## File and Directory Locations
+
+The location of configuration and data files differs between Windows and Linux to follow platform conventions.
+
+| File / Directory | Windows Location | Linux Location (for AppImage) |
+| :--- | :--- | :--- |
+| **`config.ini`** | In the same directory as the `.exe` | `~/.config/VS_ModsUpdater/config.ini` |
+| **`logs/`** | In the same directory as the `.exe` | `~/.local/share/VS_ModsUpdater/logs/` |
+| **`backup_mods/`** | In the same directory as the `.exe` | `~/.local/share/VS_ModsUpdater/backup_mods/` |
+| **`modlist/`** | In the same directory as the `.exe` | `~/.local/share/VS_ModsUpdater/modlist/` |
+
+**Note:** On Linux, the paths may vary if you have customized the `XDG_CONFIG_HOME` or `XDG_DATA_HOME` environment variables.
+
 ## How Mods Are Handled (Zip vs. Directory)
 
 The updater is designed to be flexible and supports mods in different formats. It is important to note that the standard behavior for Vintage Story is to load mods directly from `.zip` files. You do not need to extract them.
@@ -36,11 +49,11 @@ For example, if you have a mod in a folder named `MyAwesomeMod/` and you update 
 
 **Important Note Regarding Configuration Migration:**
 
-During updates of the ModsUpdater application, the format of the `config.ini` file may evolve. To facilitate these updates, the application includes an automatic migration mechanism. If an older version of the configuration file is detected, the application will attempt to convert it to the new format. In most cases, this migration will occur transparently. However, it is always recommended to check your `config.ini` file after an application update to ensure that all your settings are correctly preserved. In case of any issues, a backup of your old configuration (`config.old`) is kept (beside the `config.ini`file).
+During updates of the ModsUpdater application, the format of the `config.ini` file may evolve. To facilitate these updates, the application includes an automatic migration mechanism. If an older version of the configuration file is detected, the application will attempt to convert it to the new format. In most cases, this migration will occur transparently. However, it is always recommended to check your `config.ini` file after an application update to ensure that all your settings are correctly preserved. In case of any issues, a backup of your old configuration (`config.old`) is kept next to the `config.ini` file.
 
 ## Configuration (`config.ini`)
 
-The `config.ini` file contains the configuration parameters for the application. It is located in the same directory as the main script. Here are the main sections and their options:
+The `config.ini` file contains the configuration parameters for the application. See the table above for its location. Here are the main sections and their options:
 
 ```ini
 [ModsUpdater]
@@ -77,9 +90,9 @@ backup_folder = backup_mods
 max_backups = 3
 modlist_folder = Modlist
 ```
-* `backup_folder`: Name of the directory (created in the application directory by default) where mod backups will be stored. **You can also specify a full path if you wish to store backups elsewhere.**
+* `backup_folder`: Name of the directory where mod backups will be stored. If you use a simple name, it will be created at the default location (see table above). **You can also specify a full path to store backups elsewhere.**
 * `max_backups`: Maximum number of mod backups to keep. Older backups will be deleted when this limit is reached.
-* `modlist_folder`: Name of the directory (created in the application directory by default) where the mod lists in PDF and JSON format will be saved. **You can also specify a full path if you wish to save the lists elsewhere.**
+* `modlist_folder`: Name of the directory where the mod lists (PDF, JSON, HTML) will be saved. If you use a simple name, it will be created at the default location. **You can also specify a full path to save the lists elsewhere.**
 
 ```ini
 [ModsPath]
