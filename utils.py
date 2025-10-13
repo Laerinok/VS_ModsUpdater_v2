@@ -410,8 +410,7 @@ def backup_mods(mods_to_backup):
     Handles files (zip, cs) and directories.
     """
     max_backups = int(global_cache.config_cache['Backup_Mods']['max_backups'])
-    backup_folder_name = global_cache.config_cache['Backup_Mods']['backup_folder']
-    backup_folder = global_cache.config_cache['APPLICATION_PATH'] / backup_folder_name
+    backup_folder = global_cache.config_cache['BACKUP_FOLDER']
 
     setup_directories(backup_folder)
 

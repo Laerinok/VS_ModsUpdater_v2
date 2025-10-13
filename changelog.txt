@@ -10,6 +10,7 @@ v2.4.0
 - Added: `--dry-run` command-line argument.
 - feat (i18n): Added language support for Polish (pl_PL) (thanks to MaLiN2223: https://github.com/Laerinok/VS_ModsUpdater_v2/pull/36).
 ### Fixed
+- fix(linux): Corrected the backup directory path on Linux to use the user's data directory (`~/.local/share/VS_ModsUpdater/backup_mods/`) instead of the application's root.
 - Fixed a critical issue where mods installed as directories were detected but not actually updated.
 - Fixed a bug where mod icons were not displayed correctly (or at all) in the HTML and PDF reports.
 - Fixed a bug where local-only mods would have a broken link in the generated reports.
