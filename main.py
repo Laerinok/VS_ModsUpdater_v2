@@ -33,7 +33,6 @@ Key functionalities include:
 
 """
 __author__ = "Laerinok"
-__version__ = "2.4.0"
 __license__ = "GNU GPL v3"
 __description__ = "Mods Updater for Vintage Story"
 __date__ = "2025-10-11"  # Last update
@@ -57,6 +56,7 @@ from rich.text import Text
 
 import cli
 import config
+from app_version import __version__
 import export_html
 import export_json
 import export_pdf

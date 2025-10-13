@@ -21,7 +21,6 @@ This module provides functionality for exporting reports.
 """
 
 __author__ = "Laerinok"
-__version__ = "2.4.0"
 __date__ = "2025-10-09"  # Last update
 
 # export_report.py

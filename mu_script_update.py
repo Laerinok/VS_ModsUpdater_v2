@@ -30,16 +30,17 @@ Key functionalities include:
 """
 
 __author__ = "Laerinok"
-__version__ = "2.4.0"
 __date__ = "2025-08-26"  # Last update
 
 # mu_script_update.py
 
 import logging
-import utils
-from http_client import HTTPClient
+
 import config
 import global_cache
+import utils
+from app_version import __version__
+from http_client import HTTPClient
 
 # Initialize the HTTP client for making requests.
 client = HTTPClient()

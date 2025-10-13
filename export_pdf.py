@@ -29,7 +29,6 @@ Key functionalities include:
 
 """
 __author__ = "Laerinok"
-__version__ = "2.4.0"
 __date__ = "2025-08-25"  # Last update
 
 

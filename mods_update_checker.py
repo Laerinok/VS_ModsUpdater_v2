@@ -22,7 +22,6 @@ It compares local mod versions with the latest available versions and retrieves 
 """
 
 __author__ = "Laerinok"
-__version__ = "2.4.0"
 __date__ = "2025-10-11"  # Last update
 
 # mods_update_checker.py

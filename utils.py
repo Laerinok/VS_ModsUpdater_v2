@@ -17,7 +17,6 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 __author__ = "Laerinok"
-__version__ = "2.4.0"
 __date__ = "2025-10-03"  # Last update
 
 
