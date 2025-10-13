@@ -54,7 +54,7 @@ import config
 import global_cache
 import lang
 from http_client import HTTPClient
-from utils import fix_json, is_zip_valid, validate_workers, convert_html_to_markdown
+from utils import fix_json, is_zip_valid, validate_workers, convert_html_to_markdown, ModType, get_icon_binary
 
 timeout = global_cache.config_cache["Options"].get("timeout", 10)
 client = HTTPClient()
@@ -126,6 +126,33 @@ def get_modinfo_from_zip(zip_path):
     return None, None, None, None
 
 
+def get_modinfo_from_path(mod_path):
+    """Gets modid, name, version, and description from modinfo.json in a directory."""
+    try:
+        modinfo_file_path = mod_path / 'modinfo.json'
+        if not modinfo_file_path.exists():
+            return None, None, None, None
+
+        with open(modinfo_file_path, 'r', encoding='utf-8-sig') as modinfo_file:
+            raw_json = modinfo_file.read()
+            fixed_json = fix_json(raw_json)
+            modinfo = json.loads(fixed_json)
+
+            modinfo_lower = {k.lower(): v for k, v in modinfo.items()}
+            return (
+                modinfo_lower.get('modid'),
+                modinfo_lower.get('name'),
+                modinfo_lower.get('version'),
+                modinfo_lower.get('description')
+            )
+    except json.JSONDecodeError:
+        logging.error(f"Error: Failed to parse modinfo.json in {mod_path}")
+    except Exception as e:
+        logging.error(f"Unexpected error processing {mod_path}: {e}")
+
+    return None, None, None, None
+
+
 def get_cs_info(cs_path):
     """Gets Version, Side, namespace information from a .cs file."""
     with open(cs_path, 'r', encoding='utf-8') as cs_file:
@@ -144,36 +171,57 @@ def get_cs_info(cs_path):
         return version, side, namespace, modid, mod_url_api, description
 
 
-def process_mod_file(file, mods_data, invalid_files):
-    """Process a mod file (zip or cs), and add the results to mods_data or invalid_files."""
-    if file.suffix == '.zip':
-        if is_zip_valid(file):
-            modid, modname, local_mod_version, description = get_modinfo_from_zip(file)
+def process_mod_entry(entry, mods_data, invalid_files):
+    """Process a mod entry (zip, cs, or directory), and add the results to mods_data or invalid_files."""
+    if entry.is_dir():
+        modid, modname, local_mod_version, description = get_modinfo_from_path(entry)
+        if modid and modname and local_mod_version:
+            icon_binary = get_icon_binary(entry, ModType.DIR)
+            mods_data["installed_mods"].append({
+                "Name": modname,
+                "Local_Version": local_mod_version,
+                "ModId": modid,
+                "Description": description,
+                "Filename": entry.name,
+                "Type": ModType.DIR.value,
+                "Path": str(entry),
+                "IconBinary": icon_binary
+            })
+    elif entry.suffix == '.zip':
+        if is_zip_valid(entry):
+            modid, modname, local_mod_version, description = get_modinfo_from_zip(entry)
             if modid and modname and local_mod_version:
+                icon_binary = get_icon_binary(entry, ModType.ZIP)
                 mods_data["installed_mods"].append({
                     "Name": modname,
                     "Local_Version": local_mod_version,
                     "ModId": modid,
                     "Description": description,
-                    "Filename": file.name
+                    "Filename": entry.name,
+                    "Type": ModType.ZIP.value,
+                    "Path": str(entry),
+                    "IconBinary": icon_binary
                 })
             else:
-                invalid_files.append(file.name)
+                invalid_files.append(entry.name)
         else:
-            invalid_files.append(file.name)
-    elif file.suffix == '.cs':
+            invalid_files.append(entry.name)
+    elif entry.suffix == '.cs':
         local_mod_version, side, namespace, modid, mod_url_dl, description = get_cs_info(
-            file)
+            entry)
         if local_mod_version and namespace and modid:
             mods_data["installed_mods"].append({
                 "Name": namespace,
                 "Local_Version": local_mod_version,
                 "ModId": modid,
                 "Description": description,
-                "Filename": file.name
+                "Filename": entry.name,
+                "Type": ModType.CS.value,
+                "Path": str(entry),
+                "IconBinary": None
             })
         else:
-            invalid_files.append(file.name)
+            invalid_files.append(entry.name)
 
 
 def get_mainfile_from_excluded_mods(sorted_releases, excluded_mods):
@@ -399,13 +447,13 @@ def scan_and_fetch_mod_info(mods_folder):
             "•",
     ) as progress:
         task = progress.add_task(
-            f"[cyan]{lang.get_translation("fetch_mod_info_scanning_mods")}",
+            f"[cyan]{lang.get_translation('fetch_mod_info_scanning_mods')}",
             total=total_files)
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             futures = []
             for file in mods_folder.iterdir():
                 futures.append(
-                    executor.submit(process_mod_file, file, global_cache.mods_data,
+                    executor.submit(process_mod_entry, file, global_cache.mods_data,
                                     invalid_files))
 
             for idx, future in enumerate(as_completed(futures)):
@@ -431,7 +479,7 @@ def scan_and_fetch_mod_info(mods_folder):
             "•",
     ) as progress:
         api_task = progress.add_task(
-            f"[green]{lang.get_translation("fetch_mod_info_fetching_mod_info")}",
+            f"[green]{lang.get_translation('fetch_mod_info_fetching_mod_info')}",
             total=len(mod_ids), mod_name=" ")
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             api_futures = []
@@ -462,7 +510,7 @@ def scan_and_fetch_mod_info(mods_folder):
                     logging.warning(
                         f"Failed to retrieve API data for mod: {mod['Name']}. Skipping update for this mod.")
                 progress.update(api_task, advance=1,
-                                description=f'[cyan]{lang.get_translation("fetch_mod_info_fetching_mod_info_name")}',
+                                description=f"[cyan]{lang.get_translation('fetch_mod_info_fetching_mod_info_name')}",
                                 mod_name=mod['Name'])
     return {"installed_mods": global_cache.mods_data["installed_mods"], "excluded_mods": global_cache.mods_data["excluded_mods"]}
 

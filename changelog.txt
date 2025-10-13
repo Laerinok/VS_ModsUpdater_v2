@@ -1,5 +1,6 @@
 v2.4.0
 ### Added
+- **Support for Directory-Based Mods:** The updater can now detect and update mods that are managed in individual folders (e.g., by Mod Organizer 2), as long as they contain a `modinfo.json` file.
 - feat(update): Implement mod downgrade capability (thanks to Surdjak: https://github.com/Laerinok/VS_ModsUpdater_v2/pull/39). If an installed mod is too new for the selected game version, the updater will now offer to downgrade it to the latest compatible version.
 - feat(check): Add proactive incompatibility check. The application now warns the user if an installed mod is incompatible with the game version, even when no alternative version is available for download.
 - feat(config): Add 'incompatibility_behavior' option. Users can now configure how the application reacts to incompatible mods: ask to continue (0), abort automatically (1), or ignore (2).
@@ -9,6 +10,12 @@ v2.4.0
 - Added: `--dry-run` command-line argument.
 - feat (i18n): Added language support for Polish (pl_PL) (thanks to MaLiN2223: https://github.com/Laerinok/VS_ModsUpdater_v2/pull/36).
 ### Fixed
+- Fixed a critical issue where mods installed as directories were detected but not actually updated.
+- Fixed a bug where mod icons were not displayed correctly (or at all) in the HTML and PDF reports.
+- Fixed a bug where local-only mods would have a broken link in the generated reports.
+- Fixed a bug where setting `max_backups = 0` in the config file would incorrectly delete all backups instead of preserving them.
+- Fixed a crash that could occur during the update process.
+- Fixed a bug where some user prompts were case-sensitive.
 - fix(core): Overhauled update detection logic. The application now retrieves the game version of installed mods directly from the ModDB API, ensuring reliable update and downgrade decisions even when the local modinfo.json is missing compatibility data.
 - fix(core): Fixed a critical `ValueError` crash that occurred when processing local mods (mods not present on the ModDB) due to an incorrect number of return values in the API data fetching function.
 - fix(cli): Restored the --dry-run functionality, which was broken during a recent refactoring. The application now correctly displays the simulation report and exits as expected.

@@ -99,7 +99,9 @@ def process_mod(mod, force_update) -> ProcessModResult:
             "New_version": local_version_str,
             "Changelog": "",
             "Filename": mod['Filename'],
-            "download_url": mod.get("installed_download_url")
+            "download_url": mod.get("installed_download_url"),
+            "Type": mod.get("Type"),
+            "Path": mod.get("Path")
         })
 
     # If a best compatible version exists, compare it to the local version
@@ -113,7 +115,9 @@ def process_mod(mod, force_update) -> ProcessModResult:
                 "New_version": best_compatible_version_str,
                 "Changelog": mod.get("Changelog", ""),
                 "Filename": mod['Filename'],
-                "download_url": mod.get("latest_version_dl_url")
+                "download_url": mod.get("latest_version_dl_url"),
+                "Type": mod.get("Type"),
+                "Path": mod.get("Path")
             })
         else:
             # The local version is the best compatible version
@@ -134,7 +138,10 @@ def process_mod(mod, force_update) -> ProcessModResult:
                     return ProcessModResult(ModUpdateStatus.NO_COMPATIBILITY, {
                         "Name": mod['Name'],
                         "Old_version": local_version_str,
-                        "Old_version_game_Version": local_game_ver_str
+                        "Old_version_game_Version": local_game_ver_str,
+                        "Filename": mod.get("Filename"),
+                        "Type": mod.get("Type"),
+                        "Path": mod.get("Path")
                     })
             except InvalidVersion:
                 logging.warning(f"Could not parse game version for {mod['Name']} to check incompatibility.")

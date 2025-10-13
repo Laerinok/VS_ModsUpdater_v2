@@ -20,6 +20,20 @@ This program automates the management of your mods for the game Vintage Story. I
 - Command Line Interface (CLI): Integration with arguments to customize execution.
 - Multilingual Support: The interface is available in several languages (configurable).
 
+## How Mods Are Handled (Zip vs. Directory)
+
+The updater is designed to be flexible and supports mods in different formats. It is important to note that the standard behavior for Vintage Story is to load mods directly from `.zip` files. You do not need to extract them.
+
+-   **.zip Files**: This is the standard format for the game. The updater will check for updates and replace the `.zip` file with the new version.
+-   **.cs Files**: These are treated as simple mods. The updater will replace the `.cs` file with its new version.
+-   **Directories**: This feature is primarily intended for users of **Mod Organizer 2**, which manages mods in individual folders. The updater identifies a folder as a mod if it contains a `modinfo.json` file.
+
+**⚠️ Important Note for Directory-Based Mods:**
+
+When updating a mod that is in a directory, the updater will **replace the contents** of the directory with the new version. The **name of the directory itself will not be changed**. This is intentional to maintain compatibility with mod managers that rely on stable folder names (like Mod Organizer 2, which often uses the `modid` as the folder name).
+
+For example, if you have a mod in a folder named `MyAwesomeMod/` and you update it, the contents will be replaced, but the folder will still be named `MyAwesomeMod/`, even if the downloaded file was `MyAwesomeMod-v1.2.zip`.
+
 **Important Note Regarding Configuration Migration:**
 
 During updates of the ModsUpdater application, the format of the `config.ini` file may evolve. To facilitate these updates, the application includes an automatic migration mechanism. If an older version of the configuration file is detected, the application will attempt to convert it to the new format. In most cases, this migration will occur transparently. However, it is always recommended to check your `config.ini` file after an application update to ensure that all your settings are correctly preserved. In case of any issues, a backup of your old configuration (`config.old`) is kept (beside the `config.ini`file).
@@ -149,4 +163,4 @@ Supported Languages:
     简体中文
 
 =============================    
-(Latest update: 2024-10-10 / v2.4.0)
+(Latest update: 2025-10-13 / v2.4.0)

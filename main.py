@@ -314,52 +314,40 @@ if __name__ == "__main__":
         print(f"[yellow]{global_cache.language_cache['main_incompatible_mods_found_without_update']}[/yellow]")
         for mod in global_cache.mods_data.get('incompatible_mods'):
             print(f"[yellow] - {mod['Name']} ({mod['Old_version'] + (' for game version ' + mod['Old_version_game_Version'] if mod['Old_version_game_Version'] else '')})[/yellow]")
-        incompatibility_behavior = global_cache.config_cache.get("Incompatibility_behavior", 0)
-        if incompatibility_behavior == 0:
-            # Use Prompt.ask to get the user's input
-            user_confirms_abort = Prompt.ask(
-                f"{global_cache.language_cache['main_continue_anyway_prompt']}",
-                choices=[global_cache.language_cache["yes"][0],
-                         global_cache.language_cache["no"][0]],
-                default=global_cache.language_cache["no"][0])
-            user_confirms_abort = user_confirms_abort.strip().lower()
-            if user_confirms_abort == global_cache.language_cache["no"][0].lower():
+        
+        incompatibility_behavior = global_cache.config_cache.get("Options", {}).get("incompatibility_behavior", '0')
+
+        if incompatibility_behavior == '0': # Ask
+            # Use utils.prompt_yes_no for robust input
+            continue_anyway = utils.prompt_yes_no(
+                global_cache.language_cache['main_continue_anyway_prompt'],
+                default=False  # Default to No
+            )
+            if not continue_anyway:
                 exit_program()
-        elif incompatibility_behavior == 1:
+        elif incompatibility_behavior == '1': # Abort
             print(f"[red]{global_cache.language_cache['main_aborting_due_to_incompatibility']}[/red]")
             if not args.no_pause:
                 input(f"\n{global_cache.language_cache['main_press_enter_to_exit']}")
             sys.exit()
-    if auto_update_cfg:
-        # Auto update mods
-        if global_cache.mods_data.get('mods_to_update'):
-            # Backup mods before update
-            mods_to_backup = [mod['Filename'] for mod in
-                              global_cache.mods_data.get('mods_to_update', [])]
-            utils.backup_mods(mods_to_backup)
-            # Download Mods
-            mods_to_download = global_cache.mods_data.get('mods_to_update', [])
-            mods_auto_update.download_mods_to_update(mods_to_download)
+        # if '2', ignore and continue
 
-            # Display mods updated
+    mods_to_update_list = global_cache.mods_data.get('mods_to_update', [])
+
+    if mods_to_update_list:
+        # Backup mods before any update
+        utils.backup_mods(mods_to_update_list)
+
+        if auto_update_cfg:
+            # Auto update mods
+            mods_auto_update.download_mods_to_update(mods_to_update_list)
             mods_auto_update.resume_mods_updated()
         else:
-            print(lang.get_translation("main_mods_no_update"))
-            logging.info("No updates needed for mods.")
+            # Manual update mods
+            mods_manual_update.perform_manual_updates(mods_to_update_list)
     else:
-        # Manual update mods
-        if global_cache.mods_data.get('mods_to_update'):
-            # Backup mods before update
-            mods_to_backup = [mod['Filename'] for mod in
-                              global_cache.mods_data.get('mods_to_update', [])]
-            utils.backup_mods(mods_to_backup)
-            # Download Mods
-            mods_manual_update.perform_manual_updates(
-                global_cache.mods_data['mods_to_update'])
-
-        else:
-            print(lang.get_translation("main_mods_no_update"))
-            logging.info("No updates needed for mods.")
+        print(lang.get_translation("main_mods_no_update"))
+        logging.info("No updates needed for mods.")
 
     # Modlist creation
     # Generate JSON output of the installed mods data.

@@ -12,9 +12,6 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 """
 This module automates the creation of a PDF document containing a list of Vintage Story mods, including their icons, names, versions, and descriptions. It leverages multithreading to efficiently process mod information and generate a visually appealing PDF.
@@ -43,8 +40,6 @@ import concurrent.futures
 import logging
 import os
 import sys
-import urllib.parse
-import zipfile
 from io import BytesIO
 from pathlib import Path
 
@@ -63,7 +58,7 @@ from rich.progress import Progress
 import config
 import global_cache
 import lang
-from utils import validate_workers
+from utils import validate_workers, get_default_icon_binary
 
 # Suppress Pillow debug messages
 logging.getLogger("PIL").setLevel(logging.WARNING)
@@ -94,54 +89,6 @@ def resize_image(image_data, max_size=100):
     except Exception as e:
         logging.error(f"Error resizing image: {e}")
     return image_data  # Return original data if resizing fails
-
-
-def extract_icon_binary(zip_path):
-    """
-    Extracts 'modicon.png' as binary data from the ZIP archive.
-    If the file is not a ZIP file or doesn't contain 'modicon.png', returns the default icon binary.
-    """
-    try:
-        # Check if the file is a ZIP file
-        if zip_path.suffix.lower() == '.zip':
-            # Decode the filename from the zip_path
-            decoded_zip_path = urllib.parse.unquote(str(zip_path))
-            decoded_zip_path = Path(decoded_zip_path)
-
-            with zipfile.ZipFile(decoded_zip_path, 'r') as zip_ref:
-                # If 'modicon.png' is not in the ZIP, use default icon
-                if 'modicon.png' not in zip_ref.namelist():
-                    logging.debug(
-                        f"'modicon.png' not found in {zip_path}, using default icon.")
-                    return get_default_icon_binary()
-
-                # Read 'modicon.png' from the ZIP
-                icon_data = zip_ref.read('modicon.png')
-                logging.debug(f"Found 'modicon.png' in {zip_path}.")
-                return icon_data
-
-        # If it's not a ZIP file or 'modicon.png' was not found, use the default icon
-        return get_default_icon_binary()
-
-    except Exception as e:
-        logging.error(f"Error extracting icon from {zip_path}: {e}")
-        return get_default_icon_binary()
-
-
-def get_default_icon_binary():
-    """
-    Loads and returns the binary data of the default icon ('assets/no_icon.png').
-    """
-    default_icon_path = Path(config.APPLICATION_PATH) / 'assets' / 'no_icon.png'
-    if default_icon_path.exists():
-        with open(default_icon_path, 'rb') as f:
-            icon_data = f.read()
-        logging.debug(f"Using default icon from {default_icon_path}.")
-        return icon_data
-    else:
-        logging.debug(f"Default icon 'no_icon.png' not found at {default_icon_path}.")
-        return None
-
 
 # Function to create the PDF with Platypus.Table
 def create_pdf_with_table(modsdata, pdf_path, args):
@@ -272,7 +219,7 @@ def create_pdf_with_table(modsdata, pdf_path, args):
 
         # Name and version with hyperlink
         url = mod_info.get("url_moddb", "")
-        if url != 'Local mod':
+        if url and url != 'Local mod':
             name_and_version = f'<b><a href="{url}">{mod_info["name"]} (v{mod_info["version"]})</a></b>'
             name_and_version_paragraph = Paragraph(name_and_version,
                                                    link_style)  # Use the custom style for links
@@ -320,65 +267,20 @@ def create_pdf_with_table(modsdata, pdf_path, args):
             sys.exit()
 
 
-def get_local_versions_of_excluded_mods(mods_data):
-    """
-    Retrieves the 'Local_Version' of excluded mods.
-    """
-    local_versions = {}  # Dictionary to store ModId: Local_Version pairs
-    excluded_filenames = {mod['Filename'] for mod in mods_data['excluded_mods']}  # Set of excluded filenames for fast lookup
-
-    for installed_mod in mods_data['installed_mods']:
-        if installed_mod['Filename'] in excluded_filenames:
-            local_versions[installed_mod['ModId']] = installed_mod['Local_Version']  # Store Local_Version if filename matches
-
-    return local_versions  # Return the dictionary of Local_Versions
-
-
 def process_mod(mod_info):
     """
     Process to extract mod information and capitalize the first letter of the mod name.
     """
-    mod_name = mod_info["Name"]
-    # Capitalize the first letter of the mod name
-    mod_name = mod_name.capitalize()
+    mod_name = mod_info["Name"].capitalize()
+    version = mod_info["Local_Version"]
+    icon_binary_data = mod_info.get("IconBinary")
 
-    if mod_info.get('manual_update_mod_skipped'):
-        # If the manual update was skipped, use the filename of the installed version
-        filename = mod_info['Filename']
-        version = mod_info["Local_Version"]
-    elif mod_info["Mod_url"] != "Local mod":
-        if mod_info['latest_version_dl_url'] is not None:
-            filename = mod_info['latest_version_dl_url'].split("dl=")[-1]
-            version = mod_info['mod_latest_version_for_game_version']
-        else:
-            filename = mod_info['Filename']
-            version = mod_info["Local_Version"]
-    else:
-        filename = mod_info['Filename']
-        version = mod_info["Local_Version"]
-
-    excluded_local_versions = get_local_versions_of_excluded_mods(global_cache.mods_data)
-    if mod_info['ModId'] in excluded_local_versions:
-        version = excluded_local_versions[mod_info['ModId']]
-
-    icon_binary_data = extract_icon_binary(
-        Path(global_cache.config_cache['ModsPath']['path']) / filename)
+    if not icon_binary_data:
+        icon_binary_data = get_default_icon_binary()
 
     resized_icon_binary_data_pdf = None
     if icon_binary_data:
         resized_icon_binary_data_pdf = resize_image(icon_binary_data, max_size=25)  # Resize for PDF
-
-    resized_icon_binary_data_html = None
-    if icon_binary_data:
-        resized_icon_binary_data_html = resize_image(icon_binary_data, max_size=100)  # Resize for HTML
-
-    # Update global_cache.mods_data directly
-    if 'installed_mods' in global_cache.mods_data:
-        for mod in global_cache.mods_data['installed_mods']:
-            if mod.get('ModId') == mod_info['ModId']:
-                mod['IconBinary'] = resized_icon_binary_data_html
-                logging.debug(f"Updated global_cache for mod '{mod_name}' with resized IconBinary.")
-                break  # Found the mod, no need to continue the loop
 
     return {
         mod_info["ModId"]: {
