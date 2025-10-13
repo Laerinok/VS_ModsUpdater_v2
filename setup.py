@@ -1,15 +1,30 @@
+import sys
 from cx_Freeze import setup, Executable
 
-# Options pour inclure les packages et fichiers nécessaires
+# Determine the icon based on the OS
+icon_path = "vintagestory.ico"
+if sys.platform == "darwin":  # macOS
+    icon_path = "vintagestory.icns"
+elif sys.platform.startswith("linux"):  # Linux
+    icon_path = "vintagestory.png"
+
+# Files to include
+include_files = [
+    "README.md", "changelog.txt", "LICENSE.md", "requirements.txt",
+    "assets", "fonts", "lang",
+    "vintagestory.ico", "vintagestory.png", "vintagestory.icns"
+]
+
+# Options to include necessary packages and files
 build_exe_options = {
-    "include_files": ["README.md", "changelog.txt", "LICENSE.md", "requirements.txt", "assets", "fonts", "lang"],
+    "include_files": include_files,
     "excludes": []
 }
 
-# Définition de l'exécutable
+# Executable definition
 exe = Executable(
     script="main.py",
-    icon="vintagestory.ico",
+    icon=icon_path,
     target_name="VS_ModsUpdater",
     copyright="Laerinok",
 )

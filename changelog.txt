@@ -1,5 +1,7 @@
-v2.4.0
+v2.4.0 - 2025-10-13
 ### Added
+- **Build Automation:** Implemented a GitHub Actions workflow to automatically build and create releases for Windows (.exe), Linux (AppImage), and macOS (.dmg).
+- **Platform-Specific Icons:** The build process now automatically selects the appropriate icon format (`.ico` for Windows, `.png` for Linux, `.icns` for macOS).
 - **Support for Directory-Based Mods:** The updater can now detect and update mods that are managed in individual folders (e.g., by Mod Organizer 2), as long as they contain a `modinfo.json` file.
 - feat(update): Implement mod downgrade capability (thanks to Surdjak: https://github.com/Laerinok/VS_ModsUpdater_v2/pull/39). If an installed mod is too new for the selected game version, the updater will now offer to downgrade it to the latest compatible version.
 - feat(check): Add proactive incompatibility check. The application now warns the user if an installed mod is incompatible with the game version, even when no alternative version is available for download.
@@ -28,6 +30,8 @@ v2.4.0
 - fixed: The application now correctly displays the changelogs for all intermediate versions when updating a mod, instead of only showing the changelog for the latest version. This provides a complete picture of the changes included in an update.
 - fixed (i18n): Resolved a critical issue where the 'Yes/No' prompts failed to accept universal ASCII input (like 'n' for No) when the locale used non-ASCII characters (e.g., Russian 'н'/'д').
 ### Changed
+- **Internationalization:** Translated comments in `setup.py` to English for better maintainability.
+- **Build System:** Updated `setup.py` to support platform-specific icon selection.
 - docs: Clarified file and directory locations for Windows and Linux in the README and Wiki.
 - refactor(deps): Removed multiple unused Python dependencies (e.g., beautifulsoup4, Pygments, striprtf) from requirements.txt, reducing the final application size by ~15MB.
 - refactor(config): Dynamically generate the language selection list to improve maintainability. This removes the need for manual re-numbering when adding/removing languages and ensures the default language selection is always correct.
@@ -37,7 +41,7 @@ v2.4.0
 - refactor (Data): Enriched the `excluded_mods` data in `global_cache` to store the specific `Reason` for exclusion, improving debugging and logging.
 - i18n: Added translation keys across all 12 supported languages to ensure full support for the new exclusion messages.
 
-v2.3.0:
+v2.3.0 - 2025-08-26
 - Added: a user prompt that allows displaying the changelog for new script updates on demand.
 - Added: support for a new API to check for ModsUpdater updates.
 - Added: Improved console output with clickable links and better-centered text.
@@ -47,7 +51,7 @@ v2.3.0:
 - Fixed: The program now correctly identifies and displays local mods in the excluded mods list.
 - Changed: The game version display has been rephrased for better clarity.
 
-v2.2.2:
+v2.2.2 - 2025-08-25
 - Improved the configuration for the game version. The program now automatically uses the latest version of the game if no specific version is indicated in `config.ini`.
 - For clarity, the `config.ini` file now shows 'latest_version' instead of being empty when this option is selected.
 
@@ -67,19 +71,19 @@ v2.2.0:
 - Fixed: Adapted API call for game version retrieval. The Vintage Story Mods API no longer prepends a 'v' to game version strings (e.g., v1.20.11 is now 1.20.11).
 - Improved: Enhanced configuration file handling by explicitly specifying UTF-8 encoding for both reading and writing config.ini.
 
-v2.1.3:
+v2.1.3 - 2025-05-05
 - Fixed: The download link for ModsUpdater was broken due to a character issue.
 - Build System: Migrated the binary creation process from Nuitka to cx_Freeze. This change aims to improve build compatibility and simplify the packaging workflow.
 
-v2.1.2:
+v2.1.2 - 2025-04-26
 - Fixed: Improved the warning message displayed when a directory is found in the Mods folder. It now includes the name of the directory in question, providing clearer context to the user.
 - Fixed: get_mod_path: Command line `modspath` argument is now correctly used.
 - Updated: ko_KR.json file
 
-v2.1.1:
+v2.1.1 - 2025-04-09
 - Fixed: Ensure mod icons are extracted when PDF export is disabled. The `if not args.no_pdf:` condition was moved within the `export_pdf` module to wrap only the PDF generation steps. This ensures that the icon extraction logic, which runs before PDF generation, is always executed, making icons available for other export formats (like HTML) even if PDF export is skipped.
 
-v2.1.0:
+v2.1.0 - 2025-04-08
 - Fixed (welcome_display): Ensures that the update status message is always displayed. A logic issue prevented the "No new version available" message from being shown.
 - Fixed: Correct mod icon is now displayed in the PDF modlist even if a manual update for that mod was skipped.
 - Fixed: modlist_json for manual mode: download links were not for the correct version.
