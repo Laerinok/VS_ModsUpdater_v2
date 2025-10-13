@@ -2,44 +2,10 @@ name: Build Application
 
 on:
   push:
-    branches: [ "main", "dev" ]
+    branches: [ "dev", "main" ]
   workflow_dispatch: {}
 
-permissions:
-  contents: read
-
 jobs:
-  build_linux:
-    name: Build AppImage (Linux)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install Python dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Install Linux dependencies for AppImage
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y patchelf desktop-file-utils libgdk-pixbuf2.0-dev fakeroot
-
-      - name: Build AppImage
-        run: python setup.py bdist_appimage
-
-      - name: Upload AppImage artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: VS_ModsUpdater-AppImage
-          path: dist/*.AppImage
-
   build_windows:
     name: Build Executable (Windows)
     runs-on: windows-latest
@@ -65,29 +31,3 @@ jobs:
         with:
           name: VS_ModsUpdater-Windows
           path: build/exe.win-amd64-3.12/
-
-  build_macos:
-    name: Build DMG (macOS)
-    runs-on: macos-latest
-    steps:
-      - name: Check out the repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install Python dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Build the DMG
-        run: python setup.py bdist_dmg
-
-      - name: Upload macOS DMG artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: VS_ModsUpdater-macOS
-          path: dist/*.dmg
