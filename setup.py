@@ -2,12 +2,15 @@ import sys
 import os
 from cx_Freeze import setup, Executable
 
+# Define the assets directory
+assets_dir = "assets"
+
 # --- Icon Logic ---
-# Define potential icon files by platform
+# Define potential icon files by platform, now looking inside the assets folder
 icon_files = {
-    "win32": "vintagestory.ico",
-    "darwin": "vintagestory.icns",
-    "linux": "vintagestory.png"
+    "win32": os.path.join(assets_dir, "vintagestory.ico"),
+    "darwin": os.path.join(assets_dir, "vintagestory.icns"),
+    "linux": os.path.join(assets_dir, "vintagestory.png")
 }
 
 # Determine the icon for the current platform executable, if it exists
@@ -18,15 +21,11 @@ if platform_icon_for_exe and os.path.exists(platform_icon_for_exe):
 
 # --- Include Files Logic ---
 # Start with the base files and directories that are always needed
+# Note: We now include the entire assets directory. cx_Freeze will handle it.
 include_files = [
     "README.md", "changelog.txt", "LICENSE.md", "requirements.txt",
-    "assets", "fonts", "lang"
+    assets_dir, "fonts", "lang"
 ]
-
-# Add ONLY the icon for the CURRENT build platform to the list of included files
-platform_icon_to_include = icon_files.get(sys.platform)
-if platform_icon_to_include and os.path.exists(platform_icon_to_include):
-    include_files.append(platform_icon_to_include)
 
 # Options for cx_Freeze
 build_exe_options = {
