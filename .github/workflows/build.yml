@@ -1,70 +1,120 @@
-name: Create Release
+name: Build and Release
 
 on:
   push:
-    branches:
-      - "main"
+    branches: [ "main" ]
   workflow_dispatch: {}
 
 permissions:
   contents: write
 
 jobs:
-  build_and_release:
-    name: Build and Release
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
-        include:
-          - os: windows-latest
-            asset_name: "VS_ModsUpdater-${{ github.ref_name }}-Windows.zip"
-            asset_path: "build/exe.win-amd64-3.12"
-            build_command: "python setup.py build_exe"
-            archive_command: "powershell Compress-Archive -Path build/exe.win-amd64-3.12 -DestinationPath VS_ModsUpdater-${{ github.ref_name }}-Windows.zip"
-            release_asset_path: "VS_ModsUpdater-${{ github.ref_name }}-Windows.zip"
-          - os: ubuntu-latest
-            asset_name: "VS_ModsUpdater-${{ github.ref_name }}-Linux.AppImage"
-            asset_path: "dist/*.AppImage"
-            build_command: |
-              sudo apt-get update
-              sudo apt-get install -y patchelf desktop-file-utils libgdk-pixbuf2.0-dev fakeroot
-              python setup.py bdist_appimage
-            archive_command: ""
-            release_asset_path: "dist/*.AppImage"
-          - os: macos-latest
-            asset_name: "VS_ModsUpdater-${{ github.ref_name }}-macOS.dmg"
-            asset_path: "dist/*.dmg"
-            build_command: "python setup.py bdist_dmg"
-            archive_command: ""
-            release_asset_path: "dist/*.dmg"
-
+  build_windows:
+    name: Build Executable (Windows)
+    runs-on: windows-latest
     steps:
-      - name: Check out the repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
+      - name: Get App Version
+        id: get_version
+        run: echo "APP_VERSION=$(grep -oP '__version__ = \"\K[^\"]+' app_version.py)" >> $env:GITHUB_ENV
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install cx-freeze setuptools
           pip install -r requirements.txt
+      - name: Build the executable
+        run: python setup.py build_exe
+      - name: Archive executable with version
+        run: powershell Compress-Archive -Path build/exe.win-amd64-3.12 -DestinationPath VS_ModsUpdater.v${{ env.APP_VERSION }}_Windows.zip
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifact-windows
+          path: VS_ModsUpdater.v${{ env.APP_VERSION }}_Windows.zip
 
-      - name: Build the application
-        run: ${{ matrix.build_command }}
+  build_linux:
+    name: Build AppImage (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Get App Version
+        id: get_version
+        run: echo "APP_VERSION=$(grep -oP '__version__ = \"\K[^\"]+' app_version.py)" >> $GITHUB_ENV
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install cx-freeze setuptools
+          pip install -r requirements.txt
+      - name: Install Linux dependencies
+        run: sudo apt-get update && sudo apt-get install -y patchelf desktop-file-utils libgdk-pixbuf2.0-dev fakeroot
+      - name: Build AppImage
+        run: python setup.py bdist_appimage
+      - name: Rename AppImage with version
+        run: mv dist/*.AppImage dist/VS_ModsUpdater.v${{ env.APP_VERSION }}_Linux.AppImage
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifact-linux
+          path: dist/VS_ModsUpdater.v${{ env.APP_VERSION }}_Linux.AppImage
 
-      - name: Archive executable (Windows only)
-        if: matrix.os == 'windows-latest' && matrix.archive_command != ''
-        run: ${{ matrix.archive_command }}
+  build_macos:
+    name: Build DMG (macOS)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Get App Version
+        id: get_version
+        run: echo "APP_VERSION=$(grep -oP '__version__ = \"\K[^\"]+' app_version.py)" >> $GITHUB_ENV
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install cx-freeze setuptools
+          pip install -r requirements.txt
+      - name: Build the DMG
+        run: python setup.py bdist_dmg
+      - name: List build directories for debugging
+        run: ls -R build dist
+      - name: Rename DMG with version
+        run: mv build/*.dmg build/VS_ModsUpdater.v${{ env.APP_VERSION }}_macOS.dmg
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifact-macos
+          path: build/VS_ModsUpdater.v${{ env.APP_VERSION }}_macOS.dmg
 
-      - name: Create Release and Upload Asset
+  release:
+    name: Create Release
+    needs: [build_windows, build_linux, build_macos]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get App Version
+        id: get_version
+        run: echo "APP_VERSION=$(grep -oP '__version__ = \"\K[^\"]+' app_version.py)" >> $GITHUB_ENV
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: List downloaded files for debugging
+        run: ls -R artifacts
+      - name: Create Release and Upload Assets
         uses: softprops/action-gh-release@v1
         with:
-          files: ${{ matrix.release_asset_path }}
-          tag_name: ${{ github.ref_name }}
+          name: "Version ${{ env.APP_VERSION }}"
+          tag_name: "v${{ env.APP_VERSION }}"
+          body_path: "changelog.txt"
+          files: |
+            artifacts/artifact-windows/*
+            artifacts/artifact-linux/*
+            artifacts/artifact-macos/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
