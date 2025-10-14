@@ -47,11 +47,5 @@ setup(
     author="Laerinok",
     license="GNU GPLv3",
     options={"build_exe": build_exe_options},
-    executables=[exe],
-    setup_requires=["dmgbuild"],
-    dmgbuild={
-        "settings": {
-            "format": "bzip2"
-        }
-    }
+    executables=[exe]
 )
