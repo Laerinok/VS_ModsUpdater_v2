@@ -19,7 +19,8 @@ jobs:
           python-version: '3.12'
       - name: Get App Version
         id: get_version
-        run: echo "APP_VERSION=$(grep -oP '__version__ = \"\K[^\"]+' app_version.py)" >> $env:GITHUB_ENV
+        shell: bash
+        run: echo "APP_VERSION=$(python -c 'import app_version; print(app_version.__version__)')" >> $GITHUB_ENV
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -45,7 +46,7 @@ jobs:
           python-version: '3.12'
       - name: Get App Version
         id: get_version
-        run: echo "APP_VERSION=$(grep -oP '__version__ = \"\K[^\"]+' app_version.py)" >> $GITHUB_ENV
+        run: echo "APP_VERSION=$(python -c 'import app_version; print(app_version.__version__)')" >> $GITHUB_ENV
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -73,7 +74,7 @@ jobs:
           python-version: '3.12'
       - name: Get App Version
         id: get_version
-        run: echo "APP_VERSION=$(grep -oP '__version__ = \"\K[^\"]+' app_version.py)" >> $GITHUB_ENV
+        run: echo "APP_VERSION=$(python -c 'import app_version; print(app_version.__version__)')" >> $GITHUB_ENV
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -99,7 +100,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Get App Version
         id: get_version
-        run: echo "APP_VERSION=$(grep -oP '__version__ = \"\K[^\"]+' app_version.py)" >> $GITHUB_ENV
+        run: echo "APP_VERSION=$(python -c 'import app_version; print(app_version.__version__)')" >> $GITHUB_ENV
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
