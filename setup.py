@@ -10,23 +10,23 @@ icon_files = {
     "linux": "vintagestory.png"
 }
 
-# Determine the icon for the current platform, if it exists
+# Determine the icon for the current platform executable, if it exists
 icon_path = None
-platform_icon = icon_files.get(sys.platform)
-if platform_icon and os.path.exists(platform_icon):
-    icon_path = platform_icon
+platform_icon_for_exe = icon_files.get(sys.platform)
+if platform_icon_for_exe and os.path.exists(platform_icon_for_exe):
+    icon_path = platform_icon_for_exe
 
 # --- Include Files Logic ---
-# Start with the base files and directories
+# Start with the base files and directories that are always needed
 include_files = [
     "README.md", "changelog.txt", "LICENSE.md", "requirements.txt",
     "assets", "fonts", "lang"
 ]
 
-# Add only the icon files that actually exist in the project
-for icon_file in set(icon_files.values()):  # Use set to avoid duplicates
-    if os.path.exists(icon_file):
-        include_files.append(icon_file)
+# Add ONLY the icon for the CURRENT build platform to the list of included files
+platform_icon_to_include = icon_files.get(sys.platform)
+if platform_icon_to_include and os.path.exists(platform_icon_to_include):
+    include_files.append(platform_icon_to_include)
 
 # Options for cx_Freeze
 build_exe_options = {
