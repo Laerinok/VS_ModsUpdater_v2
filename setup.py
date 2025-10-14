@@ -33,6 +33,11 @@ build_exe_options = {
     "excludes": []
 }
 
+# Options for bdist_dmg
+bdist_dmg_options = {
+    "settings_file": "dmg_settings.py"
+}
+
 # Executable definition
 exe = Executable(
     script="main.py",
@@ -47,6 +52,9 @@ setup(
     description="ModsUpdater for Vintage Story",
     author="Laerinok",
     license="GNU GPLv3",
-    options={"build_exe": build_exe_options},
+    options={
+        "build_exe": build_exe_options,
+        "bdist_dmg": bdist_dmg_options
+    },
     executables=[exe]
 )
