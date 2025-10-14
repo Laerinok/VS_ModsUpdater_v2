@@ -86,17 +86,14 @@ jobs:
       - name: Install build tools and dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install cx-freeze setuptools dmgbuild
+          pip install cx-freeze setuptools
           pip install -r requirements.txt
 
-      - name: Build the .app bundle
-        run: python setup.py bdist_mac
-
-      - name: Create compressed DMG
-        run: dmgbuild -s dmg_settings.py "VS_ModsUpdater" dist/VS_ModsUpdater-${{ github.ref_name }}.dmg
+      - name: Build the DMG
+        run: python setup.py bdist_dmg
 
       - name: Upload macOS DMG artifact
         uses: actions/upload-artifact@v4
         with:
           name: VS_ModsUpdater-${{ github.ref_name }}-macOS
-          path: dist/*.dmg
+          path: build/*.dmg
