@@ -105,7 +105,7 @@ def prompt_yes_no(prompt_message: str, default: bool = True, **kwargs: Any) -> b
     yes_word = lang.get_translation("yes").strip().lower()
     no_word = lang.get_translation("no").strip().lower()
 
-    # Extract the first character for validation and display
+    # Extract the first character for validation
     yes_local_char = yes_word[0]
     no_local_char = no_word[0]
 
@@ -114,13 +114,21 @@ def prompt_yes_no(prompt_message: str, default: bool = True, **kwargs: Any) -> b
     no_inputs = {no_local_char, 'n'}
 
     # 3. Determine display and default value
-    display_choices = [yes_local_char, no_local_char]
+    local_choices = f"{yes_local_char}/{no_local_char}"
+    english_choices = "y/n"
+
+    # Only show both if they are different to avoid "(y/n, y/n)"
+    if local_choices == english_choices:
+        choices_str = local_choices
+    else:
+        choices_str = f"{local_choices}, {english_choices}"
+
     default_char = no_local_char if not default else yes_local_char
 
     # 4. Loop until valid input is given
     while True:
         # Construct the final prompt string with the default value displayed
-        prompt_str = f"{prompt_message} ({'/'.join(display_choices)}) [{default_char}]: "
+        prompt_str = f"{prompt_message} ({choices_str}) [{default_char}]: "
 
         # *** CRITICAL CHANGE: Use console.input() for raw input! ***
         # This bypasses all rich.prompt.Prompt validation logic that was failing.
@@ -448,6 +456,7 @@ def backup_mods(mods_to_backup):
                 old_backup.unlink()
                 logging.info(f"Deleted old backup: {old_backup}")
 
+
 def get_default_icon_binary():
     """
     Loads and returns the binary data of the default icon ('assets/no_icon.png').
@@ -459,6 +468,7 @@ def get_default_icon_binary():
     else:
         logging.debug(f"Default icon 'no_icon.png' not found at {default_icon_path}.")
         return None
+
 
 def get_icon_binary(path, mod_type):
     """Gets the binary data of modicon.png from a mod path (zip or directory)."""
@@ -478,6 +488,7 @@ def get_icon_binary(path, mod_type):
     except Exception as e:
         logging.warning(f"Could not read icon for {path}: {e}")
     return None
+
 
 def escape_rich_tags(text):
     return text.replace("[", r"\[").replace("]", r"\]")

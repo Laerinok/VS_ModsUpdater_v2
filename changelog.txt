@@ -1,4 +1,4 @@
-v2.4.0 - 2025-10-13
+v2.4.0 - 2025-10-14
 ### Added
 - **Build Automation:** Implemented a GitHub Actions workflow to automatically build and create releases for Windows (.exe), Linux (AppImage), and macOS (.dmg).
 - **Platform-Specific Icons:** The build process now automatically selects the appropriate icon format (`.ico` for Windows, `.png` for Linux, `.icns` for macOS).
@@ -30,6 +30,8 @@ v2.4.0 - 2025-10-13
 - fixed: The application now correctly displays the changelogs for all intermediate versions when updating a mod, instead of only showing the changelog for the latest version. This provides a complete picture of the changes included in an update.
 - fixed (i18n): Resolved a critical issue where the 'Yes/No' prompts failed to accept universal ASCII input (like 'n' for No) when the locale used non-ASCII characters (e.g., Russian 'н'/'д').
 ### Changed
+- **Improvement:** The application now correctly handles "yes/no" and "y/n" responses in English, in addition to localized answers, for all confirmation prompts. This improves consistency and user experience, especially during initial setup and when displaying the changelog.
+- **Improvement:** The yes/no confirmation prompts now explicitly display all valid inputs (e.g., `(o/n, y/n)`), making it clear that both localized and English responses are accepted.
 - **Internationalization:** Translated comments in `setup.py` to English for better maintainability.
 - **Build System:** Updated `setup.py` to support platform-specific icon selection.
 - docs: Clarified file and directory locations for Windows and Linux in the README and Wiki.

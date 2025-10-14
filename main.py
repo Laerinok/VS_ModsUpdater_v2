@@ -56,6 +56,7 @@ from rich.text import Text
 
 import cli
 import config
+import utils
 from app_version import __version__
 import export_html
 import export_json
@@ -67,7 +68,6 @@ import mods_auto_update
 import mods_install
 import mods_manual_update
 import mods_update_checker
-from utils import exit_program
 
 console = Console()
 
@@ -124,23 +124,13 @@ def initialize_config():
 
         # Ask if we continue or quit to modify config.ini (e.g., to add mods to the exception list.)
         print(f"{language_cache['main_update_or_modify_config']}")
-        while True:
-            user_confirms_update = Prompt.ask(
+        if not utils.prompt_yes_no(
                 f"{language_cache['main_continue_update_prompt']}",
-                choices=[global_cache.language_cache["yes"][0],
-                         global_cache.language_cache["no"][0]],
-                default=global_cache.language_cache["no"][0])
-            user_confirms_update = user_confirms_update.strip().lower()
-
-            if user_confirms_update == global_cache.language_cache["yes"][0].lower():
-                break
-            elif user_confirms_update == global_cache.language_cache["no"][0].lower():
-                print(f"{language_cache['main_exiting_program']}")
-                utils.exit_program(
-                    extra_msg=f"{lang.get_translation('main_user_exits')}")
-
-            else:
-                pass
+                default=False  # Default to No
+        ):
+            print(f"{language_cache['main_exiting_program']}")
+            utils.exit_program(
+                extra_msg=f"{lang.get_translation('main_user_exits')}")
 
     migration_performed = config.migrate_config_if_needed()
 
@@ -185,13 +175,10 @@ def welcome_display():
             justify="center")
 
         # Prompt the user to show the changelog
-        show_changelog = Prompt.ask(
+        if utils.prompt_yes_no(
             f"\n{lang.get_translation('main_show_changelog_prompt')}",
-            choices=["y", "n"],
-            default="n"
-        )
-
-        if show_changelog.lower() == "y":
+            default=False # Default to No
+        ):
             changelog_panel = Panel(
                 changelog_text,
                 title=lang.get_translation("main_changelog_title"),
@@ -211,6 +198,7 @@ def welcome_display():
     console.print()  # Add a blank line
     console.print()  # Add another blank line
     console.print(game_version_text, justify="center")
+
 
 def handle_dry_run():
     """
@@ -266,12 +254,10 @@ def handle_dry_run():
         logging.error(f"Failed to write dry run report: {e}")
 
     # Exit the program
-    exit_program()
+    utils.exit_program()
 
 if __name__ == "__main__":
     args = cli.parse_args()
-
-    import utils
 
     # Initialize config
     initialize_config()
@@ -288,7 +274,7 @@ if __name__ == "__main__":
     # Install from modlist.json
     if args.install_modlist:
         mods_install.main()
-        exit_program()
+        utils.exit_program()
 
     # Check if the 'Mods' folder is not empty and contains only archive files, not extracted archive folders.
     utils.check_mods_directory(mods_path)
@@ -324,7 +310,7 @@ if __name__ == "__main__":
                 default=False  # Default to No
             )
             if not continue_anyway:
-                exit_program()
+                utils.exit_program()
         elif incompatibility_behavior == '1': # Abort
             print(f"[red]{global_cache.language_cache['main_aborting_due_to_incompatibility']}[/red]")
             if not args.no_pause:
