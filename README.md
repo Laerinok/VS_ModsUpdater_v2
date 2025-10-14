@@ -1,8 +1,10 @@
-# - ModsUpdater for Vintage Story (Windows/Linux) -
+# - ModsUpdater for Vintage Story (Windows/Linux/macOS) -
 
 This program automates the management of your mods for the game Vintage Story. It allows you to check for updates, download them (automatically or manually), and generate a list of your installed mods in JSON, PDF, and HTML format.
 
 [ModsUpdater on ModDB](https://mods.vintagestory.at/modsupdater) / [ModsUpdater for Linux on ModDB](https://mods.vintagestory.at/modsupdaterforlinux)
+
+**macOS Version Note:** A native version for macOS is also available. However, as I not have access to a Mac, this version is provided "as is" without direct testing. The binary is built automatically via GitHub Actions. Due to its size, it is not available for download on ModDB but can be found on the project's GitHub releases page.
 
 ## Key Features
 
@@ -22,16 +24,16 @@ This program automates the management of your mods for the game Vintage Story. I
 
 ## File and Directory Locations
 
-The location of configuration and data files differs between Windows and Linux to follow platform conventions.
+The location of configuration and data files differs between Windows, Linux, and macOS to follow platform conventions.
 
-| File / Directory | Windows Location | Linux Location (for AppImage) |
+| File / Directory | Windows Location | Linux & macOS Location |
 | :--- | :--- | :--- |
 | **`config.ini`** | In the same directory as the `.exe` | `~/.config/VS_ModsUpdater/config.ini` |
 | **`logs/`** | In the same directory as the `.exe` | `~/.local/share/VS_ModsUpdater/logs/` |
 | **`backup_mods/`** | In the same directory as the `.exe` | `~/.local/share/VS_ModsUpdater/backup_mods/` |
 | **`modlist/`** | In the same directory as the `.exe` | `~/.local/share/VS_ModsUpdater/modlist/` |
 
-**Note:** On Linux, the paths may vary if you have customized the `XDG_CONFIG_HOME` or `XDG_DATA_HOME` environment variables.
+**Note:** On Linux and macOS, the paths may vary if you have customized the `XDG_CONFIG_HOME` or `XDG_DATA_HOME` environment variables. The Linux locations refer to the AppImage version.
 
 ## How Mods Are Handled (Zip vs. Directory)
 
@@ -176,4 +178,4 @@ Supported Languages:
     简体中文
 
 =============================    
-(Latest update: 2025-10-13 / v2.4.0)
+(Latest update: 2025-10-14 / v2.4.0)
