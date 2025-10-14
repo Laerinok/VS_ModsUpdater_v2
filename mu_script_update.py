@@ -30,16 +30,17 @@ Key functionalities include:
 """
 
 __author__ = "Laerinok"
-__version__ = "2.3.0"
 __date__ = "2025-08-26"  # Last update
 
 # mu_script_update.py
 
 import logging
-import utils
-from http_client import HTTPClient
+
 import config
 import global_cache
+import utils
+from app_version import __version__
+from http_client import HTTPClient
 
 # Initialize the HTTP client for making requests.
 client = HTTPClient()
@@ -88,7 +89,7 @@ def modsupdater_update():
         # Convert the HTML changelog to a readable Markdown format for the console.
         changelog_text = utils.convert_html_to_markdown(changelog_html)
 
-        new_version = utils.version_compare(__version__, latest_version)
+        new_version = utils.version_compare(__version__, latest_version) == utils.VersionCompareState.LOCAL_VERSION_BEHIND
 
         logging.info(
             f"Current version: {__version__}, Latest version: {latest_version}")

@@ -26,7 +26,7 @@ API calls, downloading files, and any HTTP requests requiring a persistent sessi
 
 
 __author__ = "Laerinok"
-__version__ = "2.3.0"
+__version__ = "2.4.0"
 __date__ = "2025-08-24"  # Last update
 
 
@@ -52,6 +52,7 @@ def parse_args():
     parser.add_argument('--timeout', type=int, help='Set the timeout for downloads')
     parser.add_argument('--install-modlist', action='store_true', help='Download mods from modlist.json to the mods folder.')
     parser.add_argument('--force-update', action='store_true', help='Force a re-download and re-install of all mods, regardless of version.')
+    parser.add_argument('--dry-run', action='store_true', help='List mods with updates without downloading them.')
 
     args = parser.parse_args()
 

@@ -17,7 +17,6 @@
 Module to export the list of mods to HTML format.
 """
 __author__ = "Laerinok"
-__version__ = "2.3.0"
 __date__ = "2025-08-24"  # Last update
 
 
@@ -34,6 +33,7 @@ import config
 import global_cache
 import lang
 from html_generator import generate_basic_table
+from utils import get_default_icon_binary
 
 
 def format_mods_html_data(mods_data):
@@ -53,6 +53,10 @@ def format_mods_html_data(mods_data):
         description = mod.get("Description", "No description available.")
         icon_binary = mod.get("IconBinary")
         mod_url = mod.get("Mod_url")
+
+        if not icon_binary:
+            icon_binary = get_default_icon_binary()
+
         if icon_binary:
             base64_icon = base64.b64encode(icon_binary).decode('utf-8')
             mime_type = "image/png"  # Assuming the icons are in PNG format
@@ -61,9 +65,11 @@ def format_mods_html_data(mods_data):
         else:
             icon_html = '<td></td>'
 
-        name_with_link = name
-        if mod_url:
+        if mod_url and mod_url != "Local mod":
             name_with_link = f'<a href="{mod_url}" target="_blank">{name} ({version})</a>'
+        else:
+            name_with_link = f'{name} ({version})'
+
         row = f'<tr>{icon_html}<td>{name_with_link}</td><td>{description}</td></tr>'
         rows.append(row)
     return ''.join(rows)
@@ -82,7 +88,7 @@ def export_mods_to_html():
         logging.info(f"Found {len(mods_data)} installed mods.")
 
         num_installed_mods = len(mods_data)
-        mod_table_rows = format_mods_html_data(mods_data)  # Note: icons_folder_path is removed
+        mod_table_rows = format_mods_html_data(mods_data)
         basic_html = generate_basic_table(num_installed_mods)
         logging.info("Generated basic HTML structure.")
 

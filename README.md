@@ -1,34 +1,65 @@
+# - ModsUpdater for Vintage Story (Windows/Linux/macOS) -
 
-# - ModsUpdater for Vintage Story (Windows/Linux)-
-
-This program automates the management of your mods for the game Vintage Story. It allows you to check for updates, download them (automatically or manually), and generate a list of your installed mods in JSON and PDF format.
+This program automates the management of your mods for the game Vintage Story. It allows you to check for updates, download them (automatically or manually), and generate a list of your installed mods in JSON, PDF, and HTML format.
 
 [ModsUpdater on ModDB](https://mods.vintagestory.at/modsupdater) / [ModsUpdater for Linux on ModDB](https://mods.vintagestory.at/modsupdaterforlinux)
+
+**macOS Version Note:** A native version for macOS is also available. However, as I not have access to a Mac, this version is provided "as is" without direct testing. The binary is built automatically via GitHub Actions. Due to its size, it is not available for download on ModDB but can be found on the project's GitHub releases page.
 
 ## Key Features
 
 - Script Update Check: Checks if a new version of the ModsUpdater tool is available.
 - Configuration Migration: Automatically manages the migration of the old configuration file format to the new one, ensuring compatibility during application updates.
 - Update Check: Compares the local versions of your mods with the latest versions available on ModDB.
+- **Mod Downgrade**: If an installed mod is too new for the selected game version, the updater will offer to downgrade it to the latest compatible version.
+- **Incompatibility Check**: The application warns if an installed mod is incompatible with the selected game version, even when no alternative version is available.
 - Automatic Download: Automatically downloads available updates (configurable).
 - Manual Download: Displays changelogs and allows you to choose which updates to download.
 - Backup Management: Creates backups of your mods before updating them, with a configurable retention policy.
 - Excluded Mods Management: Allows you to ignore certain mods during update checks and downloads.
-- Mod List Generation (PDF/JSON): Creates a PDF/JSON document listing your installed mods.
+- **Detailed Exclusion Reasons**: Displays the specific reason for a mod's exclusion in the final summary (e.g., 'Excluded by user in config.ini' or 'API data unavailable').
+- Mod List Generation (PDF/JSON/HTML): Creates a PDF, JSON, or HTML document listing your installed mods.
 - Command Line Interface (CLI): Integration with arguments to customize execution.
 - Multilingual Support: The interface is available in several languages (configurable).
 
+## File and Directory Locations
+
+The location of configuration and data files differs between Windows, Linux, and macOS to follow platform conventions.
+
+| File / Directory | Windows Location | Linux & macOS Location |
+| :--- | :--- | :--- |
+| **`config.ini`** | In the same directory as the `.exe` | `~/.config/VS_ModsUpdater/config.ini` |
+| **`logs/`** | In the same directory as the `.exe` | `~/.local/share/VS_ModsUpdater/logs/` |
+| **`backup_mods/`** | In the same directory as the `.exe` | `~/.local/share/VS_ModsUpdater/backup_mods/` |
+| **`modlist/`** | In the same directory as the `.exe` | `~/.local/share/VS_ModsUpdater/modlist/` |
+
+**Note:** On Linux and macOS, the paths may vary if you have customized the `XDG_CONFIG_HOME` or `XDG_DATA_HOME` environment variables. The Linux locations refer to the AppImage version.
+
+## How Mods Are Handled (Zip vs. Directory)
+
+The updater is designed to be flexible and supports mods in different formats. It is important to note that the standard behavior for Vintage Story is to load mods directly from `.zip` files. You do not need to extract them.
+
+-   **.zip Files**: This is the standard format for the game. The updater will check for updates and replace the `.zip` file with the new version.
+-   **.cs Files**: These are treated as simple mods. The updater will replace the `.cs` file with its new version.
+-   **Directories**: This feature is primarily intended for users of **Mod Organizer 2**, which manages mods in individual folders. The updater identifies a folder as a mod if it contains a `modinfo.json` file.
+
+**⚠️ Important Note for Directory-Based Mods:**
+
+When updating a mod that is in a directory, the updater will **replace the contents** of the directory with the new version. The **name of the directory itself will not be changed**. This is intentional to maintain compatibility with mod managers that rely on stable folder names (like Mod Organizer 2, which often uses the `modid` as the folder name).
+
+For example, if you have a mod in a folder named `MyAwesomeMod/` and you update it, the contents will be replaced, but the folder will still be named `MyAwesomeMod/`, even if the downloaded file was `MyAwesomeMod-v1.2.zip`.
+
 **Important Note Regarding Configuration Migration:**
 
-During updates of the ModsUpdater application, the format of the `config.ini` file may evolve. To facilitate these updates, the application includes an automatic migration mechanism. If an older version of the configuration file is detected, the application will attempt to convert it to the new format. In most cases, this migration will occur transparently. However, it is always recommended to check your `config.ini` file after an application update to ensure that all your settings are correctly preserved. In case of any issues, a backup of your old configuration (`config.old`) is kept (beside the `config.ini`file).
+During updates of the ModsUpdater application, the format of the `config.ini` file may evolve. To facilitate these updates, the application includes an automatic migration mechanism. If an older version of the configuration file is detected, the application will attempt to convert it to the new format. In most cases, this migration will occur transparently. However, it is always recommended to check your `config.ini` file after an application update to ensure that all your settings are correctly preserved. In case of any issues, a backup of your old configuration (`config.old`) is kept next to the `config.ini` file.
 
 ## Configuration (`config.ini`)
 
-The `config.ini` file contains the configuration parameters for the application. It is located in the same directory as the main script. Here are the main sections and their options:
+The `config.ini` file contains the configuration parameters for the application. See the table above for its location. Here are the main sections and their options:
 
 ```ini
 [ModsUpdater]
-version = 2.0.1
+version = 2.4.0
 ```
 * `version`: Current version of the ModsUpdater application (information).
 
@@ -44,11 +75,16 @@ exclude_prerelease_mods = false
 auto_update = true
 max_workers = 4
 timeout = 10
+incompatibility_behavior = 0
 ```
 * `exclude_prerelease_mods`: true to exclude pre-release mod versions during update checks, false to include them.
 * `auto_update`: true to enable automatic downloading of updates (after checking), false to use manual mode where you confirm each download.
 * `max_workers`: Maximum number of threads to use for downloading mods in parallel. Increasing this value may speed up downloads but may also consume more system resources. **The maximum value allowed for this setting is 10.**
 * `timeout`: Timeout in seconds for HTTP requests during update checks and mod downloads. **A typical useful range is between 5 and 30 seconds. Setting it too low might cause connection errors on slower networks, while setting it too high might make the application wait unnecessarily long if a server is unresponsive.**
+* `incompatibility_behavior`: Defines how the application handles incompatible mods.
+  * `0` (ask): Prompts the user for action before continuing. (Default)
+  * `1` (abort): Stops the process automatically if an incompatibility is detected.
+  * `2` (ignore): Continues the process, ignoring the incompatibility.
 
 ```ini
 [Backup_Mods]
@@ -56,9 +92,9 @@ backup_folder = backup_mods
 max_backups = 3
 modlist_folder = Modlist
 ```
-* `backup_folder`: Name of the directory (created in the application directory by default) where mod backups will be stored. **You can also specify a full path if you wish to store backups elsewhere.**
+* `backup_folder`: Name of the directory where mod backups will be stored. If you use a simple name, it will be created at the default location (see table above). **You can also specify a full path to store backups elsewhere.**
 * `max_backups`: Maximum number of mod backups to keep. Older backups will be deleted when this limit is reached.
-* `modlist_folder`: Name of the directory (created in the application directory by default) where the mod lists in PDF and JSON format will be saved. **You can also specify a full path if you wish to save the lists elsewhere.**
+* `modlist_folder`: Name of the directory where the mod lists (PDF, JSON, HTML) will be saved. If you use a simple name, it will be created at the default location. **You can also specify a full path to save the lists elsewhere.**
 
 ```ini
 [ModsPath]
@@ -78,7 +114,7 @@ user_game_version = 1.20.5
 ```    
 * `user_game_version`:    Maximum game version target for mod updates.
   * If you specify a version (for example, 1.20.5), the application will not download mod updates that are only compatible with Vintage Story versions higher than the one specified.
-  * If this option is left empty (``) or set to None, the application will download the latest available update for each mod, regardless of the compatible Vintage Story version. Caution: this means you might download mods that are not compatible with your current game version. If you want to stay on a specific Vintage Story version, define the version, but remember to change it when you update the game.
+  * If this option is left empty (``), set to `None`, or set to `latest_version`, the application will download the latest available update for each mod, regardless of the compatible Vintage Story version. Caution: this means you might download mods that are not compatible with your current game version. If you want to stay on a specific Vintage Story version, define the version, but remember to change it when you update the game.
 
 ```ini
 [Mod_Exclusion]
@@ -101,6 +137,7 @@ The script can be executed with arguments to customize its behavior:
 - `--timeout <seconds>`: Sets the timeout in seconds for HTTP requests during update checks and mod downloads. This argument replaces the `timeout` value defined in the `[Options]` section of `config.ini`.
 - `--install-modlist`: Download mods from modlist.json to the mods folder.
 - `--force-update`: Force a re-download and re-install of all mods, regardless of version.
+- `--dry-run`: Performs a trial run that checks for updates and incompatibilities without downloading or modifying any files.
 
 **Usage Examples:**
 
@@ -133,6 +170,7 @@ Supported Languages:
     Italiano
     日本語
     한국어 (From gitHub. Thanks purple8cloud)
+    Polski (From gitHub. Thanks MaLiN2223)
     Português (Brasil)
     Português (Portugal)
     Русский
@@ -140,4 +178,4 @@ Supported Languages:
     简体中文
 
 =============================    
-(Latest update: 2025-08-24)
+(Latest update: 2025-10-14 / v2.4.0)

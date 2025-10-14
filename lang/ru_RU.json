@@ -10,26 +10,36 @@
     "main_user_exits": "Пользователь решил выйти из процесса обновления.",
     "main_no_new_version_available": "Нет доступной новой версии",
     "main_new_version_available": "Доступна новая версия!!!",
-    "main_title": "ModsUpdater для Vintage Story / v{ModsUpdater_version} (от Laerinok)",
+    "main_title": "ModsUpdater для Vintage Story / v{ModsUpdater_version} (от {ModsUpdater_author})",
     "main_mods_no_update": "Нет доступных обновлений модов.",
     "main_max_game_version": "Установленная версия игры: ",
     "main_press_enter_to_exit": "Нажмите Enter, чтобы выйти...",
     "main_excluded_mods_title": "Следующие моды исключены из обновления:",
     "main_logs_location": "Журналы сохранены здесь: ",
     "main_logs_location_error": "Не удалось получить местоположение журналов.",
-    "main_show_changelog_prompt": "Хотите увидеть список изменений? (y/n)",
+    "main_show_changelog_prompt": "Хотите увидеть список изменений?",
     "main_changelog_title": "Список изменений",
-    
+    "main_reason_label_unknown": "Неизвестная причина",
+
+    "main_incompatible_mods_found_without_update": "Обнаружены несовместимые моды без доступного обновления:",
+    "main_aborting_due_to_incompatibility": "Прерывание обновления из-за несовместимости.",
+    "main_continue_anyway_prompt": "Продолжить все равно?",
+
     "config_ask_mod_directory": "Введите путь к папке с модами. Оставьте пустым для пути по умолчанию",
     "config_configuration_migrated": "Конфигурация успешно перенесена в версию {EXPECTED_VERSION}.",
     "config_invalid_directory": "Ошибка: {mods_directory} не является действительным каталогом.",
     "config_game_version_prompt": "Блокировать обновления до версии игры (1.2.3, пусто = без блокировки)",
     "config_invalid_game_version": "Ошибка: Пожалуйста, укажите действительную версию в формате major.minor.patch (например, 1.20.5).",
-    "config_choose_update_mode": "Выберите режим обновления (вручную/автоматически)",
+    "config_choose_update_mode": "Выберите режим обновления (1: вручную / 2: автоматически)",
     "config_choose_update_mode_auto": "автоматически",
     "config_choose_update_mode_manual": "вручную",
     "config_invalid_update_choice": "Неверный выбор. Пожалуйста, введите 'вручную' или 'автоматически'.",
-    
+    "config_incompatibility_prompt": "Как обрабатывать несовместимые моды, если обновление недоступно?",
+    "config_incompatibility_ask": "Спросить, что делать",
+    "config_incompatibility_abort": "Прервать процесс обновления",
+    "config_incompatibility_ignore": "Игнорировать и продолжить",
+    "config_choose_behavior_prompt": "Введите ваш выбор",
+
     "fetch_changelog_unknown_version": "неизвестная версия",
     
     "fetch_mod_info_error_mods_path_missing": "В конфигурации отсутствует ModsPath или ключ 'path'.",
@@ -37,13 +47,14 @@
     "fetch_mod_info_scanning_mods": "Сканирование модов...",
     "fetch_mod_info_fetching_mod_info": "Получение информации о модах из API...",
     "fetch_mod_info_fetching_mod_info_name": "Получение информации о модах",
-    
+    "fetch_mod_info_exclusion_reason_api_failure": "Данные API недоступны. Возможно, мод был удален или перенесен.",
+
     "auto_file_size_unknown": "Предупреждение: Размер файла неизвестен или равен нулю. Загрузка может завершиться некорректно.[/bold indian_red1]",
     "auto_downloading_mods": "Загрузка модов...",
     "auto_downloading_mod_name": "Загрузка",
     "auto_mods_updated_resume": "Следующие моды были обновлены:",
     
-    "manual_download_mod_prompt": "Загрузить этот мод? (y/n)",
+    "manual_download_mod_prompt": "Загрузить этот мод?",
     "manual_skipping_download": "Пропуск загрузки для",
     "manual_downloading_mod": "Загрузка",
     "manual_download_completed": "Загрузка завершена для",
@@ -54,7 +65,8 @@
     "utils_no_valid_mod_files_found": "В папке модов не найдено ни одного действительного файла модов.",
     "utils_error_invalid_max_workers": "Ошибка: Недопустимый ввод для max_workers. Должно быть целым числом.",
     "utils_prg_terminated": "Программа завершена.",
-    
+    "utils_exclusion_reason_user_config": "Исключен пользователем в config.ini",
+
     "export_json_modilst": "Список модов экспортирован как JSON:",
     "export_pdf_modilst": "Список модов экспортирован как PDF:",
     "export_html_modilst": "Список модов экспортирован в HTML: ",
@@ -65,5 +77,21 @@
     "error": "Ошибка:",
     "yes": "да",
     "no": "нет",
-    "to": "к"
+    "to": "к",
+    "changelog_version_title": "Версия",
+
+    "dry_run_console_updates_available": "Для следующих модов доступны обновления:",
+    "dry_run_console_no_updates": "Все моды обновлены.",
+    "dry_run_console_report_saved": "Отчет сохранен в:",
+    "dry_run_console_installed": "Установлено",
+    "dry_run_console_latest": "Последняя",
+    "dry_run_console_changelog": "Список изменений",
+
+    "dry_run_report_header": "Vintage Story Mods Updater - Отчет о пробном запуске",
+    "dry_run_report_generated_on": "Сгенерировано:",
+    "dry_run_report_no_updates": "Все моды обновлены.",
+    "dry_run_report_installed": "Установлено",
+    "dry_run_report_available": "Доступно",
+    "dry_run_report_changelog": "Список изменений",
+    "dry_run_report_changelog_unavailable": "Список изменений: недоступен."
 }

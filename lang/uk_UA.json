@@ -10,16 +10,20 @@
     "main_user_exits": "Користувач вирішив вийти з процесу оновлення.",
     "main_no_new_version_available": "Немає доступної нової версії",
     "main_new_version_available": "Доступна нова версія!!!",
-    "main_title": "ModsUpdater для Vintage Story / v{ModsUpdater_version} (від Laerinok)",
+    "main_title": "ModsUpdater для Vintage Story / v{ModsUpdater_version} (від {ModsUpdater_author})",
     "main_mods_no_update": "Немає доступних оновлень модів.",
     "main_max_game_version": "Встановлена версія гри: ",
     "main_press_enter_to_exit": "Натисніть Enter, щоб вийти...",
     "main_excluded_mods_title": "Наступні моди виключено з оновлення:",
     "main_logs_location": "Журнали збережено тут: ",
     "main_logs_location_error": "Не вдалося отримати розташування журналів.",
-    "main_show_changelog_prompt": "Хочете переглянути журнал змін? (y/n)",
+    "main_show_changelog_prompt": "Хочете переглянути журнал змін?",
     "main_changelog_title": "Журнал змін",
-    
+    "main_reason_label_unknown": "Невідома причина",
+    "main_incompatible_mods_found_without_update": "Виявлено несумісні моди без доступного оновлення:",
+    "main_aborting_due_to_incompatibility": "Переривання оновлення через несумісність.",
+    "main_continue_anyway_prompt": "Продовжити все одно?",
+
     "config_ask_mod_directory": "Введіть шлях до папки з модами. Залиште порожнім для шляху за замовчуванням",
     "config_configuration_migrated": "Конфігурацію успішно перенесено до версії {EXPECTED_VERSION}.",
     "config_invalid_directory": "Помилка: {mods_directory} не є дійсним каталогом.",
@@ -29,7 +33,12 @@
     "config_choose_update_mode_auto": "автоматично",
     "config_choose_update_mode_manual": "вручну",
     "config_invalid_update_choice": "Невірний вибір. Будь ласка, введіть 'вручну' або 'автоматично'.",
-    
+    "config_incompatibility_prompt": "Як поводитися з несумісними модами, коли оновлення недоступне?",
+    "config_incompatibility_ask": "Запитати, що робити",
+    "config_incompatibility_abort": "Перервати процес оновлення",
+    "config_incompatibility_ignore": "Ігнорувати та продовжити",
+    "config_choose_behavior_prompt": "Введіть ваш вибір",
+
     "fetch_changelog_unknown_version": "невідома версія",
     
     "fetch_mod_info_error_mods_path_missing": "У конфігурації відсутній ModsPath або ключ 'path'.",
@@ -37,13 +46,14 @@
     "fetch_mod_info_scanning_mods": "Сканування модів...",
     "fetch_mod_info_fetching_mod_info": "Отримання інформації про моди з API...",
     "fetch_mod_info_fetching_mod_info_name": "Отримання інформації про моди",
-    
+    "fetch_mod_info_exclusion_reason_api_failure": "Дані API недоступні. Можливо, мод було видалено або перенесено.",
+
     "auto_file_size_unknown": "Попередження: Розмір файлу невідомий або нульовий. Завантаження може завершитися некоректно.[/bold indian_red1]",
     "auto_downloading_mods": "Завантаження модів...",
     "auto_downloading_mod_name": "Завантаження",
     "auto_mods_updated_resume": "Наступні моди було оновлено:",
     
-    "manual_download_mod_prompt": "Завантажити цей мод? (y/n)",
+    "manual_download_mod_prompt": "Завантажити цей мод?",
     "manual_skipping_download": "Пропуск завантаження для",
     "manual_downloading_mod": "Завантаження",
     "manual_download_completed": "Завантаження завершено для",
@@ -54,7 +64,8 @@
     "utils_no_valid_mod_files_found": "У папці з модами не знайдено жодного дійсного файлу мода.",
     "utils_error_invalid_max_workers": "Помилка: Недійсне введення для max_workers. Має бути цілим числом.",
     "utils_prg_terminated": "Програму завершено.",
-    
+    "utils_exclusion_reason_user_config": "Виключено користувачем у config.ini",
+
     "export_json_modilst": "Список модів експортовано як JSON:",
     "export_pdf_modilst": "Список модів експортовано як PDF:",
     "export_html_modilst": "Список модов експортовано до HTML: ",
@@ -65,5 +76,21 @@
     "error": "Помилка:",
     "yes": "так",
     "no": "ні",
-    "to": "до"
+    "to": "до",
+    "changelog_version_title": "Версія",
+
+    "dry_run_console_updates_available": "Для наступних модів доступні оновлення:",
+    "dry_run_console_no_updates": "Усі моди оновлено.",
+    "dry_run_console_report_saved": "Звіт збережено в:",
+    "dry_run_console_installed": "Встановлено",
+    "dry_run_console_latest": "Остання",
+    "dry_run_console_changelog": "Журнал змін",
+
+    "dry_run_report_header": "Vintage Story Mods Updater - Звіт про пробний запуск",
+    "dry_run_report_generated_on": "Створено:",
+    "dry_run_report_no_updates": "Усі моди оновлено.",
+    "dry_run_report_installed": "Встановлено",
+    "dry_run_report_available": "Доступно",
+    "dry_run_report_changelog": "Журнал змін",
+    "dry_run_report_changelog_unavailable": "Журнал змін: недоступний."
 }

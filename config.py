@@ -22,8 +22,8 @@
 
 
 __author__ = "Laerinok"
-__version__ = "2.3.0"  # Don't forget to change EXPECTED_VERSION
-__date__ = "2025-08-25"  # Last update
+__version__ = "2.4.0"  # Don't forget to change EXPECTED_VERSION
+__date__ = "2025-10-11"  # Last update
 
 
 # config.py
@@ -36,14 +36,13 @@ import shutil
 from pathlib import Path
 
 from rich import print
-from rich.prompt import Prompt
 
 import global_cache
 import lang
 import utils
 
 # The target version after migration
-EXPECTED_VERSION = "2.3.0"
+EXPECTED_VERSION = "2.4.0"
 
 # Variable to enable/disable the download - for my test
 download_enabled = True  # Set to False to disable downloads
@@ -96,19 +95,37 @@ else:  # Linux or other systems (where AppImage will run)
 LANG_PATH = APPLICATION_PATH / 'lang'
 
 # Constants for supported languages
+# The following dictionary defines the languages supported by the application.
+# To add a new language, add a new entry with the country code as the key
+# and a list containing the language code (e.g., "en") and the language name
+# (e.g., "English") as the value.
+# The numeric index for user selection is generated automatically.
+_languages_to_process = {
+    "DE": ["de", "Deutsch"],
+    "US": ["en", "English"],
+    "ES": ["es", "Español"],
+    "FR": ["fr", "Français"],
+    "IT": ["it", "Italiano"],
+    "JP": ["ja", "日本語"],
+    "KR": ["ko", "한국어"],
+    "PL": ["pl", "Polski"],
+    "BR": ["pt", "Português (Brasil)"],
+    "PT": ["pt", "Português (Portugal)"],
+    "RU": ["ru", "Русский"],
+    "UA": ["uk", "Yкраїнська"],
+    "CN": ["zh", "简体中文"],
+}
+
+# Sort by language code (value[0]), then by country code (key) for stability.
+# This ensures a consistent order for the user, regardless of how the dictionary
+# is defined above.
+_sorted_languages = sorted(_languages_to_process.items(), key=lambda item: (item[1][0], item[0]))
+
+# Dynamically create the final SUPPORTED_LANGUAGES dictionary with numeric indices.
+# This avoids having to manually re-number languages when adding or removing one.
 SUPPORTED_LANGUAGES = {
-    "DE": ["de", "Deutsch", '1'],
-    "US": ["en", "English", '2'],
-    "ES": ["es", "Español", '3'],
-    "FR": ["fr", "Français", '4'],
-    "IT": ["it", "Italiano", '5'],
-    "JP": ["ja", "日本語", '6'],
-    "BR": ["pt", "Português (Brasil)", '7'],
-    "PT": ["pt", "Português (Portugal)", '8'],
-    "RU": ["ru", "Русский", '9'],
-    "UA": ["uk", "Yкраїнська", '10'],
-    "CN": ["zh", "简体中文", '11'],
-    "KR": ["ko", "한국어", '12']
+    key: value + [str(i)]
+    for i, (key, value) in enumerate(_sorted_languages, 1)
 }
 DEFAULT_LANGUAGE = "en_US"
 
@@ -126,7 +143,8 @@ URL_SCRIPT = {
 DEFAULT_CONFIG = {
     "ModsUpdater": {"version": __version__},
     "Logging": {"log_level": "DEBUG"},
-    "Options": {"exclude_prerelease_mods": "false", "auto_update": "true", "max_workers": str(4), "timeout": str(10)},
+    # Dans DEFAULT_CONFIG
+    "Options": {"exclude_prerelease_mods": "false", "auto_update": "true", "max_workers": str(4), "timeout": str(10), "incompatibility_behavior": "0"},
     "Backup_Mods": {"backup_folder": "backup_mods", "max_backups": str(3), "modlist_folder": "modlist"},
     "ModsPath": {"path": MODS_PATHS[SYSTEM]},
     "Language": {"language": DEFAULT_LANGUAGE},
@@ -197,7 +215,7 @@ def migrate_config_if_needed():
     if current_version != EXPECTED_VERSION:
         # If the configuration version is outdated, initiate the migration
         old_config = configparser.ConfigParser()
-        old_config.read(CONFIG_FILE)  # Read the current configuration file
+        old_config.read(CONFIG_FILE, encoding='utf-8')  # Read the current configuration file
         rename_old_config(CONFIG_FILE)
         migrate_config(old_config)  # Migrate the configuration to the new version
         return True  # Migration done
@@ -275,8 +293,8 @@ def migrate_config(old_config):
         new_config["Logging"]["log_level"] = log_level
         logging.debug("Migrated log_level: %s", log_level)
     else:
-        new_config["Logging"]["log_level"] = DEFAULT_CONFIG['Logging']["log_level"]
-        logging.debug(f"Set log_level to default: {DEFAULT_CONFIG['Logging']["log_level"]}")
+        new_config["Logging"]["log_level"] = DEFAULT_CONFIG['Logging']['log_level']
+        logging.debug(f"Set log_level to default: {DEFAULT_CONFIG['Logging']['log_level']}")
 
     # Step 4: Remove obsolete sections
     for section in list(new_config.keys()):
@@ -301,7 +319,7 @@ def migrate_config(old_config):
         logging.error("Error occurred while writing the migrated config: %s", str(e))
 
 
-def create_config(language, mod_folder, user_game_version, auto_update):
+def create_config(language, mod_folder, user_game_version, auto_update, behavior_choice):
     """
     Create the config.ini file with default or user-specified values.
     """
@@ -314,6 +332,7 @@ def create_config(language, mod_folder, user_game_version, auto_update):
     DEFAULT_CONFIG["ModsPath"]["path"] = mod_folder
     DEFAULT_CONFIG["Game_Version"]["user_game_version"] = user_game_version
     DEFAULT_CONFIG["Options"]["auto_update"] = auto_update
+    DEFAULT_CONFIG["Options"]["incompatibility_behavior"] = behavior_choice
 
     config_parser = configparser.ConfigParser()
     for section, options in DEFAULT_CONFIG.items():
@@ -422,7 +441,7 @@ def ask_mods_directory():
     """Ask the user to choose a folder for the mods."""
     default_path = str(MODS_PATHS[SYSTEM])  # Convert Path to string for Prompt
     while True:
-        mods_directory = Prompt.ask(
+        mods_directory = utils.Prompt.ask(
             lang.get_translation("config_ask_mod_directory"),
             default=default_path
         )
@@ -452,12 +471,12 @@ def ask_language_choice():
         language_name = SUPPORTED_LANGUAGES[region][1]
         print(f"    [bold]{index}.[/bold] {language_name} ({region})")
 
-    # Use Prompt.ask to get the user's input
-    choice_index = Prompt.ask(
+    # Use utils.prompt_choice to get the user's input
+    choice_index = utils.prompt_choice(
         "Enter the number of your language choice (leave blank for default English)",
         choices=[str(i) for i in range(1, len(language_options) + 1)],
-        show_choices=False,
-        default=2
+        show_choices=False,  # <-- This is now correctly handled by **kwargs
+        default=SUPPORTED_LANGUAGES["US"][2]  # Default to English (US)
     )
 
     # Convert the user's choice to the corresponding language key
@@ -471,7 +490,7 @@ def ask_language_choice():
 def ask_game_version():
     """Ask the user to select the game version the first script launch."""
     while True:
-        user_game_version = Prompt.ask(
+        user_game_version = utils.Prompt.ask(
             lang.get_translation("config_game_version_prompt"),
             default=""
         )
@@ -487,27 +506,68 @@ def ask_game_version():
         else:
             # If the format is invalid, display an error message and ask for the version again.
             print(
-                f"[bold indian_red1]{lang.get_translation("config_invalid_game_version")}[/bold indian_red1]")
+                f"[bold indian_red1]{lang.get_translation('config_invalid_game_version')}[/bold indian_red1]")
 
 
 def ask_auto_update():
-    """Ask the user to choose between manual or auto update."""
-    while True:
-        auto_update_input = Prompt.ask(
-            lang.get_translation("config_choose_update_mode"),
-            choices=[lang.get_translation("config_choose_update_mode_manual"),
-                     lang.get_translation("config_choose_update_mode_auto")],
-            default=lang.get_translation("config_choose_update_mode_auto")
-        ).lower()
+    """Ask the user to choose between manual or auto update (using words or numbers)."""
 
-        if auto_update_input == lang.get_translation("config_choose_update_mode_auto").lower():
+    # Normalize the translated words for comparison
+    auto_key = lang.get_translation("config_choose_update_mode_auto").lower()
+    manual_key = lang.get_translation("config_choose_update_mode_manual").lower()
+
+    # Define the set of ALL acceptable inputs (numbers + normalized words)
+    # 1 is for manual, 2 is for auto (using 1/2 is clearer than 1/2 depending on the order)
+    # Let's assume 1 for Manual, 2 for Auto. We must stick to one mapping.
+
+    # Define the choices presented to Rich, which must be unique and normalized
+    # The first element listed is often shown as the default choice by Rich if the 'default'
+    # value is missing, but here 'default' is explicitly set.
+    choices_list = ['1', manual_key, '2', auto_key]  # All valid inputs
+
+    # The default key (used for comparison AND as the default value for Rich)
+    default_key = auto_key
+
+    # Construct the message to display options clearly (e.g., "Choose mode: [1: Manual, 2: Auto]")
+    # We must ensure the message is updated in the language files to be generic:
+    # "config_choose_update_mode": "Choose update mode (1: Manual / 2: Auto):"
+
+    prompt_msg = lang.get_translation("config_choose_update_mode")
+
+    while True:
+        # We use utils.prompt_choice (which handles case-insensitivity and strips spaces)
+        auto_update_input = utils.prompt_choice(
+            prompt_msg,
+            choices=choices_list,
+            default=default_key  # Rich will try to display this if possible
+        )
+
+        # Check against the normalized word key OR the number key
+        if auto_update_input == auto_key or auto_update_input == '2':
             logging.info("Auto update selected.")
             return True
-        elif auto_update_input == lang.get_translation("config_choose_update_mode_manual").lower():
+        elif auto_update_input == manual_key or auto_update_input == '1':
             logging.info("Manual update selected.")
             return False
         else:
+            # This path is theoretically unreachable if Rich's validation works,
+            # but it's good practice to keep it for debugging.
             print(lang.get_translation("config_invalid_update_choice"))
+
+
+def ask_incompatibility_behavior():
+    """Ask the user how to handle incompatible mods."""
+    print(f"\n{lang.get_translation('config_incompatibility_prompt')}")
+    print(f"  [bold]0.[/bold] {lang.get_translation('config_incompatibility_ask')}")
+    print(f"  [bold]1.[/bold] {lang.get_translation('config_incompatibility_abort')}")
+    print(f"  [bold]2.[/bold] {lang.get_translation('config_incompatibility_ignore')}")
+
+    choice = utils.prompt_choice(
+        lang.get_translation("config_choose_behavior_prompt"),
+        choices=['0', '1', '2'],
+        default='0'
+    )
+    return choice
 
 
 def configure_logging(logging_level):

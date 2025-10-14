@@ -32,7 +32,6 @@ Key functionalities include:
 
 """
 __author__ = "Laerinok"
-__version__ = "2.3.0"
 __date__ = "2025-08-24"  # Last update
 
 
@@ -40,8 +39,7 @@ __date__ = "2025-08-24"  # Last update
 
 
 import logging
-import os
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
 
@@ -52,47 +50,21 @@ from rich.progress import Progress, TextColumn, BarColumn, TimeElapsedColumn
 import config
 import global_cache
 import lang
-from http_client import HTTPClient
-from utils import extract_filename_from_url, validate_workers, escape_rich_tags
+from utils import validate_workers, escape_rich_tags, update_mod_and_handle_files
 
-timeout = global_cache.config_cache["Options"].get("timeout", 10)
-client = HTTPClient()
 console = Console()
-
-
-def download_file(url, destination_path):
-    """
-    Download the file from the given URL and save it to the destination path.
-    Implements error handling and additional security measures.
-    """
-    if not config.download_enabled:
-        logging.info(f"Skipping download - for TEST")
-        return  # Skip download if disabled
-
-    response = client.get(url, stream=True, timeout=int(global_cache.config_cache["Options"]["timeout"]))
-    response.raise_for_status()  # Will raise an HTTPError for bad responses (4xx, 5xx)
-
-    # Get the total size of the file (if available)
-    total_size = int(response.headers.get('content-length', 0))
-
-    if total_size == 0:
-        print(f"[bold indian_red1]{lang.get_translation("auto_file_size_unknown")}[/bold indian_red1]")
-
-    with open(destination_path, 'wb') as file:
-        for data in response.iter_content(chunk_size=1024):
-            file.write(data)
-            # Ne plus mettre à jour la barre de progression ici
-
-    logging.info(f"Download completed: {destination_path}")
-
 
 def download_mods_to_update(mods_data):
     """
-    Download all mods that require updates using multithreading with a progress bar for each download.
+    Download all mods that require updates using multithreading.
+    Each thread handles the full backup, download, and installation process for a single mod.
     """
+    if not mods_data:
+        return
+
+    mods_path = Path(global_cache.config_cache['ModsPath']['path']).resolve()
     fixed_bar_width = 40
 
-    # Initialize the Rich Progress bar with your custom layout
     with Progress(
         TextColumn("[bold blue]{task.description}", justify="right"),
         TextColumn("-"),
@@ -103,58 +75,28 @@ def download_mods_to_update(mods_data):
         "•",
         TextColumn("[bold green]{task.fields[mod_name]}"),
     ) as progress:
-        # Create a single task for all downloads
-        task = progress.add_task(f"[cyan]{lang.get_translation("auto_downloading_mods")}", total=len(mods_data), mod_name=" ")
-
-        # Create a thread pool executor for parallel downloads
+        task = progress.add_task(f"[cyan]{lang.get_translation('auto_downloading_mods')}", total=len(mods_data), mod_name=" ")
         max_workers = validate_workers()
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            futures = []
-            for mod in mods_data:
-                url = mod['download_url']
-                # Extract the filename from the URL
-                filename = os.path.basename(url)
-                filename = extract_filename_from_url(filename)
+            future_to_mod = {executor.submit(update_mod_and_handle_files, mod, mods_path): mod for mod in mods_data}
 
-                # Set the destination folder path
-                destination_folder = Path(global_cache.config_cache['ModsPath']['path']).resolve()
-                destination_path = destination_folder / filename  # Combine folder path and filename
-
-                # Submit download tasks to the thread pool
-                futures.append(executor.submit(download_file, url, destination_path))
-
-                # Erase old file
-                file_to_erase = mod['Filename']
-                filename_value = Path(global_cache.config_cache['ModsPath']['path']) / file_to_erase
-                filename_value = filename_value.resolve()
-                if not config.download_enabled:
-                    logging.info(f"Skipping download - for TEST")
-                    break  # Skip download (and erase) if disabled
-                try:
-                    os.remove(filename_value)
-                    logging.info(f"Old file {file_to_erase} has been deleted successfully.")
-                except PermissionError:
-                    logging.error(
-                        f"PermissionError: Unable to delete {file_to_erase}. You don't have the required permissions.")
-                except FileNotFoundError:
-                    logging.error(
-                        f"FileNotFoundError: The file {file_to_erase} does not exist.")
-                except Exception as e:
-                    logging.error(
-                        f"An unexpected error occurred while trying to delete {file_to_erase}: {e}")
-
-                # Update global_cache.mods_data['installed_mods']
-                for installed_mod in global_cache.mods_data['installed_mods']:
-                    if installed_mod.get('Filename') == mod.get('Filename'):
-                        installed_mod['Local_Version'] = mod['New_version']
-                        break  # Stop searching once found
-
-            # Wait for all downloads to finish
-            for i, future in enumerate(futures):
-                future.result()
-                mod = mods_data[i]
+            for future in as_completed(future_to_mod):
+                mod = future_to_mod[future]
                 mod_name = mod['Name']
-                progress.update(task, completed=i + 1, mod_name=mod_name)
+                try:
+                    future.result()
+                    for installed_mod in global_cache.mods_data['installed_mods']:
+                        if installed_mod.get('Filename') == mod.get('Filename'):
+                            installed_mod['Local_Version'] = mod['New_version']
+                            if 'New_Filename' in mod:
+                                installed_mod['Filename'] = mod['New_Filename']
+                                installed_mod['Path'] = mod['New_Path']
+                            break
+                    logging.info(f"Successfully updated {mod_name}")
+                except Exception as e:
+                    logging.error(f"Failed to update {mod_name}. See previous logs for details. Error: {e}")
+
+                progress.update(task, advance=1, mod_name=mod_name)
 
 
 def resume_mods_updated():

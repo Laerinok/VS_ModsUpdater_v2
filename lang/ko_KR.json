@@ -10,16 +10,21 @@
     "main_user_exits": "사용자가 업데이트 프로세스를 종료하기로 선택했습니다.",
     "main_no_new_version_available": "사용 가능한 새로운 버전이 없습니다.",
     "main_new_version_available": "새로운 버전 사용가능!!!",
-    "main_title": "모드 업데이터 for 빈티지 스토리 - v{ModsUpdater_version} (by Laerinok)",
+    "main_title": "모드 업데이터 for 빈티지 스토리 - v{ModsUpdater_version} (by {ModsUpdater_author})",
     "main_mods_no_update": "사용 가능한 모드 업데이트가 없습니다.",
     "main_max_game_version": "설치된 게임 버전: ",
     "main_press_enter_to_exit": "엔터를 눌러 종료...",
     "main_excluded_mods_title": "다음 모드는 업데이트에서 제외됩니다:",
     "main_logs_location": "로그는 여기에 저장됩니다: ",
     "main_logs_location_error": "로그 위치를 검색할 수 없습니다.",
-    "main_show_changelog_prompt": "변경 로그를 보시겠습니까? (y/n)",
+    "main_show_changelog_prompt": "변경 로그를 보시겠습니까?",
     "main_changelog_title": "변경 로그",
-  
+    "main_reason_label_unknown": "알 수 없는 이유",
+
+    "main_incompatible_mods_found_without_update": "업데이트가 불가능한 호환되지 않는 모드를 찾았습니다:",
+    "main_aborting_due_to_incompatibility": "호환성 문제로 인해 업데이트를 중단합니다.",
+    "main_continue_anyway_prompt": "계속 하시겠습니까?",
+
     "config_ask_mod_directory": "모드 폴더의 경로를 입력하세요. 기본 경로를 사용하려면 비워두세요.",
     "config_configuration_migrated": "버전 {EXPECTED_VERSION}으로 구성을 성공적으로 이식했습니다.",
     "config_invalid_directory": "에러: {mods_directory} 가 유효한 경로가 아닙니다.",
@@ -29,6 +34,11 @@
     "config_choose_update_mode_auto": "자동",
     "config_choose_update_mode_manual": "수동",
     "config_invalid_update_choice": "잘못된 선택. '수동'이나 '자동'을 입력해 주세요.",
+    "config_incompatibility_prompt": "사용 가능한 업데이트가 없을 때 호환되지 않는 모드를 어떻게 처리할까요?",
+    "config_incompatibility_ask": "어떻게 할지 묻기",
+    "config_incompatibility_abort": "업데이트 프로세스 중단",
+    "config_incompatibility_ignore": "무시하고 계속하기",
+    "config_choose_behavior_prompt": "선택을 입력하세요",
   
     "fetch_changelog_unknown_version": "알 수 없는 버전",
   
@@ -37,13 +47,14 @@
     "fetch_mod_info_scanning_mods": "모드 스캔중...",
     "fetch_mod_info_fetching_mod_info": "API에서 모드 정보 가져오는 중...",
     "fetch_mod_info_fetching_mod_info_name": "모드 정보 가져오는 중",
-  
+    "fetch_mod_info_exclusion_reason_api_failure": "이 모드의 API 데이터를 사용할 수 없습니다. 제거되거나 마이그레이션되었을 수 있습니다.",
+
     "auto_file_size_unknown": "경고: 파일 크기를 알 수 없거나 0입니다. 다운로드가 제대로 완료되지 않을 수 있습니다.",
     "auto_downloading_mods": "모드 다운로드 중...",
     "auto_downloading_mod_name": "다운로드 중",
     "auto_mods_updated_resume": "다음 모드가 업데이트되었습니다: ",
   
-    "manual_download_mod_prompt": "이 모드를 다운로드 하시겠습니까? (y/n)",
+    "manual_download_mod_prompt": "이 모드를 다운로드 하시겠습니까?",
     "manual_skipping_download": "다운로드를 넘기는 중",
     "manual_downloading_mod": "다운로딩",
     "manual_download_completed": "다운로드를 완료함",
@@ -54,7 +65,8 @@
     "utils_no_valid_mod_files_found": "모드 폴더에 유효한 모드 파일을 찾을 수 없습니다.",
     "utils_error_invalid_max_workers": "에러: max_workers에 대한 입력이 잘못되었습니다. 정수여야 합니다.",
     "utils_prg_terminated": "프로그램 실행됨.",
-  
+    "utils_exclusion_reason_user_config": "config.ini에서 사용자에 의해 제외됨",
+
     "export_json_modilst": "JSON으로 내보낸 모드 목록: ",
     "export_pdf_modilst": "PDF로 내보낸 모드 목록: ",
     "export_html_modilst": "HTML으로 내보낸 모드 목록: ",
@@ -65,5 +77,21 @@
     "error": "에러:",
     "yes": "y",
     "no": "n",
-    "to": "까지"
-  }
+    "to": "까지",
+    "changelog_version_title": "버전",
+
+    "dry_run_console_updates_available": "다음 모드에 사용 가능한 업데이트가 있습니다:",
+    "dry_run_console_no_updates": "모든 모드가 최신 버전입니다.",
+    "dry_run_console_report_saved": "보고서가 다음 위치에 저장되었습니다:",
+    "dry_run_console_installed": "설치됨",
+    "dry_run_console_latest": "최신",
+    "dry_run_console_changelog": "변경 로그",
+
+    "dry_run_report_header": "Vintage Story Mods Updater - 드라이 런 보고서",
+    "dry_run_report_generated_on": "생성 날짜:",
+    "dry_run_report_no_updates": "모든 모드가 최신 버전입니다.",
+    "dry_run_report_installed": "설치됨",
+    "dry_run_report_available": "사용 가능",
+    "dry_run_report_changelog": "변경 로그",
+    "dry_run_report_changelog_unavailable": "변경 로그: 사용할 수 없음."
+}

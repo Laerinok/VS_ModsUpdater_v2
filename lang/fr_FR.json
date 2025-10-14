@@ -10,25 +10,34 @@
     "main_user_exits": "L'utilisateur a décidé de quitter la mise à jour.",
     "main_no_new_version_available": "Aucune nouvelle version disponible",
     "main_new_version_available": "Nouvelle version disponible !!!",
-    "main_title": "ModsUpdater pour Vintage Story / v{ModsUpdater_version} (par Laerinok)",
+    "main_title": "ModsUpdater pour Vintage Story / v{ModsUpdater_version} (par {ModsUpdater_author})",
     "main_mods_no_update": "Aucune mise à jour de mod disponible.",
     "main_max_game_version": "Version du jeu installée : ",
     "main_press_enter_to_exit": "Appuyez sur Entrée pour quitter...",
     "main_excluded_mods_title": "Les mods suivants sont exclus de la mises à jour :",
     "main_logs_location": "Les logs sont enregistrés ici : ",
     "main_logs_location_error": "Impossible de récupérer l'emplacement des logs.",
-    "main_show_changelog_prompt": "Voulez-vous voir le changelog ? (y/n)",
+    "main_show_changelog_prompt": "Voulez-vous voir le changelog ?",
     "main_changelog_title": "Changelog",
-    
+    "main_reason_label_unknown": "Raison inconnue",
+    "main_incompatible_mods_found_without_update": "Mods incompatibles trouvés sans mise à jour disponible :",
+    "main_aborting_due_to_incompatibility": "Abandon de la mise à jour en raison d'une incompatibilité.",
+    "main_continue_anyway_prompt": "Continuer quand même ?",
+
     "config_ask_mod_directory": "Entrez le chemin vers votre dossier de mods. Laissez vide pour le chemin par défaut.",
     "config_configuration_migrated": "Mise à jour de la configuration vers la version {EXPECTED_VERSION} réussie.",
     "config_invalid_directory": "Erreur : {mods_directory} n'est pas un dossier valide.",
     "config_game_version_prompt": "Bloquer les mises à jour jusqu'à la version (1.2.3, vide = aucun blocage)",
     "config_invalid_game_version": "Erreur : Veuillez fournir une version valide au format majeur.mineur.patch (par exemple, 1.20.5).",
-    "config_choose_update_mode": "Choisissez le mode de mise à jour (manuel/auto)",
+    "config_choose_update_mode": "Choisissez le mode de mise à jour (1: manuel / 2: auto)",
     "config_choose_update_mode_auto": "auto",
     "config_choose_update_mode_manual": "manuel",
     "config_invalid_update_choice": "Choix invalide. Veuillez entrer 'manuel' ou 'auto'.",
+    "config_incompatibility_prompt": "Comment gérer les mods incompatibles lorsqu'aucune mise à jour n'est disponible ?",
+    "config_incompatibility_ask": "Demander quoi faire",
+    "config_incompatibility_abort": "Arrêter le processus de mise à jour",
+    "config_incompatibility_ignore": "Ignorer et continuer",
+    "config_choose_behavior_prompt": "Entrez votre choix",
     
     "fetch_changelog_unknown_version": "version inconnue",
     
@@ -37,13 +46,14 @@
     "fetch_mod_info_scanning_mods": "Analyse des mods",
     "fetch_mod_info_fetching_mod_info": "Récupération des informations des mods depuis l'API...",
     "fetch_mod_info_fetching_mod_info_name": "Récupération des informations des mods",
-    
+    "fetch_mod_info_exclusion_reason_api_failure": "Données API indisponibles pour ce mod. Il a pu être retiré ou migré.",
+
     "auto_file_size_unknown": "Attention : La taille du fichier est inconnue ou nulle. Le téléchargement risque de ne pas se terminer correctement.[/bold indian_red1]",
     "auto_downloading_mods": "Téléchargement des mods",
     "auto_downloading_mod_name": "Téléchargement de",
     "auto_mods_updated_resume": "Les mods suivants ont été mis à jour :",
     
-    "manual_download_mod_prompt": "Télécharger ce mod ? (o/n)",
+    "manual_download_mod_prompt": "Télécharger ce mod ?",
     "manual_skipping_download": "Téléchargement ignoré pour",
     "manual_downloading_mod": "Téléchargement de",
     "manual_download_completed": "Téléchargement terminé pour",
@@ -54,7 +64,8 @@
     "utils_no_valid_mod_files_found": "Aucun fichier de mod valide trouvé dans le dossier des mods.",
     "utils_error_invalid_max_workers": "Erreur : Entrée invalide pour max_workers. Doit être un entier.",
     "utils_prg_terminated": "Programme terminé.",
-    
+    "utils_exclusion_reason_user_config": "Exclu par l'utilisateur dans config.ini",
+
     "export_json_modilst": "Liste de mods exportée en JSON : ",
     "export_pdf_modilst": "Liste de mods exportée en PDF : ",
     "export_html_modilst": "Liste de mods exportée en HTML : ",
@@ -65,5 +76,21 @@
     "error": "Erreur :",
     "yes": "oui",
     "no": "non",
-    "to": "vers"
+    "to": "vers",
+    "changelog_version_title": "Version",
+
+    "dry_run_console_updates_available": "Les mods suivants ont des mises à jour disponibles :",
+    "dry_run_console_no_updates": "Tous les mods sont à jour.",
+    "dry_run_console_report_saved": "Un rapport a été enregistré dans :",
+    "dry_run_console_installed": "Installé",
+    "dry_run_console_latest": "Dernière version",
+    "dry_run_console_changelog": "Changelog",
+
+    "dry_run_report_header": "Vintage Story Mods Updater - Rapport de simulation",
+    "dry_run_report_generated_on": "Généré le :",
+    "dry_run_report_no_updates": "Tous les mods sont à jour.",
+    "dry_run_report_installed": "Installé",
+    "dry_run_report_available": "Disponible",
+    "dry_run_report_changelog": "Changelog",
+    "dry_run_report_changelog_unavailable": "Changelog : Non disponible."
 }

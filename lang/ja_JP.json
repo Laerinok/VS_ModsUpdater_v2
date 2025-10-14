@@ -10,16 +10,21 @@
     "main_user_exits": "ユーザーはアップデートプロセスを終了することを選択しました。",
     "main_no_new_version_available": "新しいバージョンはありません",
     "main_new_version_available": "新しいバージョンがあります！！！",
-    "main_title": "Vintage Story用ModsUpdater - v{ModsUpdater_version} (作成者：Laerinok)",
+    "main_title": "Vintage Story用ModsUpdater - v{ModsUpdater_version} (作成者：{ModsUpdater_author})",
     "main_mods_no_update": "利用可能なModのアップデートはありません。",
     "main_max_game_version": "インストール済みゲームバージョン：",
     "main_press_enter_to_exit": "終了するにはEnterキーを押してください...",
     "main_excluded_mods_title": "以下のModはアップデートから除外されます：",
     "main_logs_location": "ログはここに保存されます：",
     "main_logs_location_error": "ログの場所を取得できませんでした。",
-    "main_show_changelog_prompt": "変更履歴を見ますか？ (y/n)",
+    "main_show_changelog_prompt": "変更履歴を見ますか？",
     "main_changelog_title": "変更履歴",
-    
+    "main_reason_label_unknown": "不明な理由",
+
+    "main_incompatible_mods_found_without_update": "アップデートが利用できない互換性のないModが見つかりました：",
+    "main_aborting_due_to_incompatibility": "アップデートを中止します。",
+    "main_continue_anyway_prompt": "それでも続行しますか？",
+
     "config_ask_mod_directory": "Modフォルダへのパスを入力してください。デフォルトパスの場合は空白のままにしてください",
     "config_configuration_migrated": "構成はバージョン{EXPECTED_VERSION}に正常に移行されました。",
     "config_invalid_directory": "エラー：{mods_directory}は有効なディレクトリではありません。",
@@ -29,6 +34,11 @@
     "config_choose_update_mode_auto": "自動",
     "config_choose_update_mode_manual": "手動",
     "config_invalid_update_choice": "無効な選択です。「手動」または「自動」を入力してください。",
+    "config_incompatibility_prompt": "アップデートが利用できない互換性のないModをどのように処理しますか？",
+    "config_incompatibility_ask": "どうするか尋ねる",
+    "config_incompatibility_abort": "アップデートプロセスを中止する",
+    "config_incompatibility_ignore": "無視して続行する",
+    "config_choose_behavior_prompt": "選択を入力してください",
     
     "fetch_changelog_unknown_version": "不明なバージョン",
     
@@ -37,13 +47,14 @@
     "fetch_mod_info_scanning_mods": "Modをスキャン中...",
     "fetch_mod_info_fetching_mod_info": "APIからMod情報を取得中...",
     "fetch_mod_info_fetching_mod_info_name": "Mod情報を取得中",
-    
+    "fetch_mod_info_exclusion_reason_api_failure": "この Mod の API データは利用できません。削除または移行された可能性があります。",
+
     "auto_file_size_unknown": "警告：ファイルサイズが不明またはゼロです。ダウンロードが正しく完了しない可能性があります。[/bold indian_red1]",
     "auto_downloading_mods": "Modをダウンロード中...",
     "auto_downloading_mod_name": "ダウンロード",
     "auto_mods_updated_resume": "以下のModがアップデートされました：",
     
-    "manual_download_mod_prompt": "このModをダウンロードしますか？（y/n）",
+    "manual_download_mod_prompt": "このModをダウンロードしますか？",
     "manual_skipping_download": "ダウンロードをスキップ：",
     "manual_downloading_mod": "ダウンロード",
     "manual_download_completed": "ダウンロード完了：",
@@ -54,7 +65,8 @@
     "utils_no_valid_mod_files_found": "Modフォルダに有効なModファイルが見つかりませんでした。",
     "utils_error_invalid_max_workers": "エラー：max_workersの入力が無効です。整数である必要があります。",
     "utils_prg_terminated": "プログラムを終了しました。",
-    
+    "utils_exclusion_reason_user_config": "config.ini でユーザーによって除外されました",
+
     "export_json_modilst": "ModリストをJSONとしてエクスポート：",
     "export_pdf_modilst": "ModリストをPDFとしてエクスポート：",
     "export_html_modilst": "ModリストをHTMLにエクスポートしました: ",
@@ -65,5 +77,21 @@
     "error": "エラー：",
     "yes": "はい",
     "no": "いいえ",
-    "to": "へ"
+    "to": "へ",
+    "changelog_version_title": "バージョン",
+
+    "dry_run_console_updates_available": "以下のModに利用可能なアップデートがあります：",
+    "dry_run_console_no_updates": "すべてのModは最新です。",
+    "dry_run_console_report_saved": "レポートが保存されました：",
+    "dry_run_console_installed": "インストール済み",
+    "dry_run_console_latest": "最新",
+    "dry_run_console_changelog": "変更履歴",
+
+    "dry_run_report_header": "Vintage Story Mods Updater - ドライランレポート",
+    "dry_run_report_generated_on": "生成日：",
+    "dry_run_report_no_updates": "すべてのModは最新です。",
+    "dry_run_report_installed": "インストール済み",
+    "dry_run_report_available": "利用可能",
+    "dry_run_report_changelog": "変更履歴",
+    "dry_run_report_changelog_unavailable": "変更履歴：利用不可。"
 }

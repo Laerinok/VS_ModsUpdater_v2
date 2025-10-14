@@ -80,3 +80,5 @@ ruff_cache/
 /main.dist/
 /main.onefile-build/
 /modlist/
+/moddb_source.html
+/moddb_source - backup.html

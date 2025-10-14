@@ -25,7 +25,6 @@ This module handles caching for various global data used throughout the script. 
 - Mod-related data (mod info, updates, etc.)
 """
 __author__ = "Laerinok"
-__version__ = "2.3.0"
 __date__ = "2025-08-24"  # Last update
 
 
@@ -39,7 +38,8 @@ config_cache.setdefault("Options", {"timeout": 10})
 language_cache = {}  # Translation cache
 mods_data = {"installed_mods": [],
              "excluded_mods": [],
-             "mods_to_update": []
+             "mods_to_update": [],
+             "incompatible_mods": []
              }  # Mod cache
 modinfo_json_cache = {}
 total_mods = 0
