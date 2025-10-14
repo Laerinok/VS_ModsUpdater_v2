@@ -21,7 +21,6 @@ if platform_icon_for_exe and os.path.exists(platform_icon_for_exe):
 
 # --- Include Files Logic ---
 # Start with the base files and directories that are always needed
-# Note: We now include the entire assets directory. cx_Freeze will handle it.
 include_files = [
     "README.md", "changelog.txt", "LICENSE.md", "requirements.txt",
     assets_dir, "fonts", "lang"
@@ -31,11 +30,6 @@ include_files = [
 build_exe_options = {
     "include_files": include_files,
     "excludes": []
-}
-
-# Options for bdist_dmg
-bdist_dmg_options = {
-    "settings_file": "dmg_settings.py"
 }
 
 # Executable definition
@@ -52,9 +46,12 @@ setup(
     description="ModsUpdater for Vintage Story",
     author="Laerinok",
     license="GNU GPLv3",
-    options={
-        "build_exe": build_exe_options,
-        "bdist_dmg": bdist_dmg_options
-    },
-    executables=[exe]
+    options={"build_exe": build_exe_options},
+    executables=[exe],
+    setup_requires=["dmgbuild"],
+    dmgbuild={
+        "settings": {
+            "format": "bzip2"
+        }
+    }
 )
