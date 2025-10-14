@@ -86,6 +86,9 @@ jobs:
       - name: Build the DMG
         run: python setup.py bdist_dmg
 
+      - name: List files in the build directory
+        run: ls -R
+
       - name: Upload macOS DMG artifact
         uses: actions/upload-artifact@v4
         with:
