@@ -79,10 +79,12 @@ jobs:
           pip install -r requirements.txt
       - name: Build the DMG
         run: python setup.py bdist_dmg
+      - name: List build directories for debugging
+        run: ls -R build
       - name: Rename DMG with version
-        run: mv dist/*.dmg dist/VS_ModsUpdater.v${{ env.APP_VERSION }}_macOS.dmg
+        run: mv build/*.dmg build/VS_ModsUpdater.v${{ env.APP_VERSION }}_macOS.dmg
       - name: Upload macOS artifact
         uses: actions/upload-artifact@v4
         with:
           name: VS_ModsUpdater.v${{ env.APP_VERSION }}_macOS
-          path: dist/VS_ModsUpdater.v${{ env.APP_VERSION }}_macOS.dmg
+          path: build/VS_ModsUpdater.v${{ env.APP_VERSION }}_macOS.dmg
