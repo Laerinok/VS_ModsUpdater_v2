@@ -54,7 +54,8 @@ XDG_CONFIG_HOME_PATH = os.getenv('XDG_CONFIG_HOME', os.path.expanduser('~/.confi
 
 MODS_PATHS = {
     "Windows": Path(HOME_PATH) / 'AppData' / 'Roaming' / 'VintagestoryData' / 'Mods',
-    "Linux": Path(XDG_CONFIG_HOME_PATH) / 'VintagestoryData' / 'Mods'
+    "Linux": Path(XDG_CONFIG_HOME_PATH) / 'VintagestoryData' / 'Mods',
+    "Darwin": Path(HOME_PATH) / 'Library' / 'Application Support' / 'VintagestoryData' / 'Mods'
 }
 
 # Retrieve the application directory from the APPDIR environment variable
@@ -136,7 +137,8 @@ URL_BASE_MODS = 'https://mods.vintagestory.at/'
 URL_MOD_DB = "https://mods.vintagestory.at/show/mod/"
 URL_SCRIPT = {
     "windows": 'https://mods.vintagestory.at/api/mod/1403',
-    "linux": 'https://mods.vintagestory.at/api/mod/1525'
+    "linux": 'https://mods.vintagestory.at/api/mod/1525',
+    "darwin": 'https://mods.vintagestory.at/api/mod/5583'
 }
 
 # Default configuration

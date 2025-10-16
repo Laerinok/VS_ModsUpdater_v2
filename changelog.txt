@@ -1,3 +1,8 @@
+v2.4.1 - 2025-10-16
+### Fixed
+- **macOS:** Added the default mods path for macOS (`~/Library/Application Support/VintagestoryData/Mods`) to ensure the application can locate the game's mod directory.
+- **macOS:** Corrected the update script URL for the macOS (Darwin) release, which was preventing the application from checking for new versions.
+
 v2.4.0 - 2025-10-14
 ### Added
 - **Build Automation:** Implemented a GitHub Actions workflow to automatically build and create releases for Windows (.exe), Linux (AppImage), and macOS (.dmg).
