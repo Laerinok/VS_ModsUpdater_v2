@@ -1,4 +1,7 @@
-v2.4.2 - 2025-12-27
+v2.5.0 - 2025-12-27
+### Added
+- **CLI**: Added `--config-path` argument. This allows users to specify a custom location for the configuration file, enabling management of multiple game instances with isolated settings.
+
 ### Fixed
 - **Critical Crash**: Fixed an issue where invalid game version strings returned by the API (e.g., `.4.4-dev.2`) caused the application to crash on startup, particularly on Linux systems.
 - **Stability**: Added safeguards in `fetch_mod_info.py` to handle `InvalidVersion` exceptions gracefully during mod compatibility checks.

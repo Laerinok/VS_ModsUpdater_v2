@@ -22,7 +22,7 @@ if platform_icon_for_exe and os.path.exists(platform_icon_for_exe):
 # --- Include Files Logic ---
 # Start with the base files and directories that are always needed
 include_files = [
-    "README.md", "changelog.txt", "LICENSE.md", "requirements.txt",
+    "README.md", "CHANGELOG.md", "LICENSE.md", "requirements.txt",
     assets_dir, "fonts", "lang"
 ]
 
