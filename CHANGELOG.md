@@ -1,121 +1,144 @@
-v2.5.0 - 2025-12-27
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## [2.5.0] - 2025-12-27
+
 ### Added
 - **CLI**: Added `--config-path` argument. This allows users to specify a custom location for the configuration file, enabling management of multiple game instances with isolated settings.
 
 ### Fixed
-- **Critical Crash**: Fixed an issue where invalid game version strings returned by the API (e.g., `.4.4-dev.2`) caused the application to crash on startup, particularly on Linux systems.
+- **Core**: Fixed an issue where invalid game version strings returned by the API (e.g., `.4.4-dev.2`) caused the application to crash on startup, particularly on Linux systems.
 - **Stability**: Added safeguards in `fetch_mod_info.py` to handle `InvalidVersion` exceptions gracefully during mod compatibility checks.
+- **Refactoring**: Renamed variables in the main execution block to resolve shadowing warnings.
 
 ### Changed
 - **API Logic**: Improved `utils.get_latest_game_version` to validate version numbers received from the API. It now iterates backwards to find the latest *valid* semantic version, ignoring malformed entries.
-- **UI/Text**: Changed "Installed game version" to "Target Game Version" in the main display to clarify that this is a configuration setting, not a local file detection.
-- **Refactored** variable names in main execution block to resolve shadowing warnings.
+- **UI**: Changed "Installed game version" to "Target Game Version" in the main display to clarify that this is a configuration setting, not a local file detection.
 
+## [2.4.1] - 2025-10-16
 
-v2.4.1 - 2025-10-16
 ### Fixed
-- **macOS:** Added the default mods path for macOS (`~/Library/Application Support/VintagestoryData/Mods`) to ensure the application can locate the game's mod directory.
-- **macOS:** Corrected the update script URL for the macOS (Darwin) release, which was preventing the application from checking for new versions.
+- **macOS**: Added the default mods path (`~/Library/Application Support/VintagestoryData/Mods`) to ensure the application can locate the game's mod directory.
+- **macOS**: Corrected the update script URL for the macOS (Darwin) release, which was preventing the application from checking for new versions.
 
+## [2.4.0] - 2025-10-14
 
-v2.4.0 - 2025-10-14
 ### Added
-- **Build Automation:** Implemented a GitHub Actions workflow to automatically build and create releases for Windows (.exe), Linux (AppImage), and macOS (.dmg).
-- **Platform-Specific Icons:** The build process now automatically selects the appropriate icon format (`.ico` for Windows, `.png` for Linux, `.icns` for macOS).
-- **Support for Directory-Based Mods:** The updater can now detect and update mods that are managed in individual folders (e.g., by Mod Organizer 2), as long as they contain a `modinfo.json` file.
-- feat(update): Implement mod downgrade capability (thanks to Surdjak: https://github.com/Laerinok/VS_ModsUpdater_v2/pull/39). If an installed mod is too new for the selected game version, the updater will now offer to downgrade it to the latest compatible version.
-- feat(check): Add proactive incompatibility check. The application now warns the user if an installed mod is incompatible with the game version, even when no alternative version is available for download.
-- feat(config): Add 'incompatibility_behavior' option. Users can now configure how the application reacts to incompatible mods: ask to continue (0), abort automatically (1), or ignore (2).
-- feat (UX): Added display of the specific reason for mod exclusion in the final summary (e.g., 'Excluded by user in config.ini' or 'API data unavailable').
-- feat(UX): The summary displayed during the initial configuration now includes the user's choice for incompatibility behavior, improving clarity.
-- feat(UX): The dry-run report now includes the game version used for the simulation, providing better context.
-- Added: `--dry-run` command-line argument.
-- feat (i18n): Added language support for Polish (pl_PL) (thanks to MaLiN2223: https://github.com/Laerinok/VS_ModsUpdater_v2/pull/36).
+- **Build**: Implemented GitHub Actions workflow to automatically build releases for Windows (.exe), Linux (AppImage), and macOS (.dmg).
+- **Build**: Automatic selection of platform-specific icons (`.ico`, `.png`, `.icns`).
+- **Core**: Support for Directory-Based Mods (e.g., managed by Mod Organizer 2), provided they contain a `modinfo.json`.
+- **Core**: Mod downgrade capability. If an installed mod is too new for the selected game version, the updater offers to downgrade it.
+- **Core**: Proactive incompatibility check. Warns if an installed mod is incompatible with the game version, even if no update is available.
+- **Config**: Added `incompatibility_behavior` option (Ask, Abort, or Ignore).
+- **CLI**: Added `--dry-run` argument to simulate updates without modifying files.
+- **UX**: Display of specific reasons for mod exclusion (e.g., 'Excluded by user' or 'API data unavailable').
+- **UX**: Initial configuration summary now includes the incompatibility behavior choice.
+- **UX**: Dry-run report now includes the game version used for simulation.
+- **i18n**: Added Polish (pl_PL) language support.
+
 ### Fixed
-- fix(linux): Corrected the backup directory path on Linux to use the user's data directory (`~/.local/share/VS_ModsUpdater/backup_mods/`) instead of the application's root.
-- Fixed a critical issue where mods installed as directories were detected but not actually updated.
-- Fixed a bug where mod icons were not displayed correctly (or at all) in the HTML and PDF reports.
-- Fixed a bug where local-only mods would have a broken link in the generated reports.
-- Fixed a bug where setting `max_backups = 0` in the config file would incorrectly delete all backups instead of preserving them.
-- Fixed a crash that could occur during the update process.
-- Fixed a bug where some user prompts were case-sensitive.
-- fix(core): Overhauled update detection logic. The application now retrieves the game version of installed mods directly from the ModDB API, ensuring reliable update and downgrade decisions even when the local modinfo.json is missing compatibility data.
-- fix(core): Fixed a critical `ValueError` crash that occurred when processing local mods (mods not present on the ModDB) due to an incorrect number of return values in the API data fetching function.
-- fix(cli): Restored the --dry-run functionality, which was broken during a recent refactoring. The application now correctly displays the simulation report and exits as expected.
-- fix(UX): Restored the display of the exclusion reason in the final summary, which had disappeared during a refactoring.
-- fix(UX): Changelogs displayed in the console are now converted from HTML to Markdown for improved readability.
-- fix(config): Resolved a critical encoding issue (`UnicodeDecodeError`) during configuration migration that could corrupt paths with special characters (e.g., accents). The migration process now correctly reads the old configuration file using UTF-8.
-- fixed (Critical): Resolved a critical issue causing download failures for certain mods due to **double URL encoding** in download URLs retrieved from the Vintage Story mod API.
-- fixed (Critical): Fixed a fatal crash (`AttributeError: 'NoneType'`) that occurred when the HTTP client failed to complete a download request after all retry attempts. Download failures are now logged and handled gracefully.
-- fixed: The application now correctly displays the changelogs for all intermediate versions when updating a mod, instead of only showing the changelog for the latest version. This provides a complete picture of the changes included in an update.
-- fixed (i18n): Resolved a critical issue where the 'Yes/No' prompts failed to accept universal ASCII input (like 'n' for No) when the locale used non-ASCII characters (e.g., Russian 'н'/'д').
+- **Core**: Critical fix for `ValueError` crash when processing local-only mods not found on ModDB.
+- **Core**: Critical fix for `AttributeError: 'NoneType'` when downloads failed after all retries.
+- **Core**: Fixed double URL encoding issues causing download failures for certain mods.
+- **Core**: Overhauled update detection logic to use ModDB API data for compatibility checks, fixing issues with missing local `modinfo.json`.
+- **Core**: Fixed detection of mods installed as directories.
+- **CLI**: Restored broken `--dry-run` functionality.
+- **Config**: Fixed `UnicodeDecodeError` during config migration on systems with special characters in paths.
+- **Config**: Fixed an issue where `max_backups = 0` deleted all backups instead of disabling the limit.
+- **Linux**: Corrected backup directory path to use `~/.local/share/VS_ModsUpdater/backup_mods/`.
+- **Reports**: Fixed broken links for local-only mods in reports.
+- **Reports**: Fixed mod icons not displaying in HTML/PDF reports.
+- **UX**: Fixed "Yes/No" prompts to accept universal ASCII input (e.g., 'n') alongside localized characters (e.g., Cyrillic).
+- **UX**: Restored display of exclusion reasons in the final summary.
+- **UX**: Markdown rendering for changelogs in the console.
+
 ### Changed
-- **Improvement:** The application now correctly handles "yes/no" and "y/n" responses in English, in addition to localized answers, for all confirmation prompts. This improves consistency and user experience, especially during initial setup and when displaying the changelog.
-- **Improvement:** The yes/no confirmation prompts now explicitly display all valid inputs (e.g., `(o/n, y/n)`), making it clear that both localized and English responses are accepted.
-- **Internationalization:** Translated comments in `setup.py` to English for better maintainability.
-- **Build System:** Updated `setup.py` to support platform-specific icon selection.
-- docs: Clarified file and directory locations for Windows and Linux in the README and Wiki.
-- refactor(deps): Removed multiple unused Python dependencies (e.g., beautifulsoup4, Pygments, striprtf) from requirements.txt, reducing the final application size by ~15MB.
-- refactor(config): Dynamically generate the language selection list to improve maintainability. This removes the need for manual re-numbering when adding/removing languages and ensures the default language selection is always correct.
-- refactor (Logic): Reworked the mod update check logic (`mods_update_checker.py`) to sequentially pre-filter user-excluded mods. This centralizes exclusion logic and **prevents unnecessary network calls** during concurrent processing.
-- refactor (Core): Centralized the entire 'Yes/No' user input logic into the robust `utils.prompt_yes_no` function and removed the superfluous and rigid validation loop from `main.py`, making the application flow cleaner and more maintainable.
-- refactor (i18n): Reworked title string logic to use a dynamic variable (`{ModsUpdater_author}`) instead of hardcoding the author's name, preparing the codebase for easier redistribution or branding changes.
-- refactor (Data): Enriched the `excluded_mods` data in `global_cache` to store the specific `Reason` for exclusion, improving debugging and logging.
-- i18n: Added translation keys across all 12 supported languages to ensure full support for the new exclusion messages.
+- **UX**: "Yes/No" prompts now explicitly display all valid inputs (e.g., `(o/n, y/n)`).
+- **Performance**: Reworked update check logic to pre-filter excluded mods, preventing unnecessary network calls.
+- **Performance**: Removed unused dependencies (beautifulsoup4, Pygments, striprtf), reducing app size by ~15MB.
+- **Refactoring**: Centralized user input logic into `utils.prompt_yes_no`.
+- **Refactoring**: Dynamic language list generation in configuration.
 
-v2.3.0 - 2025-08-26
-- Added: a user prompt that allows displaying the changelog for new script updates on demand.
-- Added: support for a new API to check for ModsUpdater updates.
-- Added: Improved console output with clickable links and better-centered text.
-- Fixed: Resolved issues with misaligned text in the console display.
-- Fixed: Removed unused code and imports for better performance and readability.
-- Fixed: Resolved an issue where mods on the exclusion list were not being properly ignored. The program will now correctly skip all excluded mods and will not attempt to check for their updates or download them. The list of excluded mods is now displayed correctly at the start of the scan process.
-- Fixed: The program now correctly identifies and displays local mods in the excluded mods list.
-- Changed: The game version display has been rephrased for better clarity.
+## [2.3.0] - 2025-08-26
 
-v2.2.2 - 2025-08-25
-- Improved the configuration for the game version. The program now automatically uses the latest version of the game if no specific version is indicated in `config.ini`.
-- For clarity, the `config.ini` file now shows 'latest_version' instead of being empty when this option is selected.
+### Added
+- **UX**: Prompt to display the changelog for new script updates on demand.
+- **Core**: Support for a new API to check for ModsUpdater updates.
+- **UX**: Improved console output with clickable links and centered text.
 
-v2.2.1:
-- Fixed: a bug that caused the application to crash when using the --force-update option on mods that did not have a new version available.
-- Fixed: Addressed an issue where progress messages for specific modlist exports (PDF, JSON) would run even when their respective --no- flags were used.
-- Fixed: Restructured the export logic to ensure command-line arguments are parsed only once and correctly passed to all export functions.
-- Featured: - The `install-modlist` command now shows the name of the mod being downloaded in the progress bar.
+### Fixed
+- **Core**: Fixed exclusion list logic; excluded mods are now properly skipped during scans.
+- **Core**: Local mods are now correctly identified in the exclusion list.
+- **UI**: Resolved misaligned text in the console display.
 
-v2.2.0:
-- Added: --force-update argument: Added a new command-line argument that forces a re-download and re-installation of all mods, even if their versions are already up to date. This is useful for repairing corrupted files or performing a clean install.
-- Added: Update date and time are now displayed in updated_mods_changelog.txt
-- Added: Added a new command-line argument (--install-mods) to download all mods listed in modlist.json to the designated mods folder.
-- Fixed an issue where the warning message for an empty mods directory was not displaying the directory path correctly.
-- Fixed: Exported JSON data now correctly lists installed mod's download URL. Previously, the installed_download_url could show the latest available version instead of the exact version you have installed. This has been corrected to ensure the exported data is accurate for all mods, regardless of their update status.
-- Fixed and improved mod changelog retrieval. Mod changelog information is now fetched directly from the API.
-- Fixed: Adapted API call for game version retrieval. The Vintage Story Mods API no longer prepends a 'v' to game version strings (e.g., v1.20.11 is now 1.20.11).
-- Improved: Enhanced configuration file handling by explicitly specifying UTF-8 encoding for both reading and writing config.ini.
+### Changed
+- **UI**: Rephrased game version display for clarity.
+- **Code**: Cleanup of unused imports and code.
 
-v2.1.3 - 2025-05-05
-- Fixed: The download link for ModsUpdater was broken due to a character issue.
-- Build System: Migrated the binary creation process from Nuitka to cx_Freeze. This change aims to improve build compatibility and simplify the packaging workflow.
+## [2.2.2] - 2025-08-25
 
-v2.1.2 - 2025-04-26
-- Fixed: Improved the warning message displayed when a directory is found in the Mods folder. It now includes the name of the directory in question, providing clearer context to the user.
-- Fixed: get_mod_path: Command line `modspath` argument is now correctly used.
-- Updated: ko_KR.json file
+### Changed
+- **Config**: The program now automatically uses the latest game version if no specific version is indicated in `config.ini`.
+- **UI**: `config.ini` now shows 'latest_version' instead of an empty value for clarity.
 
-v2.1.1 - 2025-04-09
-- Fixed: Ensure mod icons are extracted when PDF export is disabled. The `if not args.no_pdf:` condition was moved within the `export_pdf` module to wrap only the PDF generation steps. This ensures that the icon extraction logic, which runs before PDF generation, is always executed, making icons available for other export formats (like HTML) even if PDF export is skipped.
+## [2.2.1] - 2025-08-??
 
-v2.1.0 - 2025-04-08
-- Fixed (welcome_display): Ensures that the update status message is always displayed. A logic issue prevented the "No new version available" message from being shown.
-- Fixed: Correct mod icon is now displayed in the PDF modlist even if a manual update for that mod was skipped.
-- Fixed: modlist_json for manual mode: download links were not for the correct version.
-- Fixed: Incorrect input values for user responses.
-- Fixed: updated_mods_changelog.txt was not being populated correctly for manual download mode.
-- Added: Functionality to export the list of installed mods to an HTML file.
-- Added: New command-line argument `--no-html` to disable HTML mod list export.
-- Added: Display of the maximum game version for mod updates.
-- Added: ko_KR.json file (Korean localization).
-- Improved: Display of the mod information retrieval progress bar.
-- Improved: Display of the mod download progress bar.
-- Improved: Display of the PDF creation progress bar.
-- Updated: Language files with translations for the HTML export feature and the `--no-html` option.
+### Fixed
+- **Core**: Fixed crash when using `--force-update` on mods without available updates.
+- **CLI**: Fixed `--no-pdf` and `--no-json` flags not suppressing progress messages.
+- **CLI**: Fixed argument parsing logic for export functions.
+
+### Changed
+- **UX**: `install-modlist` command now shows the name of the mod being downloaded.
+
+## [2.2.0] - 2025-08-??
+
+### Added
+- **CLI**: Added `--force-update` to force re-download/re-install of all mods.
+- **CLI**: Added `--install-mods` to download mods listed in `modlist.json`.
+- **Logs**: Update date and time are now displayed in `updated_mods_changelog.txt`.
+
+### Fixed
+- **Core**: Exported JSON now lists the *installed* version's URL, not the latest available.
+- **Core**: Mod changelogs are now fetched directly from the API.
+- **API**: Adapted to API changes (removal of 'v' prefix in version strings).
+- **Config**: Explicit UTF-8 encoding for reading/writing `config.ini`.
+- **UI**: Fixed warning message for empty mods directory.
+
+## [2.1.3] - 2025-05-05
+
+### Fixed
+- **Core**: Fixed broken download link for ModsUpdater self-update.
+
+### Changed
+- **Build**: Migrated from Nuitka to cx_Freeze for better compatibility.
+
+## [2.1.2] - 2025-04-26
+
+### Fixed
+- **CLI**: `modspath` argument is now correctly used.
+- **UI**: Warning for directories in Mods folder now specifies the directory name.
+- **i18n**: Updated Korean (ko_KR) translation.
+
+## [2.1.1] - 2025-04-09
+
+### Fixed
+- **Core**: Ensure mod icons are extracted even when PDF export is disabled (needed for HTML).
+
+## [2.1.0] - 2025-04-08
+
+### Added
+- **Export**: Added HTML mod list export (`export_html.py`).
+- **CLI**: Added `--no-html` argument.
+- **UI**: Display of the maximum game version for mod updates.
+- **i18n**: Added Korean (ko_KR) localization.
+
+### Fixed
+- **Core**: Fixed "No new version available" message not displaying.
+- **Core**: Correct mod icon is now displayed in PDF even if update was skipped.
+- **Core**: Fixed download links in `modlist.json` for manual mode.
+- **Core**: `updated_mods_changelog.txt` population fix for manual mode.
+
+### Improved
+- **UI**: Progress bars for information retrieval, download, and PDF creation.
