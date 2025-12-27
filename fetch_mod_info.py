@@ -240,7 +240,15 @@ def get_compatible_releases(mod_json, user_game_version, exclude_prerelease):
     Retrieve all compatible releases for the mod based on the user_game_version and changelogs
     """
     releases = mod_json.get("mod", {}).get("releases", [])
-    user_ver = Version(user_game_version.lstrip("v"))
+
+    # Validate user_game_version format before processing
+    try:
+        user_ver = Version(user_game_version.lstrip("v"))
+    except (InvalidVersion, TypeError, ValueError) as e:
+        logging.error(
+            f"Skipping mod '{mod_json.get('mod', {}).get('name')}': Invalid Game Version detected '{user_game_version}'. Error: {e}")
+        return []
+
     compatible_releases = []
     for release in releases:
         for tag in release.get("tags", []):
@@ -257,8 +265,10 @@ def get_compatible_releases(mod_json, user_game_version, exclude_prerelease):
                     break
             except Exception:
                 continue
+
     if not compatible_releases:
-        logging.info(
+        # Changed to debug to reduce noise
+        logging.debug(
             f"{mod_json['mod']['name']}: No compatible release found for game version {user_game_version}.")
         return []
 

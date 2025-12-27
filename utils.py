@@ -53,10 +53,12 @@ console = Console()
 timeout = global_cache.config_cache["Options"].get("timeout", 10)
 client = HTTPClient()
 
+
 class ModType(Enum):
     ZIP = "zip"
     CS = "cs"
     DIR = "dir"
+
 
 # #### For test and debug ####
 def print_dict(dictionary):
@@ -313,6 +315,7 @@ def fix_json(json_data):
     json_data_fixed = json.dumps(data, indent=2)
     return json_data_fixed
 
+
 class VersionCompareState(Enum):
     LOCAL_VERSION_BEHIND = "local_version_behind"
     IDENTICAL_VERSION = "identical_version"
@@ -411,6 +414,7 @@ def check_excluded_mods(mod_filename: str, mod_name: str) -> bool:
         return True
 
     return False
+
 
 def backup_mods(mods_to_backup):
     """
@@ -519,6 +523,7 @@ def exit_program(msg=None, extra_msg=None, do_exit=True):
 
     if do_exit:
         sys.exit()
+
 
 def download_file(url, destination_path):
     """

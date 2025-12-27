@@ -1,7 +1,19 @@
+v2.4.2 - 2025-12-27
+### Fixed
+- **Critical Crash**: Fixed an issue where invalid game version strings returned by the API (e.g., `.4.4-dev.2`) caused the application to crash on startup, particularly on Linux systems.
+- **Stability**: Added safeguards in `fetch_mod_info.py` to handle `InvalidVersion` exceptions gracefully during mod compatibility checks.
+
+### Changed
+- **API Logic**: Improved `utils.get_latest_game_version` to validate version numbers received from the API. It now iterates backwards to find the latest *valid* semantic version, ignoring malformed entries.
+- **UI/Text**: Changed "Installed game version" to "Target Game Version" in the main display to clarify that this is a configuration setting, not a local file detection.
+- **Refactored** variable names in main execution block to resolve shadowing warnings.
+
+
 v2.4.1 - 2025-10-16
 ### Fixed
 - **macOS:** Added the default mods path for macOS (`~/Library/Application Support/VintagestoryData/Mods`) to ensure the application can locate the game's mod directory.
 - **macOS:** Corrected the update script URL for the macOS (Darwin) release, which was preventing the application from checking for new versions.
+
 
 v2.4.0 - 2025-10-14
 ### Added

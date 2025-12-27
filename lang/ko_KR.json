@@ -12,7 +12,7 @@
     "main_new_version_available": "새로운 버전 사용가능!!!",
     "main_title": "모드 업데이터 for 빈티지 스토리 - v{ModsUpdater_version} (by {ModsUpdater_author})",
     "main_mods_no_update": "사용 가능한 모드 업데이트가 없습니다.",
-    "main_max_game_version": "설치된 게임 버전: ",
+    "main_max_game_version": "대상 게임 버전 : ",
     "main_press_enter_to_exit": "엔터를 눌러 종료...",
     "main_excluded_mods_title": "다음 모드는 업데이트에서 제외됩니다:",
     "main_logs_location": "로그는 여기에 저장됩니다: ",
