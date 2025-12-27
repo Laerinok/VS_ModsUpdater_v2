@@ -26,7 +26,6 @@ API calls, downloading files, and any HTTP requests requiring a persistent sessi
 
 
 __author__ = "Laerinok"
-__version__ = "2.4.0"
 __date__ = "2025-12-27"  # Last update
 
 
@@ -34,8 +33,8 @@ __date__ = "2025-12-27"  # Last update
 
 
 import argparse
-from pathlib import Path
 import sys
+from pathlib import Path
 
 
 def parse_args():

@@ -22,7 +22,6 @@
 
 
 __author__ = "Laerinok"
-# __version__ = "2.4.0"  # Don't forget to change EXPECTED_VERSION
 __date__ = "2025-12-27"  # Last update
 
 
@@ -43,7 +42,7 @@ import utils
 from app_version import __version__
 
 # The target version after migration
-EXPECTED_VERSION = "2.5.0"
+EXPECTED_VERSION = __version__
 
 # Variable to enable/disable the download - for my test
 download_enabled = True  # Set to False to disable downloads
