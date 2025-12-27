@@ -35,7 +35,7 @@ Key functionalities include:
 __author__ = "Laerinok"
 __license__ = "GNU GPL v3"
 __description__ = "Mods Updater for Vintage Story"
-__date__ = "2025-10-11"  # Last update
+__date__ = "2025-12-27"  # Last update
 
 # main.py
 
@@ -258,6 +258,10 @@ def handle_dry_run():
 
 if __name__ == "__main__":
     args = cli.parse_args()
+
+    # This must be done before initialize_config() is called
+    if args.config_path:
+        config.set_config_file(args.config_path)
 
     # Initialize config
     initialize_config()

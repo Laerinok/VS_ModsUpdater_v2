@@ -27,7 +27,7 @@ API calls, downloading files, and any HTTP requests requiring a persistent sessi
 
 __author__ = "Laerinok"
 __version__ = "2.4.0"
-__date__ = "2025-08-24"  # Last update
+__date__ = "2025-12-27"  # Last update
 
 
 # cli.py
@@ -44,9 +44,10 @@ def parse_args():
 
     parser.add_argument('--no-pause', action='store_true', help='Disable the pause at the end')
     parser.add_argument('--modspath', type=str, help='Enter the mods directory (in quotes).')
-    parser.add_argument('--no-json', action='store_true',help='Disable the JSON modlist generation')
+    parser.add_argument('--config-path', type=str, help='Path to a custom configuration file (e.g., for multiple instances).')
+    parser.add_argument('--no-json', action='store_true', help='Disable the JSON modlist generation')
     parser.add_argument('--no-pdf', action='store_true', help='Disable the PDF modlist generation')
-    parser.add_argument('--no-html', action='store_true',help='Disable the HTML modlist generation')
+    parser.add_argument('--no-html', action='store_true', help='Disable the HTML modlist generation')
     parser.add_argument('--log-level', choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'], help='Set the logging level')
     parser.add_argument('--max-workers', type=int, help='Set the maximum number of workers for downloads')
     parser.add_argument('--timeout', type=int, help='Set the timeout for downloads')
@@ -56,19 +57,34 @@ def parse_args():
 
     args = parser.parse_args()
 
-    # Checking the path's existence
+    # Checking the modspath existence
     if args.modspath:
         path_modspath = Path(args.modspath).resolve()
         if not path_modspath.exists():
             print(f"Error: Mods directory '{args.modspath}' not found.")
-            exit(1)
+            sys.exit(1)
 
         # Checking if the path is a directory
         if not path_modspath.is_dir():
             print(f"Error: '{args.modspath}' is not a directory.")
-            exit(1)
+            sys.exit(1)
 
         args.modspath = path_modspath
+
+    # Checking config-path existence (NOUVEAU BLOC)
+    if args.config_path:
+        path_config = Path(args.config_path).resolve()
+        # We check if the parent directory exists to allow creating a new config file
+        if not path_config.parent.exists():
+            print(
+                f"Error: The directory for the configuration file '{path_config.parent}' does not exist.")
+            sys.exit(1)
+
+        if path_config.exists() and not path_config.is_file():
+            print(f"Error: '{args.config_path}' is a directory, not a file.")
+            sys.exit(1)
+
+        args.config_path = path_config
 
     # Checking max-workers
     if args.max_workers is not None:
