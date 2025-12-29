@@ -2,19 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.5.0] - 2025-12-27
+## [2.5.0] - 2025-12-29
 
 ### Added
 - **CLI**: Added `--config-path` argument. This allows users to specify a custom location for the configuration file, enabling management of multiple game instances with isolated settings.
 
-### Fixed
-- **Core**: Fixed an issue where invalid game version strings returned by the API (e.g., `.4.4-dev.2`) caused the application to crash on startup, particularly on Linux systems.
-- **Stability**: Added safeguards in `fetch_mod_info.py` to handle `InvalidVersion` exceptions gracefully during mod compatibility checks.
-- **Refactoring**: Renamed variables in the main execution block to resolve shadowing warnings.
-
 ### Changed
 - **API Logic**: Improved `utils.get_latest_game_version` to validate version numbers received from the API. It now iterates backwards to find the latest *valid* semantic version, ignoring malformed entries.
 - **UI**: Changed "Installed game version" to "Target Game Version" in the main display to clarify that this is a configuration setting, not a local file detection.
+
+### Fixed
+- **Backup System**: Resolved a critical crash (`ValueError: ZIP does not support timestamps before 1980`) occurring when archiving mods with invalid or pre-1980 modification dates (typically on Linux filesystems).
+- **Core**: Fixed an issue where invalid game version strings returned by the API (e.g., `.4.4-dev.2`) caused the application to crash on startup, particularly on Linux systems.
+- **Stability**: Added safeguards in `fetch_mod_info.py` to handle `InvalidVersion` exceptions gracefully during mod compatibility checks.
+- **Refactoring**: Renamed variables in the main execution block to resolve shadowing warnings.
 
 ## [2.4.1] - 2025-10-16
 

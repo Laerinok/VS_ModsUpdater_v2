@@ -17,7 +17,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 __author__ = "Laerinok"
-__date__ = "2025-10-03"  # Last update
+__date__ = "2025-12-29"  # Last update
 
 
 # utils.py
@@ -429,7 +429,8 @@ def backup_mods(mods_to_backup):
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     backup_path = backup_folder / f"backup_{timestamp}.zip"
 
-    with zipfile.ZipFile(backup_path, 'w', zipfile.ZIP_DEFLATED) as backup_zip:
+    # FIX: Added strict_timestamps=False to prevent crashes with files having pre-1980 dates (e.g., Linux epoch)
+    with zipfile.ZipFile(backup_path, 'w', zipfile.ZIP_DEFLATED, strict_timestamps=False) as backup_zip:
         for mod in mods_to_backup:
             mod_path = Path(mod.get("Path"))
             mod_type_str = mod.get("Type")
