@@ -17,7 +17,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 __author__ = "Laerinok"
-__date__ = "2025-10-03"  # Last update
+__date__ = "2025-12-29"  # Last update
 
 
 # utils.py
@@ -53,10 +53,12 @@ console = Console()
 timeout = global_cache.config_cache["Options"].get("timeout", 10)
 client = HTTPClient()
 
+
 class ModType(Enum):
     ZIP = "zip"
     CS = "cs"
     DIR = "dir"
+
 
 # #### For test and debug ####
 def print_dict(dictionary):
@@ -313,6 +315,7 @@ def fix_json(json_data):
     json_data_fixed = json.dumps(data, indent=2)
     return json_data_fixed
 
+
 class VersionCompareState(Enum):
     LOCAL_VERSION_BEHIND = "local_version_behind"
     IDENTICAL_VERSION = "identical_version"
@@ -412,6 +415,7 @@ def check_excluded_mods(mod_filename: str, mod_name: str) -> bool:
 
     return False
 
+
 def backup_mods(mods_to_backup):
     """
     Create a backup of mods before download and manage a retention policy.
@@ -425,7 +429,8 @@ def backup_mods(mods_to_backup):
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     backup_path = backup_folder / f"backup_{timestamp}.zip"
 
-    with zipfile.ZipFile(backup_path, 'w', zipfile.ZIP_DEFLATED) as backup_zip:
+    # FIX: Added strict_timestamps=False to prevent crashes with files having pre-1980 dates (e.g., Linux epoch)
+    with zipfile.ZipFile(backup_path, 'w', zipfile.ZIP_DEFLATED, strict_timestamps=False) as backup_zip:
         for mod in mods_to_backup:
             mod_path = Path(mod.get("Path"))
             mod_type_str = mod.get("Type")
@@ -519,6 +524,7 @@ def exit_program(msg=None, extra_msg=None, do_exit=True):
 
     if do_exit:
         sys.exit()
+
 
 def download_file(url, destination_path):
     """

@@ -89,6 +89,7 @@ def resize_image(image_data, max_size=100):
         logging.error(f"Error resizing image: {e}")
     return image_data  # Return original data if resizing fails
 
+
 # Function to create the PDF with Platypus.Table
 def create_pdf_with_table(modsdata, pdf_path, args):
     num_mods = global_cache.total_mods

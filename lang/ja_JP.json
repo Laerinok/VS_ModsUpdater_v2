@@ -12,7 +12,7 @@
     "main_new_version_available": "新しいバージョンがあります！！！",
     "main_title": "Vintage Story用ModsUpdater - v{ModsUpdater_version} (作成者：{ModsUpdater_author})",
     "main_mods_no_update": "利用可能なModのアップデートはありません。",
-    "main_max_game_version": "インストール済みゲームバージョン：",
+    "main_max_game_version": "対象ゲームバージョン : ",
     "main_press_enter_to_exit": "終了するにはEnterキーを押してください...",
     "main_excluded_mods_title": "以下のModはアップデートから除外されます：",
     "main_logs_location": "ログはここに保存されます：",

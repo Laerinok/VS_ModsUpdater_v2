@@ -12,7 +12,7 @@
     "main_new_version_available": "Доступна нова версія!!!",
     "main_title": "ModsUpdater для Vintage Story / v{ModsUpdater_version} (від {ModsUpdater_author})",
     "main_mods_no_update": "Немає доступних оновлень модів.",
-    "main_max_game_version": "Встановлена версія гри: ",
+    "main_max_game_version": "Цільова версія гри : ",
     "main_press_enter_to_exit": "Натисніть Enter, щоб вийти...",
     "main_excluded_mods_title": "Наступні моди виключено з оновлення:",
     "main_logs_location": "Журнали збережено тут: ",

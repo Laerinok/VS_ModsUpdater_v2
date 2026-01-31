@@ -12,7 +12,7 @@
     "main_new_version_available": "Neue Version verfügbar!!!",
     "main_title": "ModsUpdater für Vintage Story / v{ModsUpdater_version} (von {ModsUpdater_author})",
     "main_mods_no_update": "Keine Mods-Updates verfügbar.",
-    "main_max_game_version": "Installierte Spielversion: ",
+    "main_max_game_version": "Ziel-Spielversion : ",
     "main_press_enter_to_exit": "Drücken Sie die Eingabetaste, um zu beenden...",
     "main_excluded_mods_title": "Die folgenden Mods sind von der Aktualisierung ausgeschlossen:",
     "main_logs_location": "Logs werden hier gespeichert: ",

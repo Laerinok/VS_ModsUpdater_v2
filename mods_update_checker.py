@@ -32,12 +32,14 @@ from packaging.version import Version, InvalidVersion
 from enum import Enum
 
 import global_cache
-from utils import version_compare, VersionCompareState, check_excluded_mods
+from utils import check_excluded_mods
+
 
 class ModUpdateStatus(Enum):
     UP_TO_DATE = "up_to_date"
     UPDATE_AVAILABLE = "update_available"
     NO_COMPATIBILITY = "no_compatibility"
+
 
 class ProcessModResult:
     status: ModUpdateStatus
@@ -46,6 +48,7 @@ class ProcessModResult:
     def __init__(self, status, update_info=None):
         self.status = status
         self.update_info = update_info
+
 
 def check_for_mod_updates(force_update=False):
     """
@@ -76,10 +79,9 @@ def check_for_mod_updates(force_update=False):
                 elif mod_data.status == ModUpdateStatus.NO_COMPATIBILITY:
                     incompatible_mods.append(mod_data.update_info)
 
-    global_cache.mods_data['mods_to_update'] = sorted(mods_to_update,
-                                                      key=lambda mod: mod['Name'].lower())
-    global_cache.mods_data['incompatible_mods'] = sorted(incompatible_mods,
-                                                          key=lambda mod: mod['Name'].lower())
+    global_cache.mods_data['mods_to_update'] = sorted(mods_to_update, key=lambda mod: mod['Name'].lower())
+    global_cache.mods_data['incompatible_mods'] = sorted(incompatible_mods, key=lambda mod: mod['Name'].lower())
+
 
 def process_mod(mod, force_update) -> ProcessModResult:
     """

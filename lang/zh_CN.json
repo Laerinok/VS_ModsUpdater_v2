@@ -12,7 +12,7 @@
     "main_new_version_available": "有新版本可用！！！",
     "main_title": "Vintage Story的ModsUpdater - v{ModsUpdater_version} (作者：{ModsUpdater_author})",
     "main_mods_no_update": "没有可用的模组更新。",
-    "main_max_game_version": "已安装的游戏版本：",
+    "main_max_game_version": "目标游戏版本 : ",
     "main_press_enter_to_exit": "按Enter键退出...",
     "main_excluded_mods_title": "以下模组已从更新中排除：",
     "main_logs_location": "日志保存在这里：",

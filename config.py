@@ -22,8 +22,7 @@
 
 
 __author__ = "Laerinok"
-__version__ = "2.4.0"  # Don't forget to change EXPECTED_VERSION
-__date__ = "2025-10-11"  # Last update
+__date__ = "2025-12-27"  # Last update
 
 
 # config.py
@@ -40,9 +39,10 @@ from rich import print
 import global_cache
 import lang
 import utils
+from app_version import __version__
 
 # The target version after migration
-EXPECTED_VERSION = "2.4.0"
+EXPECTED_VERSION = __version__
 
 # Variable to enable/disable the download - for my test
 download_enabled = True  # Set to False to disable downloads
@@ -180,6 +180,16 @@ USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0",
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:115.0) Gecko/20100101 Firefox/115.0",
 ]
+
+
+def set_config_file(custom_path: Path) -> None:
+    """
+    Override the default configuration file path.
+    Must be called before loading or creating the configuration.
+    """
+    global CONFIG_FILE
+    CONFIG_FILE = custom_path
+    logging.debug(f"Configuration file path overridden to: {CONFIG_FILE}")
 
 
 def rename_old_config(config_file_path):

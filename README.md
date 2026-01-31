@@ -33,7 +33,18 @@ The location of configuration and data files differs between Windows, Linux, and
 | **`backup_mods/`** | In the same directory as the `.exe` | `~/.local/share/VS_ModsUpdater/backup_mods/` |
 | **`modlist/`** | In the same directory as the `.exe` | `~/.local/share/VS_ModsUpdater/modlist/` |
 
-**Note:** On Linux and macOS, the paths may vary if you have customized the `XDG_CONFIG_HOME` or `XDG_DATA_HOME` environment variables. The Linux locations refer to the AppImage version.
+**Note:** 
+- On Linux and macOS, the paths may vary if you have customized the `XDG_CONFIG_HOME` or `XDG_DATA_HOME` environment variables. The Linux locations refer to the AppImage version.
+- You can override the default location of config.ini by using the --config-path command-line argument.
+
+## Linux Desktop Integration (AppImage)
+
+To integrate the AppImage into your desktop environment (allowing you to launch it from your application menu or via double-click), a `.desktop` file is provided.
+
+1.  Place both the `VS_ModsUpdater.AppImage` and the `vs-mods-updater.desktop` file in the same directory.
+2.  Ensure the AppImage is executable: `chmod +x VS_ModsUpdater.AppImage`.
+3.  (Optional) To make it appear in your system menu, you can move the `.desktop` file to `~/.local/share/applications/`.
+
 
 ## How Mods Are Handled (Zip vs. Directory)
 
@@ -129,6 +140,7 @@ The script can be executed with arguments to customize its behavior:
 
 - `--no-pause`: Disables the pause at the end of the script execution. Useful for non-interactive execution or in automated scripts.
 - `--modspath "<path>"`: Allows you to specify the path to the Vintage Story mods directory directly during execution. The path must be enclosed in quotation marks if it contains spaces. This argument replaces the path defined in the `config.ini` file.
+- `--config-path "<path>"`: Allows you to specify the path to a custom configuration file (e.g., /path/to/server_config.ini). This is particularly useful for managing multiple game instances with different settings. If the file does not exist, a new configuration file will be created at the specified location.
 - `--no-json`: Disables the automatic generation of the mod list in JSON format at the end of execution.
 - `--no-pdf`: Disables the automatic generation of the mod list in PDF format at the end of execution.
 - `--no-html`: Disables the automatic generation of the mod list in HTML format at the end of execution.
@@ -178,4 +190,4 @@ Supported Languages:
     简体中文
 
 =============================    
-(Latest update: 2025-10-14 / v2.4.0)
+(Latest update: 2025-12-27 / v2.5.0)

@@ -35,7 +35,7 @@ Key functionalities include:
 __author__ = "Laerinok"
 __license__ = "GNU GPL v3"
 __description__ = "Mods Updater for Vintage Story"
-__date__ = "2025-10-11"  # Last update
+__date__ = "2025-12-27"  # Last update
 
 # main.py
 
@@ -50,7 +50,6 @@ from pathlib import Path
 from rich import print
 from rich.console import Console
 from rich.panel import Panel
-from rich.prompt import Prompt
 from rich.style import Style
 from rich.text import Text
 
@@ -177,7 +176,7 @@ def welcome_display():
         # Prompt the user to show the changelog
         if utils.prompt_yes_no(
             f"\n{lang.get_translation('main_show_changelog_prompt')}",
-            default=False # Default to No
+            default=False  # Default to No
         ):
             changelog_panel = Panel(
                 changelog_text,
@@ -256,8 +255,13 @@ def handle_dry_run():
     # Exit the program
     utils.exit_program()
 
+
 if __name__ == "__main__":
     args = cli.parse_args()
+
+    # This must be done before initialize_config() is called
+    if args.config_path:
+        config.set_config_file(args.config_path)
 
     # Initialize config
     initialize_config()
@@ -298,12 +302,12 @@ if __name__ == "__main__":
     if global_cache.mods_data.get('incompatible_mods'):
         # Handle incompatible mods
         print(f"[yellow]{global_cache.language_cache['main_incompatible_mods_found_without_update']}[/yellow]")
-        for mod in global_cache.mods_data.get('incompatible_mods'):
-            print(f"[yellow] - {mod['Name']} ({mod['Old_version'] + (' for game version ' + mod['Old_version_game_Version'] if mod['Old_version_game_Version'] else '')})[/yellow]")
+        for incomp_mod in global_cache.mods_data.get('incompatible_mods'):
+            print(f"[yellow] - {incomp_mod['Name']} ({incomp_mod['Old_version'] + (' for game version ' + incomp_mod['Old_version_game_Version'] if incomp_mod['Old_version_game_Version'] else '')})[/yellow]")
         
         incompatibility_behavior = global_cache.config_cache.get("Options", {}).get("incompatibility_behavior", '0')
 
-        if incompatibility_behavior == '0': # Ask
+        if incompatibility_behavior == '0':  # Ask
             # Use utils.prompt_yes_no for robust input
             continue_anyway = utils.prompt_yes_no(
                 global_cache.language_cache['main_continue_anyway_prompt'],
@@ -311,7 +315,7 @@ if __name__ == "__main__":
             )
             if not continue_anyway:
                 utils.exit_program()
-        elif incompatibility_behavior == '1': # Abort
+        elif incompatibility_behavior == '1':  # Abort
             print(f"[red]{global_cache.language_cache['main_aborting_due_to_incompatibility']}[/red]")
             if not args.no_pause:
                 input(f"\n{global_cache.language_cache['main_press_enter_to_exit']}")
@@ -357,9 +361,9 @@ if __name__ == "__main__":
 
         print(Text(f"\n{lang.get_translation('main_excluded_mods_title')}",
                    style=excluded_title_style))
-        for mod in excluded_mods:
-            mod_name = mod.get('Name', mod.get('Filename', 'Unknown name'))
-            reason = mod.get('Reason')
+        for excluded_mod in excluded_mods:
+            mod_name = excluded_mod.get('Name', excluded_mod.get('Filename', 'Unknown name'))
+            reason = excluded_mod.get('Reason')
             text_to_print = Text()
             text_to_print.append(f"- {mod_name}", style=excluded_mod_style)
             if reason:
