@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.5.0] - 2025-12-29
+## [2.5.0] - 2026-01-31
 
 ### Added
 - **CLI**: Added `--config-path` argument. This allows users to specify a custom location for the configuration file, enabling management of multiple game instances with isolated settings.
@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - **Core**: Fixed an issue where invalid game version strings returned by the API (e.g., `.4.4-dev.2`) caused the application to crash on startup, particularly on Linux systems.
 - **Stability**: Added safeguards in `fetch_mod_info.py` to handle `InvalidVersion` exceptions gracefully during mod compatibility checks.
 - **Refactoring**: Renamed variables in the main execution block to resolve shadowing warnings.
+- **Update Logic**: Fixed version sorting to prioritize mod releases matching the current game version over newer backports (e.g., prevents v0.5.19 for 1.21.4 from overriding v0.5.18 for 1.21.6).
 
 ## [2.4.1] - 2025-10-16
 

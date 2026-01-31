@@ -31,7 +31,7 @@ Key functionalities include:
 """
 
 __author__ = "Laerinok"
-__date__ = "2025-10-11"  # Last update
+__date__ = "2026-01-31"  # Last update
 
 # fetch_mod_info.py
 
@@ -237,7 +237,8 @@ def get_mainfile_from_excluded_mods(sorted_releases, excluded_mods):
 
 def get_compatible_releases(mod_json, user_game_version, exclude_prerelease):
     """
-    Retrieve all compatible releases for the mod based on the user_game_version and changelogs
+    Retrieve all compatible releases for the mod based on the user_game_version and changelogs.
+    Sorts by Highest Compatible Game Version first, then by Mod Version.
     """
     releases = mod_json.get("mod", {}).get("releases", [])
 
@@ -249,35 +250,58 @@ def get_compatible_releases(mod_json, user_game_version, exclude_prerelease):
             f"Skipping mod '{mod_json.get('mod', {}).get('name')}': Invalid Game Version detected '{user_game_version}'. Error: {e}")
         return []
 
-    compatible_releases = []
+    compatible_entries = []  # Stores tuples: (release_dict, best_game_version_for_this_release)
+
     for release in releases:
+        # Check prerelease exclusion
+        if exclude_prerelease.lower() == "true":
+            try:
+                if Version(release['modversion']).is_prerelease:
+                    continue
+            except InvalidVersion:
+                continue
+
+        best_release_tag = None
+
         for tag in release.get("tags", []):
             if not tag:
                 continue
             try:
                 tag_ver = Version(tag.lstrip("v"))
-                if exclude_prerelease.lower() == "true" and Version(
-                        release['modversion']).is_prerelease:
-                    continue
+
+                # Check compatibility: Tag must be <= User Version AND same Major/Minor
                 if tag_ver <= user_ver and (tag_ver.major, tag_ver.minor) == (
                         user_ver.major, user_ver.minor):
-                    compatible_releases.append(release)
-                    break
+                    # Keep the HIGHEST compatible tag found for this specific release
+                    if best_release_tag is None or tag_ver > best_release_tag:
+                        best_release_tag = tag_ver
             except Exception:
                 continue
 
-    if not compatible_releases:
-        # Changed to debug to reduce noise
+        # If this release has at least one compatible tag, add it to candidates
+        if best_release_tag:
+            compatible_entries.append((release, best_release_tag))
+
+    if not compatible_entries:
         logging.debug(
             f"{mod_json['mod']['name']}: No compatible release found for game version {user_game_version}.")
         return []
 
-    sorted_releases = sorted(
-        compatible_releases,
-        key=lambda r: (Version(r.get("modversion") or "0.0.0"), r.get("created") or ""),
+    # SORTING LOGIC:
+    # 1. Best Compatible Game Version (descending) -> Prefer 1.21.6 over 1.21.4
+    # 2. Mod Version (descending) -> Prefer v0.5.19 over v0.5.18 (if both target same game version)
+    # 3. Created Date (descending) -> Fallback
+    compatible_entries.sort(
+        key=lambda x: (
+            x[1],  # Key 1: Game Version
+            Version(x[0].get("modversion") or "0.0.0"),  # Key 2: Mod Version
+            x[0].get("created") or ""  # Key 3: Date
+        ),
         reverse=True
     )
-    return sorted_releases
+
+    # Return only the release dictionaries, stripping the temp version data
+    return [entry[0] for entry in compatible_entries]
 
 
 def get_game_version_from_release(release):
