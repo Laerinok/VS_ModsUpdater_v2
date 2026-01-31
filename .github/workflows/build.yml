@@ -64,13 +64,12 @@ jobs:
 
   build_macos:
     name: Build DMG (macOS Intel/Rosetta Compatible)
-    runs-on: macos-13 
+    runs-on: macos-latest  
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-          architecture: x64 
       - name: Install create-dmg
         run: brew install create-dmg
       - name: Get App Version
@@ -84,12 +83,12 @@ jobs:
       - name: Build the DMG
         run: python setup.py bdist_dmg
       - name: Rename DMG with version
-        run: mv build/*.dmg build/VS_ModsUpdater.v${{ env.APP_VERSION }}_macOS_Intel.dmg
+        run: mv build/*.dmg build/VS_ModsUpdater.v${{ env.APP_VERSION }}_macOS.dmg
       - name: Upload macOS artifact
         uses: actions/upload-artifact@v4
         with:
           name: artifact-macos
-          path: build/VS_ModsUpdater.v${{ env.APP_VERSION }}_macOS_Intel.dmg
+          path: build/VS_ModsUpdater.v${{ env.APP_VERSION }}_macOS.dmg
 
   release:
     name: Create Release
