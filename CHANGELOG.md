@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.1] - 2026-01-31
+
+### Fixed
+- **Core:** fix(core): implement robust path resolution for assets and translations (macOS)
+
 ## [2.5.0] - 2026-01-31
 
 ### Added

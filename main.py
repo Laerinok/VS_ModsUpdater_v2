@@ -35,7 +35,7 @@ Key functionalities include:
 __author__ = "Laerinok"
 __license__ = "GNU GPL v3"
 __description__ = "Mods Updater for Vintage Story"
-__date__ = "2025-12-27"  # Last update
+__date__ = "2026-01-31"  # Last update
 
 # main.py
 
@@ -87,7 +87,7 @@ def initialize_config():
         config.configure_logging('DEBUG')
         language = config.ask_language_choice()
         # Load translations for the chosen language
-        lang_path = Path(f"{config.LANG_PATH}/{language[0]}.json").resolve()
+        lang_path = config.LANG_PATH / f"{language[0]}.json"
         language_cache = lang.load_translations(lang_path)
 
         mods_dir = config.ask_mods_directory()
@@ -141,8 +141,7 @@ def initialize_config():
     config.configure_logging(log_level.upper())
 
     # Load the language translations from the config file into the global cache
-    lang_path = Path(
-        f"{config.LANG_PATH}/{global_cache.config_cache['Language']['language']}.json").resolve()
+    lang_path = config.LANG_PATH / f"{global_cache.config_cache['Language']['language']}.json"
     global_cache.language_cache.update(lang.load_translations(lang_path))
 
     if migration_performed:

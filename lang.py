@@ -28,7 +28,7 @@ Key functionalities include:
 
 """
 __author__ = "Laerinok"
-__date__ = "2025-08-24"  # Last update
+__date__ = "2026-01-31"  # Last update
 
 # lang.py
 
@@ -38,6 +38,7 @@ import os
 from pathlib import Path
 
 import global_cache
+from utils import get_app_dir
 
 
 # config.load_config()
@@ -66,11 +67,14 @@ def load_translations(path=None):
         lang_file_path = Path(path)
     elif global_cache.config_cache:
         language = get_language_setting()
-        appdir = os.environ.get('APPDIR')
-        if appdir:
-            lang_file_path = Path(appdir) / "lang" / f"{language}.json"
+        app_dir = get_app_dir()
+        # Check for AppImage environment variable first (Linux specific)
+        appdir_env = os.environ.get('APPDIR')
+        if appdir_env:
+            lang_file_path = Path(appdir_env) / "lang" / f"{language}.json"
         else:
-            lang_file_path = Path() / "lang" / f"{language}.json"
+            # For Windows, macOS bundle and standard Linux build
+            lang_file_path = app_dir / "lang" / f"{language}.json"
 
     # Handle the case where lang_file_path could not be determined
     if not lang_file_path or not lang_file_path.exists():

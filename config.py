@@ -22,7 +22,7 @@
 
 
 __author__ = "Laerinok"
-__date__ = "2025-12-27"  # Last update
+__date__ = "2026-01-31"  # Last update
 
 
 # config.py
@@ -58,26 +58,13 @@ MODS_PATHS = {
     "Darwin": Path(HOME_PATH) / 'Library' / 'Application Support' / 'VintagestoryData' / 'Mods'
 }
 
-# Retrieve the application directory from the APPDIR environment variable
-appdir = os.environ.get('APPDIR')
-
-if appdir:
-    APPLICATION_PATH = Path(appdir)
-else:
-    # Case where the application is run outside the AppImage (for development)
-    APPLICATION_PATH = Path.cwd()
+# Retrieve the application directory from the APPDIR environment
+APPLICATION_PATH = utils.get_app_dir()
 
 APP_NAME = "VS_ModsUpdater"
 USER_CONFIG_DIR = Path.home() / ".config" / APP_NAME
 USER_DATA_DIR = Path.home() / ".local" / "share" / APP_NAME
 USER_CACHE_DIR = Path.home() / ".cache" / APP_NAME
-
-# Retrieve the application directory
-appdir = os.environ.get('APPDIR')
-if appdir:
-    APPLICATION_PATH = Path(appdir)
-else:
-    APPLICATION_PATH = Path.cwd()
 
 # Constants for paths
 if SYSTEM == "Windows":
@@ -94,6 +81,8 @@ else:  # Linux or other systems (where AppImage will run)
     MODLIST_FOLDER = USER_DATA_DIR / 'modlist'
 
 LANG_PATH = APPLICATION_PATH / 'lang'
+ASSETS_PATH = APPLICATION_PATH / 'assets'
+FONTS_PATH = APPLICATION_PATH / 'fonts'
 
 # Constants for supported languages
 # The following dictionary defines the languages supported by the application.

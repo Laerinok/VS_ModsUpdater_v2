@@ -17,7 +17,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 __author__ = "Laerinok"
-__date__ = "2025-12-29"  # Last update
+__date__ = "2026-01-31"  # Last update
 
 
 # utils.py
@@ -466,7 +466,7 @@ def get_default_icon_binary():
     """
     Loads and returns the binary data of the default icon ('assets/no_icon.png').
     """
-    default_icon_path = Path(config.APPLICATION_PATH) / 'assets' / 'no_icon.png'
+    default_icon_path = config.ASSETS_PATH / "no_icon.png"
     if default_icon_path.exists():
         with open(default_icon_path, 'rb') as f:
             return f.read()
@@ -624,3 +624,12 @@ def update_mod_and_handle_files(mod, mods_path):
     finally:
         if temp_download_path.exists():
             os.remove(temp_download_path)
+
+
+def get_app_dir():
+    """Determine the base directory of the application."""
+    if getattr(sys, 'frozen', False):
+        # Path to the executable (Windows/Linux/macOS)
+        return Path(sys.executable).parent
+    # If running as a script, use the script's directory
+    return Path(__file__).resolve().parent

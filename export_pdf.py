@@ -29,7 +29,7 @@ Key functionalities include:
 
 """
 __author__ = "Laerinok"
-__date__ = "2025-08-25"  # Last update
+__date__ = "2026-01-31"  # Last update
 
 
 # export_pdf.py
@@ -103,7 +103,7 @@ def create_pdf_with_table(modsdata, pdf_path, args):
                             )
 
     # Add a cyrillic font (for example, DejaVu Sans)
-    font_path = Path(config.APPLICATION_PATH) / 'fonts' / 'NotoSansCJKsc-Regular.ttf'
+    font_path = config.FONTS_PATH / 'NotoSansCJKsc-Regular.ttf'
     pdfmetrics.registerFont(TTFont('NotoSansCJKsc-Regular', font_path))
 
     styles = getSampleStyleSheet()
@@ -119,7 +119,7 @@ def create_pdf_with_table(modsdata, pdf_path, args):
 
     # Add the banner image
     try:
-        path_img = Path(config.APPLICATION_PATH) / 'assets' / 'banner.png'
+        path_img = config.ASSETS_PATH / 'banner.png'
         banner = Image(str(path_img))  # Path to your image
         banner.drawWidth = A4[0] - 40  # Adjust width to fit the page minus margins
         banner.drawHeight = 120  # Adjust height as needed
@@ -132,8 +132,7 @@ def create_pdf_with_table(modsdata, pdf_path, args):
 
     def draw_background(canvas):
         # Path to the background image
-        background_path = Path(
-            config.APPLICATION_PATH) / 'assets' / 'background.jpg'
+        background_path = config.ASSETS_PATH / 'background.jpg'
 
         if background_path.exists():
             try:
