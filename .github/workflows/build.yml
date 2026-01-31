@@ -1,7 +1,10 @@
-name: Build Binaries
+name: Build and Release
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
 
 jobs:
   build_windows:
@@ -28,7 +31,7 @@ jobs:
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
         with:
-          name: VS_ModsUpdater.v${{ env.APP_VERSION }}_Windows
+          name: artifact-windows
           path: VS_ModsUpdater.v${{ env.APP_VERSION }}_Windows.zip
 
   build_linux:
@@ -56,17 +59,18 @@ jobs:
       - name: Upload Linux artifact
         uses: actions/upload-artifact@v4
         with:
-          name: VS_ModsUpdater.v${{ env.APP_VERSION }}_Linux
+          name: artifact-linux
           path: dist/VS_ModsUpdater.v${{ env.APP_VERSION }}_Linux.AppImage
 
   build_macos:
-    name: Build DMG (macOS)
-    runs-on: macos-latest
+    name: Build DMG (macOS Intel/Rosetta Compatible)
+    runs-on: macos-13 
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          architecture: x64 
       - name: Install create-dmg
         run: brew install create-dmg
       - name: Get App Version
@@ -79,12 +83,38 @@ jobs:
           pip install -r requirements.txt
       - name: Build the DMG
         run: python setup.py bdist_dmg
-      - name: List build directories for debugging
-        run: ls -R build
       - name: Rename DMG with version
-        run: mv build/*.dmg build/VS_ModsUpdater.v${{ env.APP_VERSION }}_macOS.dmg
+        run: mv build/*.dmg build/VS_ModsUpdater.v${{ env.APP_VERSION }}_macOS_Intel.dmg
       - name: Upload macOS artifact
         uses: actions/upload-artifact@v4
         with:
-          name: VS_ModsUpdater.v${{ env.APP_VERSION }}_macOS
-          path: build/VS_ModsUpdater.v${{ env.APP_VERSION }}_macOS.dmg
+          name: artifact-macos
+          path: build/VS_ModsUpdater.v${{ env.APP_VERSION }}_macOS_Intel.dmg
+
+  release:
+    name: Create Release
+    needs: [build_windows, build_linux, build_macos]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get App Version
+        id: get_version
+        run: echo "APP_VERSION=$(python -c 'import app_version; print(app_version.__version__)')" >> $GITHUB_ENV
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: List downloaded files for debugging
+        run: ls -R artifacts
+      - name: Create Release and Upload Assets
+        uses: softprops/action-gh-release@v1
+        with:
+          name: "Version ${{ env.APP_VERSION }}"
+          tag_name: "v${{ env.APP_VERSION }}"
+          body_path: "changelog.txt"
+          files: |
+            artifacts/artifact-windows/VS_ModsUpdater.v${{ env.APP_VERSION }}_Windows.zip
+            artifacts/artifact-linux/*
+            artifacts/artifact-macos/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
