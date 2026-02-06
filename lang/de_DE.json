@@ -27,7 +27,7 @@
     "config_ask_mod_directory": "Geben Sie den Pfad zu Ihrem Mods-Ordner ein. Lassen Sie ihn leer für den Standardpfad",
     "config_configuration_migrated": "Konfiguration erfolgreich zu Version {EXPECTED_VERSION} migriert.",
     "config_invalid_directory": "Fehler: {mods_directory} ist kein gültiges Verzeichnis.",
-    "config_game_version_prompt": "Updates bis zur Spielversion blockieren (1.2.3, leer = keine Blockierung)",
+    "config_game_version_prompt": "Updates bis zur Spielversion blockieren (1.2.3, leer = neueste stabile Version)",
     "config_invalid_game_version": "Fehler: Bitte geben Sie eine gültige Version im Format Hauptversion.Nebenversion.Patch an (z.B. 1.20.5).",
     "config_choose_update_mode": "Update-Modus wählen (manuell/auto)",
     "config_choose_update_mode_auto": "auto",

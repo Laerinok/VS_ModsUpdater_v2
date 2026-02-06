@@ -27,7 +27,7 @@
     "config_ask_mod_directory": "Inserisci il percorso della tua cartella dei mod. Lascia vuoto per il percorso predefinito",
     "config_configuration_migrated": "Configurazione migrata con successo alla versione {EXPECTED_VERSION}.",
     "config_invalid_directory": "Errore: {mods_directory} non è una directory valida.",
-    "config_game_version_prompt": "Blocca gli aggiornamenti fino alla versione del gioco (1.2.3, vuoto = nessun blocco)",
+    "config_game_version_prompt": "Blocca gli aggiornamenti fino alla versione del gioco (1.2.3, vuoto = ultima versione stabile)",
     "config_invalid_game_version": "Errore: Si prega di fornire una versione valida nel formato maggiore.minore.patch (ad esempio, 1.20.5).",
     "config_choose_update_mode": "Scegli la modalità di aggiornamento (manuale/auto)",
     "config_choose_update_mode_auto": "auto",

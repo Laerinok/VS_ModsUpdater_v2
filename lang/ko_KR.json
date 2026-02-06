@@ -28,7 +28,7 @@
     "config_ask_mod_directory": "모드 폴더의 경로를 입력하세요. 기본 경로를 사용하려면 비워두세요.",
     "config_configuration_migrated": "버전 {EXPECTED_VERSION}으로 구성을 성공적으로 이식했습니다.",
     "config_invalid_directory": "에러: {mods_directory} 가 유효한 경로가 아닙니다.",
-    "config_game_version_prompt": "업데이트를 차단할 게임 버전(1.2.3, blank = no blocking): ",
+    "config_game_version_prompt": "업데이트를 차단할 게임 버전(1.2.3, 비워두면 최신 안정 버전): ",
     "config_invalid_game_version": "에러: major.minor.patch 형식의 유효한 버전을 제공해 주세요 (예시, 1.20.5).",
     "config_choose_update_mode": "업데이트 모드 선택 (수동/자동)",
     "config_choose_update_mode_auto": "자동",

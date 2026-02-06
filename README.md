@@ -82,7 +82,7 @@ log_level = INFO
 
 ```ini
 [Options]
-exclude_prerelease_mods = false
+exclude_prerelease_mods = true
 auto_update = true
 max_workers = 4
 timeout = 10

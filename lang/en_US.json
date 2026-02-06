@@ -27,7 +27,7 @@
     "config_ask_mod_directory": "Enter the path to your mods folder. Leave blank for default path",
     "config_configuration_migrated": "Configuration migrated successfully to version {EXPECTED_VERSION}.",
     "config_invalid_directory": "Error: {mods_directory} is not a valid directory.",
-    "config_game_version_prompt": "Block updates up to game version (1.2.3, blank = no blocking): ",
+    "config_game_version_prompt": "Block updates up to game version (1.2.3, blank = latest stable version): ",
     "config_invalid_game_version": "Error: Please provide a valid version in the format major.minor.patch (e.g., 1.20.5).",
     "config_choose_update_mode": "Choose update mode (1: Manual / 2: Auto)",
     "config_choose_update_mode_auto": "auto",

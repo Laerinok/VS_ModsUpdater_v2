@@ -366,14 +366,57 @@ def complete_version(version_string):
 
 
 # Retrieve the last game version
-def get_latest_game_version(url_api='https://mods.vintagestory.at/api'):
+def get_latest_game_version(url_api='https://mods.vintagestory.at/api', stable_only=False):
+    """
+    Retrieves the latest game version from the API.
+    
+    Args:
+        url_api (str): The base URL for the API.
+        stable_only (bool): If True, returns the latest stable version (excludes pre-releases/rc).
+                            If False, returns the absolute latest version.
+    """
     gameversions_api_url = f'{url_api}/gameversions'
     response = client.get(gameversions_api_url)
     response.raise_for_status()  # Checks that the request was successful (status code 200)
     gameversion_data = response.json()  # Retrieves JSON content
     logging.info(f"Game version data retrieved.")
-    # Retrieve the latest version
-    return gameversion_data['gameversions'][-1]['name']
+    
+    versions_data = gameversion_data.get('gameversions', [])
+    if not versions_data:
+        return None
+
+    # Parse versions into (name, VersionObject) tuples
+    valid_versions = []
+    for v_data in versions_data:
+        name = v_data.get('name')
+        if not name:
+            continue
+        try:
+            # Clean up name if necessary (e.g. remove 'v' prefix if present, though Version handles it)
+            ver_obj = Version(name)
+            valid_versions.append((name, ver_obj))
+        except InvalidVersion:
+            logging.debug(f"Skipping invalid version string from API: {name}")
+            continue
+
+    if not valid_versions:
+        logging.warning("No valid version strings found in API response.")
+        return None
+
+    if stable_only:
+        # Filter out prereleases using the library's property
+        stable_versions = [v for v in valid_versions if not v[1].is_prerelease]
+        
+        if stable_versions:
+            # Return the name of the highest version
+            return max(stable_versions, key=lambda x: x[1])[0]
+        else:
+            logging.warning("No stable version found, falling back to latest available version.")
+            # Fallback to the absolute latest if no stable version exists
+            return max(valid_versions, key=lambda x: x[1])[0]
+    else:
+        # Return the absolute latest version
+        return max(valid_versions, key=lambda x: x[1])[0]
 
 
 def extract_filename_from_url(url):

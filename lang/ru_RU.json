@@ -28,7 +28,7 @@
     "config_ask_mod_directory": "Введите путь к папке с модами. Оставьте пустым для пути по умолчанию",
     "config_configuration_migrated": "Конфигурация успешно перенесена в версию {EXPECTED_VERSION}.",
     "config_invalid_directory": "Ошибка: {mods_directory} не является действительным каталогом.",
-    "config_game_version_prompt": "Блокировать обновления до версии игры (1.2.3, пусто = без блокировки)",
+    "config_game_version_prompt": "Блокировать обновления до версии игры (1.2.3, пусто = последняя стабильная версия)",
     "config_invalid_game_version": "Ошибка: Пожалуйста, укажите действительную версию в формате major.minor.patch (например, 1.20.5).",
     "config_choose_update_mode": "Выберите режим обновления (1: вручную / 2: автоматически)",
     "config_choose_update_mode_auto": "автоматически",

@@ -27,7 +27,7 @@
     "config_ask_mod_directory": "Введіть шлях до папки з модами. Залиште порожнім для шляху за замовчуванням",
     "config_configuration_migrated": "Конфігурацію успішно перенесено до версії {EXPECTED_VERSION}.",
     "config_invalid_directory": "Помилка: {mods_directory} не є дійсним каталогом.",
-    "config_game_version_prompt": "Блокувати оновлення до версії гри (1.2.3, порожньо = без блокування)",
+    "config_game_version_prompt": "Блокувати оновлення до версії гри (1.2.3, порожньо = остання стабільна версія)",
     "config_invalid_game_version": "Помилка: Будь ласка, введіть дійсну версію у форматі major.minor.patch (наприклад, 1.20.5).",
     "config_choose_update_mode": "Виберіть режим оновлення (вручну/автоматично)",
     "config_choose_update_mode_auto": "автоматично",
@@ -48,7 +48,7 @@
     "fetch_mod_info_fetching_mod_info_name": "Отримання інформації про моди",
     "fetch_mod_info_exclusion_reason_api_failure": "Дані API недоступні. Можливо, мод було видалено або перенесено.",
 
-    "auto_file_size_unknown": "Попередження: Розмір файлу невідомий або нульовий. Завантаження може завершитися некоректно.[/bold indian_red1]",
+    "auto_file_size_unknown": "Попередження: Розмір файлу невідомий або нульовий. Завантаження може завершиться некорректно.[/bold indian_red1]",
     "auto_downloading_mods": "Завантаження модів...",
     "auto_downloading_mod_name": "Завантаження",
     "auto_mods_updated_resume": "Наступні моди було оновлено:",

@@ -2,10 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.5.1] - 2026-01-31
+## [2.6.0] - 2026-02-06
+
+### Added
+- **Config**: Added `latest_stable_version` as a valid value for `user_game_version`. This is now the default setting.
+- **Config**: Added automatic migration logic to update existing configurations with empty or "None" game versions to `latest_stable_version`.
+
+### Changed
+- **Config**: The default value for `user_game_version` is now `latest_stable_version` instead of `latest_version`. This ensures that by default, the updater will ignore unstable game versions (pre-releases, release candidates) to protect users from incompatible mod updates.
+- **Core**: Updated `utils.get_latest_game_version` to support filtering for stable versions only.
+- **Build**: Pinned dependencies versions in `requirements.txt` to ensure build stability and reproducibility.
 
 ### Fixed
-- **Core:** fix(core): implement robust path resolution for assets and translations (macOS)
+- **Core**: Implemented robust path resolution for assets and translations on macOS.
 
 ## [2.5.0] - 2026-01-31
 

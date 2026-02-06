@@ -28,7 +28,7 @@
     "config_ask_mod_directory": "Modフォルダへのパスを入力してください。デフォルトパスの場合は空白のままにしてください",
     "config_configuration_migrated": "構成はバージョン{EXPECTED_VERSION}に正常に移行されました。",
     "config_invalid_directory": "エラー：{mods_directory}は有効なディレクトリではありません。",
-    "config_game_version_prompt": "ゲームバージョンまでのアップデートをブロックします（1.2.3、空白の場合はブロックなし）",
+    "config_game_version_prompt": "ゲームバージョンまでのアップデートをブロックします（1.2.3、空白の場合は最新の安定版）",
     "config_invalid_game_version": "エラー：major.minor.patch（例：1.20.5）の形式で有効なバージョンを入力してください。",
     "config_choose_update_mode": "アップデートモードを選択してください（手動/自動）",
     "config_choose_update_mode_auto": "自動",

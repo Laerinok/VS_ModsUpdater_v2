@@ -27,7 +27,7 @@
     "config_ask_mod_directory": "Podaj ścieżkę do folderu modów. Pozostaw puste dla domyślnej ścieżki",
     "config_configuration_migrated": "Konfiguracja pomyślnie przeniesiona do wersji {EXPECTED_VERSION}.",
     "config_invalid_directory": "Błąd: {mods_directory} nie jest prawidłowym katalogiem.",
-    "config_game_version_prompt": "Blokuj aktualizacje do wersji gry (1.2.3, puste = brak blokady): ",
+    "config_game_version_prompt": "Blokuj aktualizacje do wersji gry (1.2.3, puste = najnowsza stabilna wersja): ",
     "config_invalid_game_version": "Błąd: Podaj poprawną wersję w formacie major.minor.patch (np. 1.20.5).",
     "config_choose_update_mode": "Wybierz tryb aktualizacji (manual/auto)",
     "config_choose_update_mode_auto": "auto",

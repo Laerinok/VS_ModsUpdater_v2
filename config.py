@@ -139,7 +139,7 @@ DEFAULT_CONFIG = {
     "Backup_Mods": {"backup_folder": "backup_mods", "max_backups": str(3), "modlist_folder": "modlist"},
     "ModsPath": {"path": MODS_PATHS[SYSTEM]},
     "Language": {"language": DEFAULT_LANGUAGE},
-    "Game_Version": {"user_game_version": "latest_version"},
+    "Game_Version": {"user_game_version": "latest_stable_version"},
     "Mod_Exclusion": {'mods': ""}
 }
 
@@ -266,7 +266,7 @@ def migrate_config(old_config):
         user_game_version = old_config["Game_Version_max"].get("version")
         user_game_version = None if str(
             user_game_version) == "100.0.0" else user_game_version
-        new_config["Game_Version"]["user_game_version"] = user_game_version or 'latest_version'
+        new_config["Game_Version"]["user_game_version"] = user_game_version or 'latest_stable_version'
         logging.debug("Migrated Game_Version_max to user_game_version: %s",
                       user_game_version)
 
@@ -410,14 +410,14 @@ def load_config():
 
         # Explicitly handle old configurations with "None" or empty values
         if user_game_version in ["None", ""]:
-            user_game_version = "latest_version"
+            user_game_version = "latest_stable_version"
             global_cache.config_cache.setdefault("Game_Version", {})[
-                "user_game_version"] = "latest_version"
+                "user_game_version"] = "latest_stable_version"
             logging.info(
-                "Detected old game version setting. Updated to 'latest_version'.")
+                "Detected old game version setting. Updated to 'latest_stable_version'.")
 
         if user_game_version == 'latest_version':
-            latest_game_version = utils.get_latest_game_version()
+            latest_game_version = utils.get_latest_game_version(stable_only=False)
             if latest_game_version:
                 global_cache.config_cache.setdefault("Game_Version", {})[
                     "user_game_version"] = latest_game_version
@@ -426,6 +426,16 @@ def load_config():
             else:
                 logging.warning(
                     "Unable to retrieve the latest game version. The version is left empty.")
+        elif user_game_version == 'latest_stable_version':
+            latest_stable_version = utils.get_latest_game_version(stable_only=True)
+            if latest_stable_version:
+                global_cache.config_cache.setdefault("Game_Version", {})[
+                    "user_game_version"] = latest_stable_version
+                logging.info(
+                    f"Game version set to the latest stable version: {latest_stable_version}")
+            else:
+                logging.warning(
+                    "Unable to retrieve the latest stable game version. The version is left empty.")
 
     except Exception as e:
         logging.error(f"Error occurred while loading the config.ini file: {e}")
@@ -498,7 +508,15 @@ def ask_game_version():
 
         # If the user left the input empty, it will use the last game version
         if user_game_version == "":
-            user_game_version = "latest_version"
+            user_game_version = "latest_stable_version"
+            return user_game_version
+        
+        # Allow the user to explicitly type 'latest_stable_version'
+        if user_game_version == "latest_stable_version":
+            return user_game_version
+        
+        # Allow the user to explicitly type 'latest_version'
+        if user_game_version == "latest_version":
             return user_game_version
 
         # If valid, complete and return the version
