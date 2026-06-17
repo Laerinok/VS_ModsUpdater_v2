@@ -20,10 +20,10 @@
     "main_show_changelog_prompt": "您想查看更新日志吗？",
     "main_changelog_title": "更新日志",
     "main_reason_label_unknown": "未知原因",
-
     "main_incompatible_mods_found_without_update": "发现了没有可用更新的不兼容模组：",
     "main_aborting_due_to_incompatibility": "由于不兼容，正在中止更新。",
     "main_continue_anyway_prompt": "您想继续吗？",
+    "main_cache_folder_path": "缓存位置：",
 
     "config_ask_mod_directory": "输入您的模组文件夹的路径。留空使用默认路径",
     "config_configuration_migrated": "配置已成功迁移到版本{EXPECTED_VERSION}。",
@@ -39,9 +39,12 @@
     "config_incompatibility_abort": "中止更新过程",
     "config_incompatibility_ignore": "忽略并继续",
     "config_choose_behavior_prompt": "请输入您的选择",
+    "config_ask_cache_guessed": "我们检测到您的缓存文件夹位于：{guessed_cache}。是否正确？",
+    "config_ask_cache_directory": "请输入您的 Vintage Story 缓存文件夹路径：",
+    "config_invalid_cache_directory": "目录“{cache_directory}”无效或不存在。请重试。",
 
     "fetch_changelog_unknown_version": "未知版本",
-    
+
     "fetch_mod_info_error_mods_path_missing": "配置中缺少ModsPath或“path”键。",
     "fetch_mod_info_error_mods_path_not_found": "找不到模组路径[dark_goldenrod]{mods_path}[/dark_goldenrod]。",
     "fetch_mod_info_scanning_mods": "正在扫描模组...",
@@ -53,13 +56,13 @@
     "auto_downloading_mods": "正在下载模组...",
     "auto_downloading_mod_name": "正在下载",
     "auto_mods_updated_resume": "以下模组已更新：",
-    
+
     "manual_download_mod_prompt": "是否将 {0} 更新至版本 {1}？",
     "manual_skipping_download": "跳过下载",
     "manual_downloading_mod": "正在下载",
     "manual_download_completed": "下载完成",
     "manual_download_error": "下载错误",
-    
+
     "utils_warning_mods_directory_empty": "[indian_red1]警告：模组目录[magenta]{mods_dir_path}[/magenta]为空！[/indian_red1]\n请添加您的模组文件。",
     "utils_warning_directory_in_mods_folder": "[indian_red1]警告：在模组文件夹中找到目录：{item_name}。[/indian_red1]\n请确保您拥有.zip文件，而不是文件夹。",
     "utils_no_valid_mod_files_found": "在模组文件夹中未找到有效的模组文件。",
@@ -73,7 +76,7 @@
     "export_pdf_generating_file": "正在生成PDF...",
     "export_pdf_permission_error": "无法访问文件“{pdf_path}”。该文件可能已被打开或正被另一个进程使用。\n请关闭所有使用此文件的应用程序，然后重试。",
     "export_pdf_installed_mods": "已安装模组",
-    
+
     "error": "错误：",
     "yes": "是",
     "no": "否",
@@ -93,5 +96,9 @@
     "dry_run_report_installed": "已安装",
     "dry_run_report_available": "可用",
     "dry_run_report_changelog": "更新日志",
-    "dry_run_report_changelog_unavailable": "更新日志：不可用。"
+    "dry_run_report_changelog_unavailable": "更新日志：不可用。",
+
+    "utils_clearing_cache": "正在清理 Vintage Story 缓存...",
+    "utils_cache_cleared_success": "缓存文件夹清理成功。",
+    "utils_cache_cleared_with_errors": "缓存已清理，但某些文件无法删除。"
 }

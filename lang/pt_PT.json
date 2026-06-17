@@ -20,10 +20,10 @@
     "main_show_changelog_prompt": "Deseja ver o registo de alterações?",
     "main_changelog_title": "Registo de alterações",
     "main_reason_label_unknown": "Razão desconhecida",
-
     "main_incompatible_mods_found_without_update": "Mods incompatíveis encontrados sem atualização disponível:",
-    "main_aborting_due_to_incompatibility": "Abandonando a atualização devido à incompatibilidade.",
+    "main_aborting_due_to_incompatibility": "Abandonando la atualização devido à incompatibilidade.",
     "main_continue_anyway_prompt": "Continuar mesmo assim?",
+    "main_cache_folder_path": "Localização da cache: ",
 
     "config_ask_mod_directory": "Introduza o caminho para a sua pasta de mods. Deixe em branco para o caminho predefinido",
     "config_configuration_migrated": "Configuração migrada com sucesso para a versão {EXPECTED_VERSION}.",
@@ -39,9 +39,12 @@
     "config_incompatibility_abort": "Abortar o processo de atualização",
     "config_incompatibility_ignore": "Ignorar e continuar",
     "config_choose_behavior_prompt": "Insira a sua escolha",
-    
+    "config_ask_cache_guessed": "Detetámos que a sua pasta de cache está em: {guessed_cache}. Está correto?",
+    "config_ask_cache_directory": "Por favor, introduza o caminho para a sua pasta de cache do Vintage Story:",
+    "config_invalid_cache_directory": "O diretório '{cache_directory}' é inválido ou não existe. Por favor, tente novamente.",
+
     "fetch_changelog_unknown_version": "versão desconhecida",
-    
+
     "fetch_mod_info_error_mods_path_missing": "O ModsPath ou a chave 'path' está em falta na configuração.",
     "fetch_mod_info_error_mods_path_not_found": "O caminho das mods [dark_goldenrod]{mods_path}[/dark_goldenrod] não foi encontrado.",
     "fetch_mod_info_scanning_mods": "A verificar mods...",
@@ -53,13 +56,13 @@
     "auto_downloading_mods": "A descarregar mods...",
     "auto_downloading_mod_name": "A descarregar",
     "auto_mods_updated_resume": "As seguintes mods foram atualizadas:",
-    
+
     "manual_download_mod_prompt": "Atualizar {0} para a versão {1}?",
     "manual_skipping_download": "A ignorar o download para",
     "manual_downloading_mod": "A descarregar",
     "manual_download_completed": "Download concluído para",
     "manual_download_error": "Erro ao descarregar",
-    
+
     "utils_warning_mods_directory_empty": "[indian_red1]Aviso: O diretório de Mods [magenta]{mods_dir_path}[/magenta] está vazio![/indian_red1]\nPor favor, adicione os seus ficheiros de mods.",
     "utils_warning_directory_in_mods_folder": "[indian_red1]Aviso: Diretório encontrado na pasta de Mods: {item_name}.[/indian_red1]\nCertifique-se de que tem ficheiros .zip, não pastas.",
     "utils_no_valid_mod_files_found": "Nenhum ficheiro de mod válido encontrado na pasta de Mods.",
@@ -73,7 +76,7 @@
     "export_pdf_generating_file": "A gerar PDF...",
     "export_pdf_permission_error": "Não é possível aceder ao ficheiro '{pdf_path}'. O ficheiro pode estar aberto ou em uso por outro processo.\nFeche todas as aplicações que estão a usar este ficheiro e tente novamente.",
     "export_pdf_installed_mods": "mods instaladas",
-    
+
     "error": "Erro:",
     "yes": "sim",
     "no": "não",
@@ -93,5 +96,9 @@
     "dry_run_report_installed": "Instalada",
     "dry_run_report_available": "Disponível",
     "dry_run_report_changelog": "Registo de alterações",
-    "dry_run_report_changelog_unavailable": "Registo de alterações: Não disponível."
+    "dry_run_report_changelog_unavailable": "Registo de alterações: Não disponível.",
+
+    "utils_clearing_cache": "A limpar a cache do Vintage Story...",
+    "utils_cache_cleared_success": "Diretório de cache limpo com sucesso.",
+    "utils_cache_cleared_with_errors": "Cache limpa, mas alguns ficheiros não puderam ser removidos."
 }

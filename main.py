@@ -91,6 +91,7 @@ def initialize_config():
         language_cache = lang.load_translations(lang_path)
 
         mods_dir = config.ask_mods_directory()
+        cache_dir = config.ask_cache_directory(mods_dir)  # <-- AJOUT
         user_game_version = config.ask_game_version()
         auto_update = config.ask_auto_update()
         behavior_choice = config.ask_incompatibility_behavior()
@@ -99,6 +100,8 @@ def initialize_config():
             f"\n- {language_cache['main_language_set_to']}[dodger_blue1]{language[1]}[/dodger_blue1]")
         print(
             f"- {language_cache['main_mods_folder_path']}[dodger_blue1]{mods_dir}[/dodger_blue1]")
+        print(
+            f"- {language_cache['main_cache_folder_path']}[dodger_blue1]{cache_dir}[/dodger_blue1]")  # <-- AJOUT
         print(
             f"- {language_cache['main_game_version']}[dodger_blue1]{user_game_version}[/dodger_blue1]")
         auto_update_choice = lang.get_translation(
@@ -117,8 +120,8 @@ def initialize_config():
         print(
             f"- {language_cache['config_incompatibility_prompt']}: [dodger_blue1]{behavior_summary}[/dodger_blue1]")
 
-        # Create config.ini file
-        config.create_config(language, mods_dir, user_game_version, auto_update, behavior_choice)
+        # Create config.ini file (Ajout de cache_dir en 3e paramètre)
+        config.create_config(language, mods_dir, cache_dir, user_game_version, auto_update, behavior_choice)
         print(f"\n{language_cache['main_config_file_created']}")
 
         # Ask if we continue or quit to modify config.ini (e.g., to add mods to the exception list.)
@@ -334,6 +337,9 @@ if __name__ == "__main__":
         else:
             # Manual update mods
             mods_manual_update.perform_manual_updates(mods_to_update_list)
+        # Clear Vintage Story cache
+        utils.clear_vintagestory_cache()
+
     else:
         print(lang.get_translation("main_mods_no_update"))
         logging.info("No updates needed for mods.")

@@ -7,6 +7,10 @@ All notable changes to this project will be documented in this file.
 ### Added
 - **Config**: Added `latest_stable_version` as a valid value for `user_game_version`. This is now the default setting.
 - **Config**: Added automatic migration logic to update existing configurations with empty or "None" game versions to `latest_stable_version`.
+- **Config**: Added `clear_cache_after_update` and `cache_path` settings to customize cache clearing behavior.
+- **Config**: Implemented smart cache directory detection and interactive validation during first-run setup.
+- **Core**: Added an option to automatically clear the game cache after mod updates to prevent loading issues.
+- **Lang**: Added localization for cache-clearing prompts and log messages across all supported languages.
 
 ### Changed
 - **Changed**: Added the mod name and target version directly into the manual download prompt to avoid scrolling through long changelogs.

@@ -669,6 +669,58 @@ def update_mod_and_handle_files(mod, mods_path):
             os.remove(temp_download_path)
 
 
+def clear_vintagestory_cache():
+    """
+    Clears the Vintage Story cache directory if enabled in configuration.
+    """
+    options = global_cache.config_cache.get("Options", {})
+    clear_enabled = options.get("clear_cache_after_update", "true").lower() == "true"
+
+    if not clear_enabled:
+        logging.info("Cache clearing is disabled in configuration.")
+        return
+
+    cache_path_str = global_cache.config_cache.get("ModsPath", {}).get("cache_path")
+    if not cache_path_str:
+        logging.warning("Cache path not specified in configuration.")
+        return
+
+    cache_path = Path(cache_path_str).resolve()
+    if not cache_path.exists():
+        logging.info(f"Cache directory does not exist, no need to clear: {cache_path}")
+        return
+
+    if not cache_path.is_dir():
+        logging.warning(f"Specified cache path is not a directory: {cache_path}")
+        return
+
+    # Fallback values if localization keys are missing
+    msg_clearing = lang.get_translation("utils_clearing_cache") or "Clearing Vintage Story cache..."
+    msg_success = lang.get_translation("utils_cache_cleared_success") or "Cache cleared successfully."
+    msg_errors = lang.get_translation("utils_cache_cleared_with_errors") or "Cache cleared, but some files could not be removed."
+
+    print(f"\n[dodger_blue1]{msg_clearing}[/dodger_blue1]")
+    logging.info(f"Clearing Vintage Story cache directory: {cache_path}")
+
+    success = True
+    for item in cache_path.iterdir():
+        try:
+            if item.is_file() or item.is_symlink():
+                item.unlink()
+            elif item.is_dir():
+                shutil.rmtree(item)
+        except Exception as e:
+            logging.error(f"Failed to delete {item.name} from cache: {e}")
+            success = False
+
+    if success:
+        print(f"[green]{msg_success}[/green]")
+        logging.info("Cache directory cleared successfully.")
+    else:
+        print(f"[orange1]{msg_errors}[/orange1]")
+        logging.warning("Cache directory partially cleared.")
+
+
 def get_app_dir():
     """Determine the base directory of the application."""
     if getattr(sys, 'frozen', False):

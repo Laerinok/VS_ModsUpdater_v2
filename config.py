@@ -58,6 +58,12 @@ MODS_PATHS = {
     "Darwin": Path(HOME_PATH) / 'Library' / 'Application Support' / 'VintagestoryData' / 'Mods'
 }
 
+CACHE_PATHS = {
+    "Windows": Path(HOME_PATH) / 'AppData' / 'Roaming' / 'VintagestoryData' / 'Cache',
+    "Linux": Path(XDG_CONFIG_HOME_PATH) / 'VintagestoryData' / 'Cache',
+    "Darwin": Path(HOME_PATH) / 'Library' / 'Application Support' / 'VintagestoryData' / 'Cache'
+}
+
 # Retrieve the application directory from the APPDIR environment
 APPLICATION_PATH = utils.get_app_dir()
 
@@ -134,10 +140,19 @@ URL_SCRIPT = {
 DEFAULT_CONFIG = {
     "ModsUpdater": {"version": __version__},
     "Logging": {"log_level": "DEBUG"},
-    # Dans DEFAULT_CONFIG
-    "Options": {"exclude_prerelease_mods": "false", "auto_update": "true", "max_workers": str(4), "timeout": str(10), "incompatibility_behavior": "0"},
+    "Options": {
+        "exclude_prerelease_mods": "false",
+        "auto_update": "true",
+        "max_workers": str(4),
+        "timeout": str(10),
+        "incompatibility_behavior": "0",
+        "clear_cache_after_update": "true"
+    },
     "Backup_Mods": {"backup_folder": "backup_mods", "max_backups": str(3), "modlist_folder": "modlist"},
-    "ModsPath": {"path": MODS_PATHS[SYSTEM]},
+    "ModsPath": {
+        "path": MODS_PATHS[SYSTEM],
+        "cache_path": CACHE_PATHS[SYSTEM]
+    },
     "Language": {"language": DEFAULT_LANGUAGE},
     "Game_Version": {"user_game_version": "latest_stable_version"},
     "Mod_Exclusion": {'mods': ""}
@@ -247,11 +262,11 @@ def migrate_config(old_config):
         if section in old_config:
             # Copy existing values while keeping the order from DEFAULT_CONFIG
             for key in default_options.keys():
-                new_config[section][key] = old_config[section].get(key,
-                                                                   default_options[key])
+                # Ensure values are converted to strings for configparser
+                new_config[section][key] = str(old_config[section].get(key, default_options[key]))
         else:
-            # Add missing sections with default values
-            new_config[section] = default_options.copy()
+            # Add missing sections with default values converted to strings
+            new_config[section] = {k: str(v) for k, v in default_options.items()}
 
     # Step 3: Apply specific migration rules
     # - Rename sections/keys if necessary
@@ -297,6 +312,30 @@ def migrate_config(old_config):
         new_config["Logging"]["log_level"] = DEFAULT_CONFIG['Logging']['log_level']
         logging.debug(f"Set log_level to default: {DEFAULT_CONFIG['Logging']['log_level']}")
 
+    # Smart cache path detection based on old mods path
+    old_mods_path_str = ""
+    if "ModsPath" in old_config:
+        old_mods_path_str = old_config["ModsPath"].get("path", "")
+    elif "ModPath" in old_config:
+        old_mods_path_str = old_config["ModPath"].get("path", "")
+
+    if old_mods_path_str:
+        old_mods_path = Path(old_mods_path_str)
+        if old_mods_path.name.lower() == "mods":
+            guessed_cache = old_mods_path.parent / "Cache"
+        else:
+            guessed_cache = CACHE_PATHS[SYSTEM]
+    else:
+        guessed_cache = CACHE_PATHS[SYSTEM]
+
+    new_config["ModsPath"]["cache_path"] = str(guessed_cache)
+
+    # Warn the user if the guessed cache path does not exist
+    if not guessed_cache.exists():
+        logging.warning(f"Guessed cache directory does not exist: {guessed_cache}. Please check 'cache_path' in config.ini.")
+        print(f"[orange1]Warning: The migrated cache directory was not found: {guessed_cache}[/orange1]")
+        print("[orange1]If your cache is located elsewhere, please update 'cache_path' manually in config.ini.[/orange1]\n")
+
     # Step 4: Remove obsolete sections
     for section in list(new_config.keys()):
         if section != "DEFAULT" and section not in DEFAULT_CONFIG:
@@ -320,7 +359,7 @@ def migrate_config(old_config):
         logging.error("Error occurred while writing the migrated config: %s", str(e))
 
 
-def create_config(language, mod_folder, user_game_version, auto_update, behavior_choice):
+def create_config(language, mod_folder, cache_folder, user_game_version, auto_update, behavior_choice):
     """
     Create the config.ini file with default or user-specified values.
     """
@@ -331,6 +370,7 @@ def create_config(language, mod_folder, user_game_version, auto_update, behavior
 
     DEFAULT_CONFIG["Language"]["language"] = language[0]
     DEFAULT_CONFIG["ModsPath"]["path"] = mod_folder
+    DEFAULT_CONFIG["ModsPath"]["cache_path"] = cache_folder  # Set user-verified cache path
     DEFAULT_CONFIG["Game_Version"]["user_game_version"] = user_game_version
     DEFAULT_CONFIG["Options"]["auto_update"] = auto_update
     DEFAULT_CONFIG["Options"]["incompatibility_behavior"] = behavior_choice
@@ -470,6 +510,39 @@ def ask_mods_directory():
             print(lang.get_translation("config_invalid_directory").format(
                 mods_directory=mods_directory))
             logging.warning(f"Invalid directory entered: {mods_directory}")
+
+
+def ask_cache_directory(mods_directory: str) -> str:
+    """
+    Ask the user to verify or choose the cache folder.
+    """
+    mods_path = Path(mods_directory)
+    if mods_path.name.lower() == "mods":
+        guessed_cache = mods_path.parent / "Cache"
+    else:
+        guessed_cache = CACHE_PATHS[SYSTEM]
+
+    prompt_msg = lang.get_translation("config_ask_cache_guessed").format(guessed_cache=guessed_cache)
+    if utils.prompt_yes_no(prompt_msg, default=True):
+        logging.info(f"Using guessed cache directory: {guessed_cache}")
+        return str(guessed_cache)
+
+    while True:
+        cache_directory = utils.Prompt.ask(
+            lang.get_translation("config_ask_cache_directory"),
+            default=str(guessed_cache)
+        )
+
+        if cache_directory == "":
+            return str(guessed_cache)
+
+        cache_path = Path(cache_directory)
+        if cache_path.is_dir():
+            logging.info(f"Using manual cache directory: {cache_directory}")
+            return str(cache_directory)
+        else:
+            print(lang.get_translation("config_invalid_cache_directory").format(cache_directory=cache_directory))
+            logging.warning(f"Invalid cache directory entered: {cache_directory}")
 
 
 def ask_language_choice():

@@ -23,6 +23,7 @@
     "main_incompatible_mods_found_without_update": "Виявлено несумісні моди без доступного оновлення:",
     "main_aborting_due_to_incompatibility": "Переривання оновлення через несумісність.",
     "main_continue_anyway_prompt": "Продовжити все одно?",
+    "main_cache_folder_path": "Розташування кешу: ",
 
     "config_ask_mod_directory": "Введіть шлях до папки з модами. Залиште порожнім для шляху за замовчуванням",
     "config_configuration_migrated": "Конфігурацію успішно перенесено до версії {EXPECTED_VERSION}.",
@@ -38,9 +39,12 @@
     "config_incompatibility_abort": "Перервати процес оновлення",
     "config_incompatibility_ignore": "Ігнорувати та продовжити",
     "config_choose_behavior_prompt": "Введіть ваш вибір",
+    "config_ask_cache_guessed": "Ми визначили, що папка кешу знаходиться за шляхом: {guessed_cache}. Це правильно?",
+    "config_ask_cache_directory": "Будь ласка, введіть шлях до папки кешу Vintage Story:",
+    "config_invalid_cache_directory": "Каталог '{cache_directory}' є недійсним або не існує. Будь ласка, спробуйте ще раз.",
 
     "fetch_changelog_unknown_version": "невідома версія",
-    
+
     "fetch_mod_info_error_mods_path_missing": "У конфігурації відсутній ModsPath або ключ 'path'.",
     "fetch_mod_info_error_mods_path_not_found": "Шлях до модов [dark_goldenrod]{mods_path}[/dark_goldenrod] не знайдено.",
     "fetch_mod_info_scanning_mods": "Сканування модів...",
@@ -52,13 +56,13 @@
     "auto_downloading_mods": "Завантаження модів...",
     "auto_downloading_mod_name": "Завантаження",
     "auto_mods_updated_resume": "Наступні моди було оновлено:",
-    
+
     "manual_download_mod_prompt": "Оновити {0} до версії {1}?",
     "manual_skipping_download": "Пропуск завантаження для",
     "manual_downloading_mod": "Завантаження",
     "manual_download_completed": "Завантаження завершено для",
     "manual_download_error": "Помилка завантаження",
-    
+
     "utils_warning_mods_directory_empty": "[indian_red1]Попередження: Каталог модів [magenta]{mods_dir_path}[/magenta] порожній![/indian_red1]\nБудь ласка, додайте файли модів.",
     "utils_warning_directory_in_mods_folder": "[indian_red1]Попередження: У папці з модами знайдено каталог: {item_name}.[/indian_red1]\nПереконайтеся, що у вас є ZIP-файли, а не папки.",
     "utils_no_valid_mod_files_found": "У папці з модами не знайдено жодного дійсного файлу мода.",
@@ -72,7 +76,7 @@
     "export_pdf_generating_file": "Генерування PDF...",
     "export_pdf_permission_error": "Не вдалося отримати доступ до файлу '{pdf_path}'. Можливо, файл відкрито або використовується іншим процесом.\nЗакрийте всі програми, що використовують цей файл, і спробуйте знову.",
     "export_pdf_installed_mods": "встановлені моди",
-    
+
     "error": "Помилка:",
     "yes": "так",
     "no": "ні",
@@ -92,5 +96,9 @@
     "dry_run_report_installed": "Встановлено",
     "dry_run_report_available": "Доступно",
     "dry_run_report_changelog": "Журнал змін",
-    "dry_run_report_changelog_unavailable": "Журнал змін: недоступний."
+    "dry_run_report_changelog_unavailable": "Журнал змін: недоступний.",
+
+    "utils_clearing_cache": "Очищення кешу Vintage Story...",
+    "utils_cache_cleared_success": "Каталог кешу успішно очищено.",
+    "utils_cache_cleared_with_errors": "Кеш очищено, але деякі файли не вдалося видалити."
 }

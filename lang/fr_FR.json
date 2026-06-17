@@ -23,6 +23,7 @@
     "main_incompatible_mods_found_without_update": "Mods incompatibles trouvés sans mise à jour disponible :",
     "main_aborting_due_to_incompatibility": "Abandon de la mise à jour en raison d'une incompatibilité.",
     "main_continue_anyway_prompt": "Continuer quand même ?",
+    "main_cache_folder_path": "Emplacement du cache : ",
 
     "config_ask_mod_directory": "Entrez le chemin vers votre dossier de mods. Laissez vide pour le chemin par défaut.",
     "config_configuration_migrated": "Mise à jour de la configuration vers la version {EXPECTED_VERSION} réussie.",
@@ -38,9 +39,12 @@
     "config_incompatibility_abort": "Arrêter le processus de mise à jour",
     "config_incompatibility_ignore": "Ignorer et continuer",
     "config_choose_behavior_prompt": "Entrez votre choix",
-    
+    "config_ask_cache_guessed": "Nous avons détecté que votre dossier de cache se trouve ici : {guessed_cache}. Est-ce correct ?",
+    "config_ask_cache_directory": "Veuillez entrer le chemin vers votre dossier de cache Vintage Story :",
+    "config_invalid_cache_directory": "Le dossier '{cache_directory}' est invalide ou n'existe pas. Veuillez réessayer.",
+
     "fetch_changelog_unknown_version": "version inconnue",
-    
+
     "fetch_mod_info_error_mods_path_missing": "La clé ModsPath ou 'path' est manquante dans la configuration.",
     "fetch_mod_info_error_mods_path_not_found": "Le chemin des mods [dark_goldenrod]{mods_path}[/dark_goldenrod] est introuvable.",
     "fetch_mod_info_scanning_mods": "Analyse des mods",
@@ -52,13 +56,13 @@
     "auto_downloading_mods": "Téléchargement des mods",
     "auto_downloading_mod_name": "Téléchargement de",
     "auto_mods_updated_resume": "Les mods suivants ont été mis à jour :",
-    
+
     "manual_download_mod_prompt": "Mettre à jour {0} vers la version {1} ?",
     "manual_skipping_download": "Téléchargement ignoré pour",
     "manual_downloading_mod": "Téléchargement de",
     "manual_download_completed": "Téléchargement terminé pour",
     "manual_download_error": "Erreur lors du téléchargement de",
-    
+
     "utils_warning_mods_directory_empty": "[indian_red1]Attention : Le dossier des mods [magenta]{mods_dir_path}[/magenta] est vide ![/indian_red1]\nVeuillez ajouter vos fichiers de mods.",
     "utils_warning_directory_in_mods_folder": "[indian_red1]Attention : Un dossier trouvé dans le dossier des mods : {item_name}.[/indian_red1] Veuillez vous assurer d'avoir des fichiers .zip, pas des dossiers.",
     "utils_no_valid_mod_files_found": "Aucun fichier de mod valide trouvé dans le dossier des mods.",
@@ -72,7 +76,7 @@
     "export_pdf_generating_file": "Génération du PDF",
     "export_pdf_permission_error": "Impossible d'accéder au fichier '{pdf_path}'. Le fichier est peut-être ouvert ou utilisé par un autre processus.\nVeuillez fermer toutes les applications qui utilisent ce fichier et réessayer",
     "export_pdf_installed_mods": "mods installés",
-    
+
     "error": "Erreur :",
     "yes": "oui",
     "no": "non",
@@ -92,5 +96,9 @@
     "dry_run_report_installed": "Installé",
     "dry_run_report_available": "Disponible",
     "dry_run_report_changelog": "Changelog",
-    "dry_run_report_changelog_unavailable": "Changelog : Non disponible."
+    "dry_run_report_changelog_unavailable": "Changelog : Non disponible.",
+
+    "utils_clearing_cache": "Nettoyage du cache de Vintage Story...",
+    "utils_cache_cleared_success": "Dossier de cache vidé avec succès.",
+    "utils_cache_cleared_with_errors": "Cache vidé, mais certains fichiers n'ont pas pu être supprimés."
 }
