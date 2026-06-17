@@ -70,7 +70,7 @@ The `config.ini` file contains the configuration parameters for the application.
 
 ```ini
 [ModsUpdater]
-version = 2.4.0
+version = 2.6.0
 ```
 * `version`: Current version of the ModsUpdater application (information).
 
@@ -121,11 +121,12 @@ language = en_US
 
 ```ini
 [Game_Version]
-user_game_version = 1.20.5
+user_game_version = latest_stable_version
 ```    
-* `user_game_version`:    Maximum game version target for mod updates.
-  * If you specify a version (for example, 1.20.5), the application will not download mod updates that are only compatible with Vintage Story versions higher than the one specified.
-  * If this option is left empty (``), set to `None`, or set to `latest_version`, the application will download the latest available update for each mod, regardless of the compatible Vintage Story version. Caution: this means you might download mods that are not compatible with your current game version. If you want to stay on a specific Vintage Story version, define the version, but remember to change it when you update the game.
+* `user_game_version`: Target game version for mod updates.
+  * If you specify a specific game version (for example, `1.20.5`), the application will not download mod updates that are only compatible with Vintage Story versions higher than the one specified.
+  * If set to `latest_stable_version` (the default), the application will automatically target the latest stable version of the game, ignoring unstable pre-releases and release candidates.
+  * If set to `latest_version` (or if left empty ``, or set to `None` which are migrated to `latest_stable_version`), the application will target the latest available game version, including unstable versions. Caution: this may result in downloading mods that are incompatible with your current stable game version. If you want to stay on a specific Vintage Story version, define the version, but remember to change it when you update the game.
 
 ```ini
 [Mod_Exclusion]
@@ -190,4 +191,4 @@ Supported Languages:
     简体中文
 
 =============================    
-(Latest update: 2025-12-27 / v2.5.0)
+(Latest update: 2026-02-06 / v2.6.0)
