@@ -54,7 +54,7 @@
     "auto_downloading_mod_name": "ダウンロード",
     "auto_mods_updated_resume": "以下のModがアップデートされました：",
     
-    "manual_download_mod_prompt": "このModをダウンロードしますか？",
+    "manual_download_mod_prompt": "{0}をバージョン{1}にアップデートしますか？",
     "manual_skipping_download": "ダウンロードをスキップ：",
     "manual_downloading_mod": "ダウンロード",
     "manual_download_completed": "ダウンロード完了：",

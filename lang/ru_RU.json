@@ -54,7 +54,7 @@
     "auto_downloading_mod_name": "Загрузка",
     "auto_mods_updated_resume": "Следующие моды были обновлены:",
     
-    "manual_download_mod_prompt": "Загрузить этот мод?",
+    "manual_download_mod_prompt": "Обновить {0} до версии {1}?",
     "manual_skipping_download": "Пропуск загрузки для",
     "manual_downloading_mod": "Загрузка",
     "manual_download_completed": "Загрузка завершена для",

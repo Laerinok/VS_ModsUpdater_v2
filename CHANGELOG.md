@@ -2,13 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.6.0] - 2026-02-06
+## [2.6.0] - 2026-06-17
 
 ### Added
 - **Config**: Added `latest_stable_version` as a valid value for `user_game_version`. This is now the default setting.
 - **Config**: Added automatic migration logic to update existing configurations with empty or "None" game versions to `latest_stable_version`.
 
 ### Changed
+- **Changed**: Added the mod name and target version directly into the manual download prompt to avoid scrolling through long changelogs.
 - **Config**: The default value for `user_game_version` is now `latest_stable_version` instead of `latest_version`. This ensures that by default, the updater will ignore unstable game versions (pre-releases, release candidates) to protect users from incompatible mod updates.
 - **Core**: Updated `utils.get_latest_game_version` to support filtering for stable versions only.
 - **Build**: Pinned dependencies versions in `requirements.txt` to ensure build stability and reproducibility.

@@ -54,7 +54,7 @@
     "auto_downloading_mod_name": "다운로드 중",
     "auto_mods_updated_resume": "다음 모드가 업데이트되었습니다: ",
   
-    "manual_download_mod_prompt": "이 모드를 다운로드 하시겠습니까?",
+    "manual_download_mod_prompt": "{0}을(를) {1} 버전으로 업데이트하시겠습니까?",
     "manual_skipping_download": "다운로드를 넘기는 중",
     "manual_downloading_mod": "다운로딩",
     "manual_download_completed": "다운로드를 완료함",

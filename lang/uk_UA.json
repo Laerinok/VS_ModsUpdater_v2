@@ -53,7 +53,7 @@
     "auto_downloading_mod_name": "Завантаження",
     "auto_mods_updated_resume": "Наступні моди було оновлено:",
     
-    "manual_download_mod_prompt": "Завантажити цей мод?",
+    "manual_download_mod_prompt": "Оновити {0} до версії {1}?",
     "manual_skipping_download": "Пропуск завантаження для",
     "manual_downloading_mod": "Завантаження",
     "manual_download_completed": "Завантаження завершено для",

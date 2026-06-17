@@ -54,7 +54,7 @@
     "auto_downloading_mod_name": "正在下载",
     "auto_mods_updated_resume": "以下模组已更新：",
     
-    "manual_download_mod_prompt": "下载这个模组吗？",
+    "manual_download_mod_prompt": "是否将 {0} 更新至版本 {1}？",
     "manual_skipping_download": "跳过下载",
     "manual_downloading_mod": "正在下载",
     "manual_download_completed": "下载完成",

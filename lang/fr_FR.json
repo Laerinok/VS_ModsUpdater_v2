@@ -53,7 +53,7 @@
     "auto_downloading_mod_name": "Téléchargement de",
     "auto_mods_updated_resume": "Les mods suivants ont été mis à jour :",
     
-    "manual_download_mod_prompt": "Télécharger ce mod ?",
+    "manual_download_mod_prompt": "Mettre à jour {0} vers la version {1} ?",
     "manual_skipping_download": "Téléchargement ignoré pour",
     "manual_downloading_mod": "Téléchargement de",
     "manual_download_completed": "Téléchargement terminé pour",
