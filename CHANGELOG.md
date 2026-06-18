@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - **Config**: Added `clear_cache_after_update` and `cache_path` settings to customize cache clearing behavior.
 - **Config**: Implemented smart cache directory detection and interactive validation during first-run setup.
 - **CLI**: Added smart parsing in `cli.py` to allow specifying simple profile names (e.g., `--config-path server1`) which automatically map to `profiles/server1/config.ini`.
+- **CLI**: Added `--only-modlist` option to generate local modlists (JSON, HTML, PDF).
 - **Core**: Added an option to automatically clear the game cache after mod updates to prevent loading issues.
 - **Lang**: Added localization for cache-clearing prompts, log messages, and dynamic profile migration notices across all supported languages.
 

@@ -35,7 +35,7 @@ Key functionalities include:
 __author__ = "Laerinok"
 __license__ = "GNU GPL v3"
 __description__ = "Mods Updater for Vintage Story"
-__date__ = "2026-06-17"  # Last update
+__date__ = "2026-06-18"  # Last update
 
 # main.py
 
@@ -288,6 +288,46 @@ if __name__ == "__main__":
     # Fetch mods info
     mod_data = fetch_mod_info.scan_and_fetch_mod_info(mods_path)
     excluded_mods = mod_data['excluded_mods']
+
+    # Handle --only-modlist (generate modlists locally and exit immediately)
+    if args.only_modlist:
+        # Generate JSON output of the installed mods data
+        export_json.format_mods_data(global_cache.mods_data['installed_mods'], args)
+
+        # Generate a PDF report of the installed mods
+        export_pdf.generate_pdf(global_cache.mods_data['installed_mods'], args)
+
+        # Generate an HTML report of the installed mods
+        if not args.no_html:
+            export_html.export_mods_to_html()
+
+        # Display excluded mods if any exist
+        if excluded_mods:
+            excluded_title_style = Style(color="dark_goldenrod", bold=True)
+            excluded_mod_style = Style(color="indian_red1")
+            reason_style = Style(color="grey50", italic=True)
+
+            print(Text(f"\n{lang.get_translation('main_excluded_mods_title')}", style=excluded_title_style))
+            for excluded_mod in excluded_mods:
+                mod_name = excluded_mod.get('Name', excluded_mod.get('Filename', 'Unknown name'))
+                reason = excluded_mod.get('Reason')
+                text_to_print = Text()
+                text_to_print.append(f"- {mod_name}", style=excluded_mod_style)
+                if reason:
+                    text_to_print.append(f" ({reason})", style=reason_style)
+                console.print(text_to_print)
+            print()
+
+        # Display logs path
+        log_file_path = global_cache.config_cache.get('LOGS_PATH')
+        if log_file_path:
+            print(f"[dodger_blue1]{lang.get_translation('main_logs_location')}[/dodger_blue1]\n[green]{log_file_path}[/green]\n")
+
+        # Exit program cleanly
+        utils.exit_program(extra_msg="", do_exit=False)
+        if not args.no_pause:
+            input(f"\n{lang.get_translation('main_press_enter_to_exit')}")
+        sys.exit()
 
     # Check for updates and pass the --force-update flag
     mods_update_checker.check_for_mod_updates(args.force_update)
