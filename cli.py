@@ -26,7 +26,7 @@ API calls, downloading files, and any HTTP requests requiring a persistent sessi
 
 
 __author__ = "Laerinok"
-__date__ = "2025-12-27"  # Last update
+__date__ = "2026-06-18"  # Last update
 
 
 # cli.py
@@ -70,20 +70,32 @@ def parse_args():
 
         args.modspath = path_modspath
 
-    # Checking config-path existence (NOUVEAU BLOC)
-    if args.config_path:
-        path_config = Path(args.config_path).resolve()
-        # We check if the parent directory exists to allow creating a new config file
-        if not path_config.parent.exists():
-            print(
-                f"Error: The directory for the configuration file '{path_config.parent}' does not exist.")
-            sys.exit(1)
+        # Check config-path existence
+        if args.config_path:
+            path_config = Path(args.config_path)
 
-        if path_config.exists() and not path_config.is_file():
-            print(f"Error: '{args.config_path}' is a directory, not a file.")
-            sys.exit(1)
+            # If only a profile name is provided, locate it in the standard profiles directory
+            if len(path_config.parts) == 1:
+                from config import PROFILES_ROOT
+                if not path_config.suffix:
+                    path_config = PROFILES_ROOT / path_config / 'config.ini'
+                else:
+                    path_config = PROFILES_ROOT / path_config
+            else:
+                path_config = path_config.resolve()
 
-        args.config_path = path_config
+            # Ensure the parent directory exists
+            try:
+                path_config.parent.mkdir(parents=True, exist_ok=True)
+            except Exception as e:
+                print(f"Error: Could not create directory '{path_config.parent}': {e}")
+                sys.exit(1)
+
+            if path_config.exists() and not path_config.is_file():
+                print(f"Error: '{args.config_path}' is a directory, not a file.")
+                sys.exit(1)
+
+            args.config_path = path_config
 
     # Checking max-workers
     if args.max_workers is not None:

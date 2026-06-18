@@ -42,6 +42,7 @@
     "config_ask_cache_guessed": "我们检测到您的缓存文件夹位于：{guessed_cache}。是否正确？",
     "config_ask_cache_directory": "请输入您的 Vintage Story 缓存文件夹路径：",
     "config_invalid_cache_directory": "目录“{cache_directory}”无效或不存在。请重试。",
+    "config_location_migrated": "提示：为了更好地进行组织，您的配置已迁移至 '{new_path}'。",
 
     "fetch_changelog_unknown_version": "未知版本",
 

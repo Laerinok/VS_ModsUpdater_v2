@@ -42,6 +42,7 @@
     "config_ask_cache_guessed": "Hemos sugerido que su directorio de caché está en: {guessed_cache}. ¿Es correcto?",
     "config_ask_cache_directory": "Por favor, introduzca la ruta a su directorio de caché de Vintage Story:",
     "config_invalid_cache_directory": "El directorio '{cache_directory}' no es válido o no existe. Por favor, inténtelo de nuevo.",
+    "config_location_migrated": "Aviso: Su configuración se ha migrado a '{new_path}' para una mejor organización.",
 
     "fetch_changelog_unknown_version": "versión desconocida",
 

@@ -42,6 +42,7 @@
     "config_ask_cache_guessed": "キャッシュディレクトリはここに自動検出されました：{guessed_cache}。これでよろしいですか？",
     "config_ask_cache_directory": "Vintage Storyのキャッシュディレクトリのパスを入力してください：",
     "config_invalid_cache_directory": "ディレクトリ '{cache_directory}' は無効か、存在しません。もう一度お試しください。",
+    "config_location_migrated": "通知：整理しやすくするため、設定は '{new_path}' に移行されました。",
 
     "fetch_changelog_unknown_version": "不明なバージョン",
 

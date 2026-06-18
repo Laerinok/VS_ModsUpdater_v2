@@ -42,6 +42,7 @@
     "config_ask_cache_guessed": "캐시 폴더 경로를 다음으로 감지했습니다: {guessed_cache}. 맞습니까?",
     "config_ask_cache_directory": "빈티지 스토리 캐시 폴더의 경로를 입력해 주세요:",
     "config_invalid_cache_directory": "{cache_directory} 경로는 유효하지 않거나 존재하지 않습니다. 다시 시도해 주세요.",
+    "config_location_migrated": "알림: 더 나은 구성을 위해 설정이 '{new_path}'(으)로 마이그레이션되었습니다.",
 
     "fetch_changelog_unknown_version": "알 수 없는 버전",
 

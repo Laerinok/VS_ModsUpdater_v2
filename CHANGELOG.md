@@ -2,17 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.6.0] - 2026-06-17
+## [2.6.0] - 2026-06-18
 
 ### Added
+- **Config**: Added a structured profile folder system (`profiles/{profile_name}/`) to group and isolate configuration, logs, modlists, backups, and temporary files.
+- **Config**: Added self-migrating logic to seamlessly move legacy files (`config.ini`, `config.old`) and legacy directories (`logs/`, `backup_mods/`, `modlist/`, `temp/`) to the new default profile.
 - **Config**: Added `latest_stable_version` as a valid value for `user_game_version`. This is now the default setting.
 - **Config**: Added automatic migration logic to update existing configurations with empty or "None" game versions to `latest_stable_version`.
 - **Config**: Added `clear_cache_after_update` and `cache_path` settings to customize cache clearing behavior.
 - **Config**: Implemented smart cache directory detection and interactive validation during first-run setup.
+- **CLI**: Added smart parsing in `cli.py` to allow specifying simple profile names (e.g., `--config-path server1`) which automatically map to `profiles/server1/config.ini`.
 - **Core**: Added an option to automatically clear the game cache after mod updates to prevent loading issues.
-- **Lang**: Added localization for cache-clearing prompts and log messages across all supported languages.
+- **Lang**: Added localization for cache-clearing prompts, log messages, and dynamic profile migration notices across all supported languages.
 
 ### Changed
+- **CLI**: Updated `--config-path` behavior to automatically resolve either legacy flat files or structured profile directories.
 - **Changed**: Added the mod name and target version directly into the manual download prompt to avoid scrolling through long changelogs.
 - **Config**: The default value for `user_game_version` is now `latest_stable_version` instead of `latest_version`. This ensures that by default, the updater will ignore unstable game versions (pre-releases, release candidates) to protect users from incompatible mod updates.
 - **Core**: Updated `utils.get_latest_game_version` to support filtering for stable versions only.

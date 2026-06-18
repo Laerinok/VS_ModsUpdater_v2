@@ -35,7 +35,7 @@ Key functionalities include:
 __author__ = "Laerinok"
 __license__ = "GNU GPL v3"
 __description__ = "Mods Updater for Vintage Story"
-__date__ = "2026-01-31"  # Last update
+__date__ = "2026-06-17"  # Last update
 
 # main.py
 

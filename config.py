@@ -22,7 +22,7 @@
 
 
 __author__ = "Laerinok"
-__date__ = "2026-01-31"  # Last update
+__date__ = "2026-06-18"  # Last update
 
 
 # config.py
@@ -72,19 +72,22 @@ USER_CONFIG_DIR = Path.home() / ".config" / APP_NAME
 USER_DATA_DIR = Path.home() / ".local" / "share" / APP_NAME
 USER_CACHE_DIR = Path.home() / ".cache" / APP_NAME
 
-# Constants for paths
+# Root directory for all profiles
 if SYSTEM == "Windows":
-    CONFIG_FILE = APPLICATION_PATH / 'config.ini'
-    TEMP_PATH = APPLICATION_PATH / 'temp'
-    LOGS_PATH = APPLICATION_PATH / 'logs'
-    BACKUP_FOLDER = APPLICATION_PATH / 'backup_mods'
-    MODLIST_FOLDER = APPLICATION_PATH / 'modlist'
-else:  # Linux or other systems (where AppImage will run)
-    CONFIG_FILE = USER_CONFIG_DIR / 'config.ini'
-    TEMP_PATH = USER_CACHE_DIR / 'temp'
-    LOGS_PATH = USER_DATA_DIR / 'logs'
-    BACKUP_FOLDER = USER_DATA_DIR / 'backup_mods'
-    MODLIST_FOLDER = USER_DATA_DIR / 'modlist'
+    PROFILES_ROOT = APPLICATION_PATH / 'profiles'
+else:
+    PROFILES_ROOT = USER_CONFIG_DIR / 'profiles'
+
+# Default profile values
+ACTIVE_PROFILE = "default"
+PROFILE_DIR = PROFILES_ROOT / ACTIVE_PROFILE
+
+# Dynamic paths for the active profile
+CONFIG_FILE = PROFILE_DIR / 'config.ini'
+TEMP_PATH = PROFILE_DIR / 'temp'
+LOGS_PATH = PROFILE_DIR / 'logs'
+BACKUP_FOLDER = PROFILE_DIR / 'backup_mods'
+MODLIST_FOLDER = PROFILE_DIR / 'modlist'
 
 LANG_PATH = APPLICATION_PATH / 'lang'
 ASSETS_PATH = APPLICATION_PATH / 'assets'
@@ -188,12 +191,34 @@ USER_AGENTS = [
 
 def set_config_file(custom_path: Path) -> None:
     """
-    Override the default configuration file path.
-    Must be called before loading or creating the configuration.
+    Override the default configuration file path and dynamically adjust related paths
+    (logs, backup, modlist, temp) based on the active profile directory.
     """
-    global CONFIG_FILE
-    CONFIG_FILE = custom_path
+    global CONFIG_FILE, TEMP_PATH, LOGS_PATH, BACKUP_FOLDER, MODLIST_FOLDER, ACTIVE_PROFILE, PROFILE_DIR
+
+    CONFIG_FILE = custom_path.resolve()
     logging.debug(f"Configuration file path overridden to: {CONFIG_FILE}")
+
+    # Use parent directory name as profile name if config.ini, otherwise use the filename stem
+    if CONFIG_FILE.name == "config.ini":
+        ACTIVE_PROFILE = CONFIG_FILE.parent.name
+        PROFILE_DIR = CONFIG_FILE.parent
+    else:
+        ACTIVE_PROFILE = CONFIG_FILE.stem
+        PROFILE_DIR = CONFIG_FILE.parent / ACTIVE_PROFILE
+
+    # Update paths for the active profile
+    TEMP_PATH = PROFILE_DIR / 'temp'
+    LOGS_PATH = PROFILE_DIR / 'logs'
+    BACKUP_FOLDER = PROFILE_DIR / 'backup_mods'
+    MODLIST_FOLDER = PROFILE_DIR / 'modlist'
+
+    logging.debug(f"Active profile: '{ACTIVE_PROFILE}'")
+    logging.debug(f"Redirecting output paths to:")
+    logging.debug(f"  - Logs: {LOGS_PATH}")
+    logging.debug(f"  - Backup: {BACKUP_FOLDER}")
+    logging.debug(f"  - Modlist: {MODLIST_FOLDER}")
+    logging.debug(f"  - Temp: {TEMP_PATH}")
 
 
 def rename_old_config(config_file_path):
@@ -368,6 +393,9 @@ def create_config(language, mod_folder, cache_folder, user_game_version, auto_up
         USER_DATA_DIR.mkdir(parents=True, exist_ok=True)
         USER_CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
+    # Ensure parent directory exists for custom configurations
+    CONFIG_FILE.parent.mkdir(parents=True, exist_ok=True)
+
     DEFAULT_CONFIG["Language"]["language"] = language[0]
     DEFAULT_CONFIG["ModsPath"]["path"] = mod_folder
     DEFAULT_CONFIG["ModsPath"]["cache_path"] = cache_folder  # Set user-verified cache path
@@ -388,10 +416,84 @@ def create_config(language, mod_folder, cache_folder, user_game_version, auto_up
         logging.error(f"Failed to create config file at {CONFIG_FILE}: {e}")
 
 
+def migrate_old_config_location() -> None:
+    """
+    Migrate legacy config.ini and output folders from application root to the new default profile directory.
+    """
+    old_default_config = APPLICATION_PATH / 'config.ini' if SYSTEM == "Windows" else USER_CONFIG_DIR / 'config.ini'
+    new_default_config = PROFILES_ROOT / 'default' / 'config.ini'
+
+    # Define legacy config.old paths
+    old_default_config_old = old_default_config.with_suffix('.old')
+    new_default_config_old = new_default_config.with_suffix('.old')
+
+    # Define legacy output folder locations
+    if SYSTEM == "Windows":
+        legacy_folders = {
+            "logs": APPLICATION_PATH / 'logs',
+            "backup_mods": APPLICATION_PATH / 'backup_mods',
+            "modlist": APPLICATION_PATH / 'modlist',
+            "temp": APPLICATION_PATH / 'temp'
+        }
+    else:
+        legacy_folders = {
+            "logs": USER_DATA_DIR / 'logs',
+            "backup_mods": USER_DATA_DIR / 'backup_mods',
+            "modlist": USER_DATA_DIR / 'modlist',
+            "temp": USER_CACHE_DIR / 'temp'
+        }
+
+    # Only run migration if a legacy configuration exists and the new one is not yet initialized
+    if old_default_config.exists() and not new_default_config.exists():
+        try:
+            # Parse the old config file to retrieve the user language preference before moving it
+            temp_parser = configparser.ConfigParser()
+            temp_parser.read(old_default_config, encoding='utf-8')
+
+            # Pre-populate the cache with the language settings so lang.get_translation works
+            if temp_parser.has_section("Language"):
+                global_cache.config_cache["Language"] = {
+                    "language": temp_parser.get("Language", "language", fallback=DEFAULT_LANGUAGE)
+                }
+            else:
+                global_cache.config_cache["Language"] = {"language": DEFAULT_LANGUAGE}
+
+            # 1. Create the new profile directory
+            new_default_config.parent.mkdir(parents=True, exist_ok=True)
+
+            # 2. Move the configuration file
+            shutil.move(str(old_default_config), str(new_default_config))
+            logging.info(f"Old config.ini migrated to {new_default_config}")
+
+            # 2b. Move config.old if it exists
+            if old_default_config_old.exists() and not new_default_config_old.exists():
+                try:
+                    shutil.move(str(old_default_config_old), str(new_default_config_old))
+                    logging.info(f"Old config.old migrated to {new_default_config_old}")
+                except Exception as e:
+                    logging.error(f"Failed to migrate old config.old: {e}")
+
+            # 3. Move old folders to the default profile
+            for folder_name, old_folder_path in legacy_folders.items():
+                new_folder_path = PROFILES_ROOT / 'default' / folder_name
+                if old_folder_path.exists() and not new_folder_path.exists():
+                    try:
+                        shutil.move(str(old_folder_path), str(new_folder_path))
+                        logging.info(f"Legacy folder '{folder_name}' migrated to {new_folder_path}")
+                    except Exception as e:
+                        logging.error(f"Failed to migrate folder '{folder_name}': {e}")
+
+            # 4. Inform the user using the translation system
+            notice_msg = lang.get_translation("config_location_migrated").format(new_path=new_default_config.parent)
+            print(f"\n[dodger_blue1]{notice_msg}[/dodger_blue1]\n")
+        except Exception as e:
+            logging.error(f"Failed to migrate legacy config and folders: {e}")
+
 def load_config():
     """
     Load the configuration from config.ini or create a default one if it doesn't exist.
     """
+
     if SYSTEM != "Windows":
         USER_CONFIG_DIR.mkdir(parents=True, exist_ok=True)
         USER_DATA_DIR.mkdir(parents=True, exist_ok=True)
@@ -485,6 +587,8 @@ def load_config():
 
 def config_exists():
     """ Check if the config.ini file exists. """
+    # Run the migration first before evaluating configuration existence
+    migrate_old_config_location()
     return CONFIG_FILE.exists()
 
 
@@ -565,7 +669,7 @@ def ask_language_choice():
 
     # Convert the user's choice to the corresponding language key
     chosen_region = language_options[int(choice_index) - 1]
-    language_code = SUPPORTED_LANGUAGES.get(chosen_region)[0]
+    language_code = SUPPORTED_LANGUAGES[chosen_region][0]
     chosen_language = f'{language_code}_{chosen_region}'
     language_name = SUPPORTED_LANGUAGES[chosen_region][1]
     return chosen_language, language_name

@@ -42,6 +42,7 @@
     "config_ask_cache_guessed": "Wykryliśmy, że Twój folder cache znajduje się w: {guessed_cache}. Czy to się zgadza?",
     "config_ask_cache_directory": "Wprowadź ścieżkę do katalogu cache Vintage Story:",
     "config_invalid_cache_directory": "Katalog '{cache_directory}' jest nieprawidłowy lub nie istnieje. Spróbuj ponownie.",
+    "config_location_migrated": "Uwaga: Twoja konfiguracja została przeniesiona do '{new_path}' w celu lepszej organizacji.",
 
     "fetch_changelog_unknown_version": "nieznana wersja",
 

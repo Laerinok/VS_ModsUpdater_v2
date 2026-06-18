@@ -17,7 +17,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 __author__ = "Laerinok"
-__date__ = "2026-01-31"  # Last update
+__date__ = "2026-06-17"  # Last update
 
 
 # utils.py

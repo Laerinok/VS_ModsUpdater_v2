@@ -42,6 +42,7 @@
     "config_ask_cache_guessed": "Der vermutete Cache-Ordner befindet sich unter: {guessed_cache}. Ist das korrekt?",
     "config_ask_cache_directory": "Bitte geben Sie den Pfad zu Ihrem Vintage-Story-Cache-Verzeichnis ein:",
     "config_invalid_cache_directory": "Das Verzeichnis '{cache_directory}' ist ungültig oder existiert nicht. Bitte versuchen Sie es erneut.",
+    "config_location_migrated": "Hinweis: Ihre Konfiguration wurde zur besseren Organisation nach '{new_path}' migriert.",
 
     "fetch_changelog_unknown_version": "unbekannte Version",
 

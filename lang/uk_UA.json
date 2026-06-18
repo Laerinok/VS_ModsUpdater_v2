@@ -42,6 +42,7 @@
     "config_ask_cache_guessed": "Ми визначили, що папка кешу знаходиться за шляхом: {guessed_cache}. Це правильно?",
     "config_ask_cache_directory": "Будь ласка, введіть шлях до папки кешу Vintage Story:",
     "config_invalid_cache_directory": "Каталог '{cache_directory}' є недійсним або не існує. Будь ласка, спробуйте ще раз.",
+    "config_location_migrated": "Примітка: Вашу конфігурацію було перенесено до '{new_path}' для кращої організації.",
 
     "fetch_changelog_unknown_version": "невідома версія",
 

@@ -42,6 +42,7 @@
     "config_ask_cache_guessed": "Abbiamo rilevato che la tua cartella cache si trova qui: {guessed_cache}. È corretto?",
     "config_ask_cache_directory": "Inserisci il percorso della cartella cache di Vintage Story:",
     "config_invalid_cache_directory": "La cartella '{cache_directory}' non è valida o non esiste. Riprova.",
+    "config_location_migrated": "Avviso: La configurazione è stata migrata in '{new_path}' per uma migliore organizzazione.",
 
     "fetch_changelog_unknown_version": "versione sconosciuta",
 
