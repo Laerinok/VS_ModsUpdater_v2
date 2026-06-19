@@ -75,23 +75,6 @@ def parse_args():
         if args.config_path:
             path_config = Path(args.config_path)
 
-            # If only a profile name is provided, locate it in the standard profiles directory
-            if len(path_config.parts) == 1:
-                from config import PROFILES_ROOT
-                if not path_config.suffix:
-                    path_config = PROFILES_ROOT / path_config / 'config.ini'
-                else:
-                    path_config = PROFILES_ROOT / path_config
-            else:
-                path_config = path_config.resolve()
-
-            # Ensure the parent directory exists
-            try:
-                path_config.parent.mkdir(parents=True, exist_ok=True)
-            except Exception as e:
-                print(f"Error: Could not create directory '{path_config.parent}': {e}")
-                sys.exit(1)
-
             if path_config.exists() and not path_config.is_file():
                 print(f"Error: '{args.config_path}' is a directory, not a file.")
                 sys.exit(1)

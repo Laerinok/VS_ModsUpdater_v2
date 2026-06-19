@@ -35,7 +35,7 @@ Key functionalities include:
 __author__ = "Laerinok"
 __license__ = "GNU GPL v3"
 __description__ = "Mods Updater for Vintage Story"
-__date__ = "2026-06-18"  # Last update
+__date__ = "2026-06-19"  # Last update
 
 # main.py
 
@@ -261,8 +261,27 @@ def handle_dry_run():
 if __name__ == "__main__":
     args = cli.parse_args()
 
-    # This must be done before initialize_config() is called
+    # Resolve config_path and profile directory structure
     if args.config_path:
+        path_config = args.config_path
+
+        # If only a profile name is provided, locate it in the standard profiles directory
+        if len(path_config.parts) == 1:
+            if not path_config.suffix:
+                path_config = config.PROFILES_ROOT / path_config / 'config.ini'
+            else:
+                path_config = config.PROFILES_ROOT / path_config
+        else:
+            path_config = path_config.resolve()
+
+        # Ensure the parent directory exists
+        try:
+            path_config.parent.mkdir(parents=True, exist_ok=True)
+        except Exception as e:
+            print(f"Error: Could not create directory '{path_config.parent}': {e}")
+            sys.exit(1)
+
+        args.config_path = path_config
         config.set_config_file(args.config_path)
 
     # Initialize config
