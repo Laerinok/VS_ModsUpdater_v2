@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.6.0] - 2026-06-18
+## [2.6.0] - 2026-06-19
 
 ### Added
 - **Config**: Added a structured profile folder system (`profiles/{profile_name}/`) to group and isolate configuration, logs, modlists, backups, and temporary files.

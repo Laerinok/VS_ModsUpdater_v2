@@ -8,34 +8,38 @@ This program automates the management of your mods for the game Vintage Story. I
 
 ## Key Features
 
-- Script Update Check: Checks if a new version of the ModsUpdater tool is available.
-- Configuration Migration: Automatically manages the migration of the old configuration file format to the new one, ensuring compatibility during application updates.
-- Update Check: Compares the local versions of your mods with the latest versions available on ModDB.
+- **Script Update Check**: Checks if a new version of the ModsUpdater tool is available and displays the markdown changelog.
+- **Multi-Profile Management**: Allows you to run and isolate multiple configuration instances (settings, backups, logs, and modlists) using different profiles.
+- **Configuration Migration**: Automatically manages the migration of the old configuration file format and directories to the new profile structure during application updates.
+- **Update Check**: Compares the local versions of your mods with the latest versions available on ModDB.
 - **Mod Downgrade**: If an installed mod is too new for the selected game version, the updater will offer to downgrade it to the latest compatible version.
 - **Incompatibility Check**: The application warns if an installed mod is incompatible with the selected game version, even when no alternative version is available.
-- Automatic Download: Automatically downloads available updates (configurable).
-- Manual Download: Displays changelogs and allows you to choose which updates to download.
-- Backup Management: Creates backups of your mods before updating them, with a configurable retention policy.
-- Excluded Mods Management: Allows you to ignore certain mods during update checks and downloads.
+- **Automatic Download**: Automatically downloads available updates (configurable).
+- **Manual Download**: Displays changelogs and allows you to choose which updates to download.
+- **Automatic Game Cache Clearing**: Automatically clears the Vintage Story game cache directory after mod updates to prevent interface conflicts, UI glitches, or missing textures.
+- **Backup Management**: Creates backups of your mods before updating them, with a configurable retention policy.
+- **Excluded Mods Management**: Allows you to ignore certain mods during update checks and downloads.
 - **Detailed Exclusion Reasons**: Displays the specific reason for a mod's exclusion in the final summary (e.g., 'Excluded by user in config.ini' or 'API data unavailable').
-- Mod List Generation (PDF/JSON/HTML): Creates a PDF, JSON, or HTML document listing your installed mods.
-- Command Line Interface (CLI): Integration with arguments to customize execution.
-- Multilingual Support: The interface is available in several languages (configurable).
+- **Mod List Generation (PDF/JSON/HTML)**: Creates a PDF, JSON, or HTML document listing your installed mods.
+- **Command Line Interface (CLI)**: Integration with arguments to customize execution.
+- **Multilingual Support**: The interface is available in several languages (configurable).
 
 ## File and Directory Locations
 
-The location of configuration and data files differs between Windows, Linux, and macOS to follow platform conventions.
+Vintage Story ModsUpdater organizes configuration and generated data into **Profiles** (using the `default` profile by default). The location of these profile directories differs between operating systems.
 
 | File / Directory | Windows Location | Linux & macOS Location |
 | :--- | :--- | :--- |
-| **`config.ini`** | In the same directory as the `.exe` | `~/.config/VS_ModsUpdater/config.ini` |
-| **`logs/`** | In the same directory as the `.exe` | `~/.local/share/VS_ModsUpdater/logs/` |
-| **`backup_mods/`** | In the same directory as the `.exe` | `~/.local/share/VS_ModsUpdater/backup_mods/` |
-| **`modlist/`** | In the same directory as the `.exe` | `~/.local/share/VS_ModsUpdater/modlist/` |
+| **`config.ini`** | `[AppDir]/profiles/default/config.ini` | `~/.config/VS_ModsUpdater/profiles/default/config.ini` |
+| **`logs/`** | `[AppDir]/profiles/default/logs/` | `~/.config/VS_ModsUpdater/profiles/default/logs/` |
+| **`backup_mods/`** | `[AppDir]/profiles/default/backup_mods/` | `~/.config/VS_ModsUpdater/profiles/default/backup_mods/` |
+| **`modlist/`** | `[AppDir]/profiles/default/modlist/` | `~/.config/VS_ModsUpdater/profiles/default/modlist/` |
+
+*(Where `[AppDir]` is the directory containing the application executable).*
 
 **Note:** 
 - On Linux and macOS, the paths may vary if you have customized the `XDG_CONFIG_HOME` or `XDG_DATA_HOME` environment variables. The Linux locations refer to the AppImage version.
-- You can override the default location of config.ini by using the --config-path command-line argument.
+- You can override the default location of `config.ini` or switch profiles by using the `--config-path` command-line argument.
 
 ## Linux Desktop Integration (AppImage)
 
@@ -62,7 +66,8 @@ For example, if you have a mod in a folder named `MyAwesomeMod/` and you update 
 
 **Important Note Regarding Configuration Migration:**
 
-During updates of the ModsUpdater application, the format of the `config.ini` file may evolve. To facilitate these updates, the application includes an automatic migration mechanism. If an older version of the configuration file is detected, the application will attempt to convert it to the new format. In most cases, this migration will occur transparently. However, it is always recommended to check your `config.ini` file after an application update to ensure that all your settings are correctly preserved. In case of any issues, a backup of your old configuration (`config.old`) is kept next to the `config.ini` file.
+During updates of the ModsUpdater application, the format and location of the files may evolve. To facilitate these updates, the application includes an automatic migration mechanism. 
+Older root files (`config.ini`, `config.old`, and associated folders) will be transparently migrated to the new profile-based directory (`profiles/default/`). Additionally, any outdated option structures within `config.ini` will be automatically updated, while preserving your custom settings. A backup of your old configuration (`config.old`) is kept next to your `config.ini` file in case of issues.
 
 ## Configuration (`config.ini`)
 
@@ -87,6 +92,7 @@ auto_update = true
 max_workers = 4
 timeout = 10
 incompatibility_behavior = 0
+clear_cache_after_update = true
 ```
 * `exclude_prerelease_mods`: true to exclude pre-release mod versions during update checks, false to include them.
 * `auto_update`: true to enable automatic downloading of updates (after checking), false to use manual mode where you confirm each download.
@@ -96,6 +102,7 @@ incompatibility_behavior = 0
   * `0` (ask): Prompts the user for action before continuing. (Default)
   * `1` (abort): Stops the process automatically if an incompatibility is detected.
   * `2` (ignore): Continues the process, ignoring the incompatibility.
+* `clear_cache_after_update`: true to automatically delete the Vintage Story game cache directory after mod updates are finished. This helps prevent UI glitces or mod data conflicts.
 
 ```ini
 [Backup_Mods]
@@ -103,15 +110,17 @@ backup_folder = backup_mods
 max_backups = 3
 modlist_folder = Modlist
 ```
-* `backup_folder`: Name of the directory where mod backups will be stored. If you use a simple name, it will be created at the default location (see table above). **You can also specify a full path to store backups elsewhere.**
+* `backup_folder`: Name of the directory where mod backups will be stored. If you use a simple name, it will be created at the default profile location (see table above). **You can also specify a full path to store backups elsewhere.**
 * `max_backups`: Maximum number of mod backups to keep. Older backups will be deleted when this limit is reached.
-* `modlist_folder`: Name of the directory where the mod lists (PDF, JSON, HTML) will be saved. If you use a simple name, it will be created at the default location. **You can also specify a full path to save the lists elsewhere.**
+* `modlist_folder`: Name of the directory where the mod lists (PDF, JSON, HTML) will be saved. If you use a simple name, it will be created at the default profile location. **You can also specify a full path to save the lists elsewhere.**
 
 ```ini
 [ModsPath]
 path = D:\Game\VintagestoryData\Mods
+cache_path = D:\Game\VintagestoryData\Cache
 ```
 * `path`: Full path to the directory where your Vintage Story mods are installed on your computer. This is crucial for the application to find your mods. (Example for Windows: D:\Game\VintagestoryData\Mods)
+* `cache_path`: Full path to your Vintage Story cache directory. Used by the cache clearing utility. The application attempts to automatically guess this path, but you can override it manually.
 
 ```ini
 [Language]
@@ -141,7 +150,8 @@ The script can be executed with arguments to customize its behavior:
 
 - `--no-pause`: Disables the pause at the end of the script execution. Useful for non-interactive execution or in automated scripts.
 - `--modspath "<path>"`: Allows you to specify the path to the Vintage Story mods directory directly during execution. The path must be enclosed in quotation marks if it contains spaces. This argument replaces the path defined in the `config.ini` file.
-- `--config-path "<path>"`: Allows you to specify the path to a custom configuration file (e.g., /path/to/server_config.ini). This is particularly useful for managing multiple game instances with different settings. If the file does not exist, a new configuration file will be created at the specified location.
+- `--config-path "<path>"`: Allows you to specify the path to a custom configuration file or a profile name (e.g., `server_1` or `/path/to/server_config.ini`). This is particularly useful for managing multiple game instances with different settings. If the file does not exist, a new configuration file will be created at the specified location.
+- `--only-modlist`: Generates local mod lists (JSON, PDF, HTML) based on currently installed mods, without performing any online update checks. The application will export files and exit immediately.
 - `--no-json`: Disables the automatic generation of the mod list in JSON format at the end of execution.
 - `--no-pdf`: Disables the automatic generation of the mod list in PDF format at the end of execution.
 - `--no-html`: Disables the automatic generation of the mod list in HTML format at the end of execution.
@@ -187,8 +197,8 @@ Supported Languages:
     Português (Brasil)
     Português (Portugal)
     Русский
-    Yкраїнська
+    Ykrаїнська
     简体中文
 
 =============================    
-(Latest update: 2026-02-06 / v2.6.0)
+(Latest update: 2026-06-20 / v2.6.0)
