@@ -26,7 +26,7 @@ API calls, downloading files, and any HTTP requests requiring a persistent sessi
 
 
 __author__ = "Laerinok"
-__date__ = "2026-06-18"  # Last update
+__date__ = "2026-06-20"  # Last update
 
 
 # cli.py
@@ -71,15 +71,15 @@ def parse_args():
 
         args.modspath = path_modspath
 
-        # Check config-path existence
-        if args.config_path:
-            path_config = Path(args.config_path)
+    # Check config-path existence
+    if args.config_path:
+        path_config = Path(args.config_path)
 
-            if path_config.exists() and not path_config.is_file():
-                print(f"Error: '{args.config_path}' is a directory, not a file.")
-                sys.exit(1)
+        if path_config.exists() and not path_config.is_file():
+            print(f"Error: '{args.config_path}' is a directory, not a file.")
+            sys.exit(1)
 
-            args.config_path = path_config
+        args.config_path = path_config
 
     # Checking max-workers
     if args.max_workers is not None:

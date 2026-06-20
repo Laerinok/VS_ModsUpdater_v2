@@ -263,7 +263,7 @@ if __name__ == "__main__":
 
     # Resolve config_path and profile directory structure
     if args.config_path:
-        path_config = args.config_path
+        path_config = Path(args.config_path)
 
         # If only a profile name is provided, locate it in the standard profiles directory
         if len(path_config.parts) == 1:
