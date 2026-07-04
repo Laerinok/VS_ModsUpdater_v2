@@ -69,7 +69,16 @@ def perform_manual_updates(mods_to_update):
         print(f"\n[green]{mod['Name']} (v{mod['Old_version']} {lang.get_translation('to')} v{mod['New_version']})[/green]")
         print(f"[bold][dark_goldenrod]:\n{mod['Changelog']}[/dark_goldenrod][/bold]\n")
 
-        download_choice = Prompt.ask(lang.get_translation("manual_download_mod_prompt"), choices=[lang.get_translation("yes")[0], lang.get_translation("no")[0]], default=lang.get_translation("yes")[0]).lower()
+        prompt_message = lang.get_translation("manual_download_mod_prompt").format(
+            mod['Name'],
+            mod['New_version']
+        )
+
+        download_choice = Prompt.ask(
+            prompt_message,
+            choices=[lang.get_translation("yes")[0], lang.get_translation("no")[0]],
+            default=lang.get_translation("yes")[0]
+        ).lower()
 
         if download_choice == lang.get_translation("yes")[0]:
             try:

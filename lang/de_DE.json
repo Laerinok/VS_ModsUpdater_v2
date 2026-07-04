@@ -23,11 +23,12 @@
     "main_incompatible_mods_found_without_update": "Inkompatible Mods gefunden, für die kein Update verfügbar ist:",
     "main_aborting_due_to_incompatibility": "Abbrechen des Updates aufgrund von Inkompatibilität.",
     "main_continue_anyway_prompt": "Möchten Sie trotzdem fortfahren?",
-    
+    "main_cache_folder_path": "Cache-Speicherort: ",
+
     "config_ask_mod_directory": "Geben Sie den Pfad zu Ihrem Mods-Ordner ein. Lassen Sie ihn leer für den Standardpfad",
     "config_configuration_migrated": "Konfiguration erfolgreich zu Version {EXPECTED_VERSION} migriert.",
     "config_invalid_directory": "Fehler: {mods_directory} ist kein gültiges Verzeichnis.",
-    "config_game_version_prompt": "Updates bis zur Spielversion blockieren (1.2.3, leer = keine Blockierung)",
+    "config_game_version_prompt": "Updates bis zur Spielversion blockieren (1.2.3, leer = neueste stabile Version)",
     "config_invalid_game_version": "Fehler: Bitte geben Sie eine gültige Version im Format Hauptversion.Nebenversion.Patch an (z.B. 1.20.5).",
     "config_choose_update_mode": "Update-Modus wählen (manuell/auto)",
     "config_choose_update_mode_auto": "auto",
@@ -38,41 +39,45 @@
     "config_incompatibility_abort": "Update-Vorgang abbrechen",
     "config_incompatibility_ignore": "Ignorieren und fortfahren",
     "config_choose_behavior_prompt": "Geben Sie Ihre Wahl ein",
-    
+    "config_ask_cache_guessed": "Der vermutete Cache-Ordner befindet sich unter: {guessed_cache}. Ist das korrekt?",
+    "config_ask_cache_directory": "Bitte geben Sie den Pfad zu Ihrem Vintage-Story-Cache-Verzeichnis ein:",
+    "config_invalid_cache_directory": "Das Verzeichnis '{cache_directory}' ist ungültig oder existiert nicht. Bitte versuchen Sie es erneut.",
+    "config_location_migrated": "Hinweis: Ihre Konfiguration wurde zur besseren Organisation nach '{new_path}' migriert.",
+
     "fetch_changelog_unknown_version": "unbekannte Version",
-    
+
     "fetch_mod_info_error_mods_path_missing": "Der ModsPath oder der Schlüssel 'path' fehlt in der Konfiguration.",
     "fetch_mod_info_error_mods_path_not_found": "Der Mods-Pfad [dark_goldenrod]{mods_path}[/dark_goldenrod] wurde nicht gefunden.",
     "fetch_mod_info_scanning_mods": "Mods werden gescannt...",
     "fetch_mod_info_fetching_mod_info": "Mod-Informationen von der API werden abgerufen...",
     "fetch_mod_info_fetching_mod_info_name": "Mod-Informationen werden abgerufen",
     "fetch_mod_info_exclusion_reason_api_failure": "API-Daten für diesen Mod sind nicht verfügbar. Er wurde möglicherweise entfernt oder migriert.",
-    
+
     "auto_file_size_unknown": "Warnung: Die Dateigröße ist unbekannt oder null. Der Download wird möglicherweise nicht ordnungsgemäß abgeschlossen.[/bold indian_red1]",
     "auto_downloading_mods": "Mods werden heruntergeladen...",
     "auto_downloading_mod_name": "Herunterladen",
     "auto_mods_updated_resume": "Folgende Mods wurden aktualisiert:",
-    
-    "manual_download_mod_prompt": "Diesen Mod herunterladen?",
+
+    "manual_download_mod_prompt": "{0} auf Version {1} aktualisieren?",
     "manual_skipping_download": "Download wird übersprungen für",
     "manual_downloading_mod": "Herunterladen",
     "manual_download_completed": "Download abgeschlossen für",
     "manual_download_error": "Fehler beim Herunterladen",
-    
-    "utils_warning_mods_directory_empty": "[indian_red1]Warnung: Der Mods-Ordner [magenta]{mods_dir_path}[/magenta] ist leer![/indian_red1]\nBitte fügen Sie Ihre Mod-Dateien hinzu.",
+
+    "utils_warning_mods_directory_empty": "[indian_red1]Warnung: Der Mods-Ordner [magenta]{mods_dir_path}[/magenta] is leer![/indian_red1]\nBitte fügen Sie Ihre Mod-Dateien hinzu.",
     "utils_warning_directory_in_mods_folder": "[indian_red1]Warnung: Ordner im Mods-Ordner gefunden: {item_name}.[/indian_red1] Bitte stellen Sie sicher, dass Sie .zip-Dateien und keine Ordner haben.",
     "utils_no_valid_mod_files_found": "Keine gültigen Mod-Dateien im Mods-Ordner gefunden.",
     "utils_error_invalid_max_workers": "Fehler: Ungültige Eingabe für max_workers. Muss eine ganze Zahl sein.",
     "utils_prg_terminated": "Programm beendet.",
     "utils_exclusion_reason_user_config": "Vom Benutzer in config.ini ausgeschlossen",
-    
+
     "export_json_modilst": "Modliste als JSON exportiert:",
     "export_pdf_modilst": "Modliste als PDF exportiert:",
     "export_html_modilst": "Liste der Mods nach HTML exportiert: ",
     "export_pdf_generating_file": "PDF wird generiert...",
     "export_pdf_permission_error": "Auf die Datei '{pdf_path}' kann nicht zugegriffen werden. Die Datei ist möglicherweise geöffnet oder wird von einem anderen Prozess verwendet.\nBitte schließen Sie alle Anwendungen, die diese Datei verwenden, und versuchen Sie es erneut.",
     "export_pdf_installed_mods": "installierte Mods",
-    
+
     "error": "Fehler:",
     "yes": "ja",
     "no": "nein",
@@ -92,5 +97,9 @@
     "dry_run_report_installed": "Installiert",
     "dry_run_report_available": "Verfügbar",
     "dry_run_report_changelog": "Änderungsprotokoll",
-    "dry_run_report_changelog_unavailable": "Änderungsprotokoll: Nicht verfügbar."
+    "dry_run_report_changelog_unavailable": "Änderungsprotokoll: Nicht verfügbar.",
+
+    "utils_clearing_cache": "Vintage-Story-Cache wird geleert...",
+    "utils_cache_cleared_success": "Cache-Verzeichnis erfolgreich geleert.",
+    "utils_cache_cleared_with_errors": "Cache geleert, aber einige Dateien konnten nicht gelöscht werden."
 }

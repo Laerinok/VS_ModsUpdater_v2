@@ -20,15 +20,15 @@
     "main_show_changelog_prompt": "Хотите увидеть список изменений?",
     "main_changelog_title": "Список изменений",
     "main_reason_label_unknown": "Неизвестная причина",
-
     "main_incompatible_mods_found_without_update": "Обнаружены несовместимые моды без доступного обновления:",
     "main_aborting_due_to_incompatibility": "Прерывание обновления из-за несовместимости.",
     "main_continue_anyway_prompt": "Продолжить все равно?",
+    "main_cache_folder_path": "Расположение кэша: ",
 
     "config_ask_mod_directory": "Введите путь к папке с модами. Оставьте пустым для пути по умолчанию",
     "config_configuration_migrated": "Конфигурация успешно перенесена в версию {EXPECTED_VERSION}.",
     "config_invalid_directory": "Ошибка: {mods_directory} не является действительным каталогом.",
-    "config_game_version_prompt": "Блокировать обновления до версии игры (1.2.3, пусто = без блокировки)",
+    "config_game_version_prompt": "Блокировать обновления до версии игры (1.2.3, пусто = последняя стабильная версия)",
     "config_invalid_game_version": "Ошибка: Пожалуйста, укажите действительную версию в формате major.minor.patch (например, 1.20.5).",
     "config_choose_update_mode": "Выберите режим обновления (1: вручную / 2: автоматически)",
     "config_choose_update_mode_auto": "автоматически",
@@ -39,9 +39,13 @@
     "config_incompatibility_abort": "Прервать процесс обновления",
     "config_incompatibility_ignore": "Игнорировать и продолжить",
     "config_choose_behavior_prompt": "Введите ваш выбор",
+    "config_ask_cache_guessed": "Мы определили, что папка кэша находится по пути: {guessed_cache}. Это верно?",
+    "config_ask_cache_directory": "Пожалуйста, введите путь к папке кэша Vintage Story:",
+    "config_invalid_cache_directory": "Каталог '{cache_directory}' недействителен или не существует. Пожалуйста, попробуйте еще раз.",
+    "config_location_migrated": "Примечание: Ваша конфигурация была перенесена в '{new_path}' для лучшей организации.",
 
     "fetch_changelog_unknown_version": "неизвестная версия",
-    
+
     "fetch_mod_info_error_mods_path_missing": "В конфигурации отсутствует ModsPath или ключ 'path'.",
     "fetch_mod_info_error_mods_path_not_found": "Путь к модам [dark_goldenrod]{mods_path}[/dark_goldenrod] не найден.",
     "fetch_mod_info_scanning_mods": "Сканирование модов...",
@@ -53,13 +57,13 @@
     "auto_downloading_mods": "Загрузка модов...",
     "auto_downloading_mod_name": "Загрузка",
     "auto_mods_updated_resume": "Следующие моды были обновлены:",
-    
-    "manual_download_mod_prompt": "Загрузить этот мод?",
+
+    "manual_download_mod_prompt": "Обновить {0} до версии {1}?",
     "manual_skipping_download": "Пропуск загрузки для",
     "manual_downloading_mod": "Загрузка",
     "manual_download_completed": "Загрузка завершена для",
     "manual_download_error": "Ошибка загрузки",
-    
+
     "utils_warning_mods_directory_empty": "[indian_red1]Предупреждение: Каталог модов [magenta]{mods_dir_path}[/magenta] пуст![/indian_red1]\nПожалуйста, добавьте файлы модов.",
     "utils_warning_directory_in_mods_folder": "[indian_red1]Предупреждение: В папке модов обнаружена директория: {item_name}.[/indian_red1]\nУбедитесь, что у вас есть ZIP-файлы, а не папки.",
     "utils_no_valid_mod_files_found": "В папке модов не найдено ни одного действительного файла модов.",
@@ -73,7 +77,7 @@
     "export_pdf_generating_file": "Генерация PDF...",
     "export_pdf_permission_error": "Не удалось получить доступ к файлу '{pdf_path}'. Возможно, файл открыт или используется другим процессом.\nЗакройте все приложения, использующие этот файл, и попробуйте снова.",
     "export_pdf_installed_mods": "установленные моды",
-    
+
     "error": "Ошибка:",
     "yes": "да",
     "no": "нет",
@@ -93,5 +97,9 @@
     "dry_run_report_installed": "Установлено",
     "dry_run_report_available": "Доступно",
     "dry_run_report_changelog": "Список изменений",
-    "dry_run_report_changelog_unavailable": "Список изменений: недоступен."
+    "dry_run_report_changelog_unavailable": "Список изменений: недоступен.",
+
+    "utils_clearing_cache": "Очистка кэша Vintage Story...",
+    "utils_cache_cleared_success": "Каталог кэша успешно очищен.",
+    "utils_cache_cleared_with_errors": "Кэш очищен, но некоторые файлы не удалось удалить."
 }

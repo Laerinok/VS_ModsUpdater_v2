@@ -23,11 +23,12 @@
     "main_incompatible_mods_found_without_update": "Incompatible mods found with no update available:",
     "main_aborting_due_to_incompatibility": "Aborting update due to incompatibility.",
     "main_continue_anyway_prompt": "Continue anyway?",
+    "main_cache_folder_path": "Cache folder path: ",
 
     "config_ask_mod_directory": "Enter the path to your mods folder. Leave blank for default path",
     "config_configuration_migrated": "Configuration migrated successfully to version {EXPECTED_VERSION}.",
     "config_invalid_directory": "Error: {mods_directory} is not a valid directory.",
-    "config_game_version_prompt": "Block updates up to game version (1.2.3, blank = no blocking): ",
+    "config_game_version_prompt": "Block updates up to game version (1.2.3, blank = latest stable version): ",
     "config_invalid_game_version": "Error: Please provide a valid version in the format major.minor.patch (e.g., 1.20.5).",
     "config_choose_update_mode": "Choose update mode (1: Manual / 2: Auto)",
     "config_choose_update_mode_auto": "auto",
@@ -38,6 +39,10 @@
     "config_incompatibility_abort": "Abort the update process",
     "config_incompatibility_ignore": "Ignore and continue",
     "config_choose_behavior_prompt": "Enter your choice",
+    "config_ask_cache_guessed": "We guessed your Cache directory is at: {guessed_cache}. Is this correct?",
+    "config_ask_cache_directory": "Please enter the path to your Vintage Story Cache directory:",
+    "config_invalid_cache_directory": "The directory '{cache_directory}' is invalid or does not exist. Please try again.",
+    "config_location_migrated": "Notice: Your configuration has been migrated to '{new_path}' for better organization.",
     
     "fetch_changelog_unknown_version": "unknown version",
     
@@ -53,7 +58,7 @@
     "auto_downloading_mod_name": "Downloading",
     "auto_mods_updated_resume": "Following mods have been updated:",
     
-    "manual_download_mod_prompt": "Download this mod?",
+    "manual_download_mod_prompt": "Update {0} to version {1}?",
     "manual_skipping_download": "Skipping download for",
     "manual_downloading_mod": "Downloading",
     "manual_download_completed": "Download completed for",
@@ -92,5 +97,9 @@
     "dry_run_report_installed": "Installed",
     "dry_run_report_available": "Available",
     "dry_run_report_changelog": "Changelog",
-    "dry_run_report_changelog_unavailable": "Changelog: Not available."
+    "dry_run_report_changelog_unavailable": "Changelog: Not available.",
+
+    "utils_clearing_cache": "Clearing Vintage Story cache...",
+    "utils_cache_cleared_success": "Cache directory cleared successfully.",
+    "utils_cache_cleared_with_errors": "Cache cleared, but some files could not be removed."
 }

@@ -22,7 +22,7 @@
 
 
 __author__ = "Laerinok"
-__date__ = "2025-12-27"  # Last update
+__date__ = "2026-06-18"  # Last update
 
 
 # config.py
@@ -58,42 +58,40 @@ MODS_PATHS = {
     "Darwin": Path(HOME_PATH) / 'Library' / 'Application Support' / 'VintagestoryData' / 'Mods'
 }
 
-# Retrieve the application directory from the APPDIR environment variable
-appdir = os.environ.get('APPDIR')
+CACHE_PATHS = {
+    "Windows": Path(HOME_PATH) / 'AppData' / 'Roaming' / 'VintagestoryData' / 'Cache',
+    "Linux": Path(XDG_CONFIG_HOME_PATH) / 'VintagestoryData' / 'Cache',
+    "Darwin": Path(HOME_PATH) / 'Library' / 'Application Support' / 'VintagestoryData' / 'Cache'
+}
 
-if appdir:
-    APPLICATION_PATH = Path(appdir)
-else:
-    # Case where the application is run outside the AppImage (for development)
-    APPLICATION_PATH = Path.cwd()
+# Retrieve the application directory from the APPDIR environment
+APPLICATION_PATH = utils.get_app_dir()
 
 APP_NAME = "VS_ModsUpdater"
 USER_CONFIG_DIR = Path.home() / ".config" / APP_NAME
 USER_DATA_DIR = Path.home() / ".local" / "share" / APP_NAME
 USER_CACHE_DIR = Path.home() / ".cache" / APP_NAME
 
-# Retrieve the application directory
-appdir = os.environ.get('APPDIR')
-if appdir:
-    APPLICATION_PATH = Path(appdir)
-else:
-    APPLICATION_PATH = Path.cwd()
-
-# Constants for paths
+# Root directory for all profiles
 if SYSTEM == "Windows":
-    CONFIG_FILE = APPLICATION_PATH / 'config.ini'
-    TEMP_PATH = APPLICATION_PATH / 'temp'
-    LOGS_PATH = APPLICATION_PATH / 'logs'
-    BACKUP_FOLDER = APPLICATION_PATH / 'backup_mods'
-    MODLIST_FOLDER = APPLICATION_PATH / 'modlist'
-else:  # Linux or other systems (where AppImage will run)
-    CONFIG_FILE = USER_CONFIG_DIR / 'config.ini'
-    TEMP_PATH = USER_CACHE_DIR / 'temp'
-    LOGS_PATH = USER_DATA_DIR / 'logs'
-    BACKUP_FOLDER = USER_DATA_DIR / 'backup_mods'
-    MODLIST_FOLDER = USER_DATA_DIR / 'modlist'
+    PROFILES_ROOT = APPLICATION_PATH / 'profiles'
+else:
+    PROFILES_ROOT = USER_CONFIG_DIR / 'profiles'
+
+# Default profile values
+ACTIVE_PROFILE = "default"
+PROFILE_DIR = PROFILES_ROOT / ACTIVE_PROFILE
+
+# Dynamic paths for the active profile
+CONFIG_FILE = PROFILE_DIR / 'config.ini'
+TEMP_PATH = PROFILE_DIR / 'temp'
+LOGS_PATH = PROFILE_DIR / 'logs'
+BACKUP_FOLDER = PROFILE_DIR / 'backup_mods'
+MODLIST_FOLDER = PROFILE_DIR / 'modlist'
 
 LANG_PATH = APPLICATION_PATH / 'lang'
+ASSETS_PATH = APPLICATION_PATH / 'assets'
+FONTS_PATH = APPLICATION_PATH / 'fonts'
 
 # Constants for supported languages
 # The following dictionary defines the languages supported by the application.
@@ -145,12 +143,21 @@ URL_SCRIPT = {
 DEFAULT_CONFIG = {
     "ModsUpdater": {"version": __version__},
     "Logging": {"log_level": "DEBUG"},
-    # Dans DEFAULT_CONFIG
-    "Options": {"exclude_prerelease_mods": "false", "auto_update": "true", "max_workers": str(4), "timeout": str(10), "incompatibility_behavior": "0"},
+    "Options": {
+        "exclude_prerelease_mods": "false",
+        "auto_update": "true",
+        "max_workers": str(4),
+        "timeout": str(10),
+        "incompatibility_behavior": "0",
+        "clear_cache_after_update": "true"
+    },
     "Backup_Mods": {"backup_folder": "backup_mods", "max_backups": str(3), "modlist_folder": "modlist"},
-    "ModsPath": {"path": MODS_PATHS[SYSTEM]},
+    "ModsPath": {
+        "path": MODS_PATHS[SYSTEM],
+        "cache_path": CACHE_PATHS[SYSTEM]
+    },
     "Language": {"language": DEFAULT_LANGUAGE},
-    "Game_Version": {"user_game_version": "latest_version"},
+    "Game_Version": {"user_game_version": "latest_stable_version"},
     "Mod_Exclusion": {'mods': ""}
 }
 
@@ -184,12 +191,34 @@ USER_AGENTS = [
 
 def set_config_file(custom_path: Path) -> None:
     """
-    Override the default configuration file path.
-    Must be called before loading or creating the configuration.
+    Override the default configuration file path and dynamically adjust related paths
+    (logs, backup, modlist, temp) based on the active profile directory.
     """
-    global CONFIG_FILE
-    CONFIG_FILE = custom_path
+    global CONFIG_FILE, TEMP_PATH, LOGS_PATH, BACKUP_FOLDER, MODLIST_FOLDER, ACTIVE_PROFILE, PROFILE_DIR
+
+    CONFIG_FILE = custom_path.resolve()
     logging.debug(f"Configuration file path overridden to: {CONFIG_FILE}")
+
+    # Use parent directory name as profile name if config.ini, otherwise use the filename stem
+    if CONFIG_FILE.name == "config.ini":
+        ACTIVE_PROFILE = CONFIG_FILE.parent.name
+        PROFILE_DIR = CONFIG_FILE.parent
+    else:
+        ACTIVE_PROFILE = CONFIG_FILE.stem
+        PROFILE_DIR = CONFIG_FILE.parent / ACTIVE_PROFILE
+
+    # Update paths for the active profile
+    TEMP_PATH = PROFILE_DIR / 'temp'
+    LOGS_PATH = PROFILE_DIR / 'logs'
+    BACKUP_FOLDER = PROFILE_DIR / 'backup_mods'
+    MODLIST_FOLDER = PROFILE_DIR / 'modlist'
+
+    logging.debug(f"Active profile: '{ACTIVE_PROFILE}'")
+    logging.debug(f"Redirecting output paths to:")
+    logging.debug(f"  - Logs: {LOGS_PATH}")
+    logging.debug(f"  - Backup: {BACKUP_FOLDER}")
+    logging.debug(f"  - Modlist: {MODLIST_FOLDER}")
+    logging.debug(f"  - Temp: {TEMP_PATH}")
 
 
 def rename_old_config(config_file_path):
@@ -258,11 +287,11 @@ def migrate_config(old_config):
         if section in old_config:
             # Copy existing values while keeping the order from DEFAULT_CONFIG
             for key in default_options.keys():
-                new_config[section][key] = old_config[section].get(key,
-                                                                   default_options[key])
+                # Ensure values are converted to strings for configparser
+                new_config[section][key] = str(old_config[section].get(key, default_options[key]))
         else:
-            # Add missing sections with default values
-            new_config[section] = default_options.copy()
+            # Add missing sections with default values converted to strings
+            new_config[section] = {k: str(v) for k, v in default_options.items()}
 
     # Step 3: Apply specific migration rules
     # - Rename sections/keys if necessary
@@ -277,7 +306,7 @@ def migrate_config(old_config):
         user_game_version = old_config["Game_Version_max"].get("version")
         user_game_version = None if str(
             user_game_version) == "100.0.0" else user_game_version
-        new_config["Game_Version"]["user_game_version"] = user_game_version or 'latest_version'
+        new_config["Game_Version"]["user_game_version"] = user_game_version or 'latest_stable_version'
         logging.debug("Migrated Game_Version_max to user_game_version: %s",
                       user_game_version)
 
@@ -308,6 +337,30 @@ def migrate_config(old_config):
         new_config["Logging"]["log_level"] = DEFAULT_CONFIG['Logging']['log_level']
         logging.debug(f"Set log_level to default: {DEFAULT_CONFIG['Logging']['log_level']}")
 
+    # Smart cache path detection based on old mods path
+    old_mods_path_str = ""
+    if "ModsPath" in old_config:
+        old_mods_path_str = old_config["ModsPath"].get("path", "")
+    elif "ModPath" in old_config:
+        old_mods_path_str = old_config["ModPath"].get("path", "")
+
+    if old_mods_path_str:
+        old_mods_path = Path(old_mods_path_str)
+        if old_mods_path.name.lower() == "mods":
+            guessed_cache = old_mods_path.parent / "Cache"
+        else:
+            guessed_cache = CACHE_PATHS[SYSTEM]
+    else:
+        guessed_cache = CACHE_PATHS[SYSTEM]
+
+    new_config["ModsPath"]["cache_path"] = str(guessed_cache)
+
+    # Warn the user if the guessed cache path does not exist
+    if not guessed_cache.exists():
+        logging.warning(f"Guessed cache directory does not exist: {guessed_cache}. Please check 'cache_path' in config.ini.")
+        print(f"[orange1]Warning: The migrated cache directory was not found: {guessed_cache}[/orange1]")
+        print("[orange1]If your cache is located elsewhere, please update 'cache_path' manually in config.ini.[/orange1]\n")
+
     # Step 4: Remove obsolete sections
     for section in list(new_config.keys()):
         if section != "DEFAULT" and section not in DEFAULT_CONFIG:
@@ -331,7 +384,7 @@ def migrate_config(old_config):
         logging.error("Error occurred while writing the migrated config: %s", str(e))
 
 
-def create_config(language, mod_folder, user_game_version, auto_update, behavior_choice):
+def create_config(language, mod_folder, cache_folder, user_game_version, auto_update, behavior_choice):
     """
     Create the config.ini file with default or user-specified values.
     """
@@ -340,8 +393,12 @@ def create_config(language, mod_folder, user_game_version, auto_update, behavior
         USER_DATA_DIR.mkdir(parents=True, exist_ok=True)
         USER_CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
+    # Ensure parent directory exists for custom configurations
+    CONFIG_FILE.parent.mkdir(parents=True, exist_ok=True)
+
     DEFAULT_CONFIG["Language"]["language"] = language[0]
     DEFAULT_CONFIG["ModsPath"]["path"] = mod_folder
+    DEFAULT_CONFIG["ModsPath"]["cache_path"] = cache_folder  # Set user-verified cache path
     DEFAULT_CONFIG["Game_Version"]["user_game_version"] = user_game_version
     DEFAULT_CONFIG["Options"]["auto_update"] = auto_update
     DEFAULT_CONFIG["Options"]["incompatibility_behavior"] = behavior_choice
@@ -359,10 +416,84 @@ def create_config(language, mod_folder, user_game_version, auto_update, behavior
         logging.error(f"Failed to create config file at {CONFIG_FILE}: {e}")
 
 
+def migrate_old_config_location() -> None:
+    """
+    Migrate legacy config.ini and output folders from application root to the new default profile directory.
+    """
+    old_default_config = APPLICATION_PATH / 'config.ini' if SYSTEM == "Windows" else USER_CONFIG_DIR / 'config.ini'
+    new_default_config = PROFILES_ROOT / 'default' / 'config.ini'
+
+    # Define legacy config.old paths
+    old_default_config_old = old_default_config.with_suffix('.old')
+    new_default_config_old = new_default_config.with_suffix('.old')
+
+    # Define legacy output folder locations
+    if SYSTEM == "Windows":
+        legacy_folders = {
+            "logs": APPLICATION_PATH / 'logs',
+            "backup_mods": APPLICATION_PATH / 'backup_mods',
+            "modlist": APPLICATION_PATH / 'modlist',
+            "temp": APPLICATION_PATH / 'temp'
+        }
+    else:
+        legacy_folders = {
+            "logs": USER_DATA_DIR / 'logs',
+            "backup_mods": USER_DATA_DIR / 'backup_mods',
+            "modlist": USER_DATA_DIR / 'modlist',
+            "temp": USER_CACHE_DIR / 'temp'
+        }
+
+    # Only run migration if a legacy configuration exists and the new one is not yet initialized
+    if old_default_config.exists() and not new_default_config.exists():
+        try:
+            # Parse the old config file to retrieve the user language preference before moving it
+            temp_parser = configparser.ConfigParser()
+            temp_parser.read(old_default_config, encoding='utf-8')
+
+            # Pre-populate the cache with the language settings so lang.get_translation works
+            if temp_parser.has_section("Language"):
+                global_cache.config_cache["Language"] = {
+                    "language": temp_parser.get("Language", "language", fallback=DEFAULT_LANGUAGE)
+                }
+            else:
+                global_cache.config_cache["Language"] = {"language": DEFAULT_LANGUAGE}
+
+            # 1. Create the new profile directory
+            new_default_config.parent.mkdir(parents=True, exist_ok=True)
+
+            # 2. Move the configuration file
+            shutil.move(str(old_default_config), str(new_default_config))
+            logging.info(f"Old config.ini migrated to {new_default_config}")
+
+            # 2b. Move config.old if it exists
+            if old_default_config_old.exists() and not new_default_config_old.exists():
+                try:
+                    shutil.move(str(old_default_config_old), str(new_default_config_old))
+                    logging.info(f"Old config.old migrated to {new_default_config_old}")
+                except Exception as e:
+                    logging.error(f"Failed to migrate old config.old: {e}")
+
+            # 3. Move old folders to the default profile
+            for folder_name, old_folder_path in legacy_folders.items():
+                new_folder_path = PROFILES_ROOT / 'default' / folder_name
+                if old_folder_path.exists() and not new_folder_path.exists():
+                    try:
+                        shutil.move(str(old_folder_path), str(new_folder_path))
+                        logging.info(f"Legacy folder '{folder_name}' migrated to {new_folder_path}")
+                    except Exception as e:
+                        logging.error(f"Failed to migrate folder '{folder_name}': {e}")
+
+            # 4. Inform the user using the translation system
+            notice_msg = lang.get_translation("config_location_migrated").format(new_path=new_default_config.parent)
+            print(f"\n[dodger_blue1]{notice_msg}[/dodger_blue1]\n")
+        except Exception as e:
+            logging.error(f"Failed to migrate legacy config and folders: {e}")
+
 def load_config():
     """
     Load the configuration from config.ini or create a default one if it doesn't exist.
     """
+
     if SYSTEM != "Windows":
         USER_CONFIG_DIR.mkdir(parents=True, exist_ok=True)
         USER_DATA_DIR.mkdir(parents=True, exist_ok=True)
@@ -421,14 +552,14 @@ def load_config():
 
         # Explicitly handle old configurations with "None" or empty values
         if user_game_version in ["None", ""]:
-            user_game_version = "latest_version"
+            user_game_version = "latest_stable_version"
             global_cache.config_cache.setdefault("Game_Version", {})[
-                "user_game_version"] = "latest_version"
+                "user_game_version"] = "latest_stable_version"
             logging.info(
-                "Detected old game version setting. Updated to 'latest_version'.")
+                "Detected old game version setting. Updated to 'latest_stable_version'.")
 
         if user_game_version == 'latest_version':
-            latest_game_version = utils.get_latest_game_version()
+            latest_game_version = utils.get_latest_game_version(stable_only=False)
             if latest_game_version:
                 global_cache.config_cache.setdefault("Game_Version", {})[
                     "user_game_version"] = latest_game_version
@@ -437,6 +568,16 @@ def load_config():
             else:
                 logging.warning(
                     "Unable to retrieve the latest game version. The version is left empty.")
+        elif user_game_version == 'latest_stable_version':
+            latest_stable_version = utils.get_latest_game_version(stable_only=True)
+            if latest_stable_version:
+                global_cache.config_cache.setdefault("Game_Version", {})[
+                    "user_game_version"] = latest_stable_version
+                logging.info(
+                    f"Game version set to the latest stable version: {latest_stable_version}")
+            else:
+                logging.warning(
+                    "Unable to retrieve the latest stable game version. The version is left empty.")
 
     except Exception as e:
         logging.error(f"Error occurred while loading the config.ini file: {e}")
@@ -446,6 +587,8 @@ def load_config():
 
 def config_exists():
     """ Check if the config.ini file exists. """
+    # Run the migration first before evaluating configuration existence
+    migrate_old_config_location()
     return CONFIG_FILE.exists()
 
 
@@ -473,6 +616,39 @@ def ask_mods_directory():
             logging.warning(f"Invalid directory entered: {mods_directory}")
 
 
+def ask_cache_directory(mods_directory: str) -> str:
+    """
+    Ask the user to verify or choose the cache folder.
+    """
+    mods_path = Path(mods_directory)
+    if mods_path.name.lower() == "mods":
+        guessed_cache = mods_path.parent / "Cache"
+    else:
+        guessed_cache = CACHE_PATHS[SYSTEM]
+
+    prompt_msg = lang.get_translation("config_ask_cache_guessed").format(guessed_cache=guessed_cache)
+    if utils.prompt_yes_no(prompt_msg, default=True):
+        logging.info(f"Using guessed cache directory: {guessed_cache}")
+        return str(guessed_cache)
+
+    while True:
+        cache_directory = utils.Prompt.ask(
+            lang.get_translation("config_ask_cache_directory"),
+            default=str(guessed_cache)
+        )
+
+        if cache_directory == "":
+            return str(guessed_cache)
+
+        cache_path = Path(cache_directory)
+        if cache_path.is_dir():
+            logging.info(f"Using manual cache directory: {cache_directory}")
+            return str(cache_directory)
+        else:
+            print(lang.get_translation("config_invalid_cache_directory").format(cache_directory=cache_directory))
+            logging.warning(f"Invalid cache directory entered: {cache_directory}")
+
+
 def ask_language_choice():
     """Ask the user to select a language at the first script launch."""
     print(f"[dodger_blue1]Please select your language:[/dodger_blue1]")
@@ -493,7 +669,7 @@ def ask_language_choice():
 
     # Convert the user's choice to the corresponding language key
     chosen_region = language_options[int(choice_index) - 1]
-    language_code = SUPPORTED_LANGUAGES.get(chosen_region)[0]
+    language_code = SUPPORTED_LANGUAGES[chosen_region][0]
     chosen_language = f'{language_code}_{chosen_region}'
     language_name = SUPPORTED_LANGUAGES[chosen_region][1]
     return chosen_language, language_name
@@ -509,7 +685,15 @@ def ask_game_version():
 
         # If the user left the input empty, it will use the last game version
         if user_game_version == "":
-            user_game_version = "latest_version"
+            user_game_version = "latest_stable_version"
+            return user_game_version
+        
+        # Allow the user to explicitly type 'latest_stable_version'
+        if user_game_version == "latest_stable_version":
+            return user_game_version
+        
+        # Allow the user to explicitly type 'latest_version'
+        if user_game_version == "latest_version":
             return user_game_version
 
         # If valid, complete and return the version

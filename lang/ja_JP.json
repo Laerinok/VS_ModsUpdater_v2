@@ -20,15 +20,15 @@
     "main_show_changelog_prompt": "変更履歴を見ますか？",
     "main_changelog_title": "変更履歴",
     "main_reason_label_unknown": "不明な理由",
-
     "main_incompatible_mods_found_without_update": "アップデートが利用できない互換性のないModが見つかりました：",
     "main_aborting_due_to_incompatibility": "アップデートを中止します。",
     "main_continue_anyway_prompt": "それでも続行しますか？",
+    "main_cache_folder_path": "キャッシュの場所：",
 
     "config_ask_mod_directory": "Modフォルダへのパスを入力してください。デフォルトパスの場合は空白のままにしてください",
     "config_configuration_migrated": "構成はバージョン{EXPECTED_VERSION}に正常に移行されました。",
     "config_invalid_directory": "エラー：{mods_directory}は有効なディレクトリではありません。",
-    "config_game_version_prompt": "ゲームバージョンまでのアップデートをブロックします（1.2.3、空白の場合はブロックなし）",
+    "config_game_version_prompt": "ゲームバージョンまでのアップデートをブロックします（1.2.3、空白の場合は最新の安定版）",
     "config_invalid_game_version": "エラー：major.minor.patch（例：1.20.5）の形式で有効なバージョンを入力してください。",
     "config_choose_update_mode": "アップデートモードを選択してください（手動/自動）",
     "config_choose_update_mode_auto": "自動",
@@ -39,9 +39,13 @@
     "config_incompatibility_abort": "アップデートプロセスを中止する",
     "config_incompatibility_ignore": "無視して続行する",
     "config_choose_behavior_prompt": "選択を入力してください",
-    
+    "config_ask_cache_guessed": "キャッシュディレクトリはここに自動検出されました：{guessed_cache}。これでよろしいですか？",
+    "config_ask_cache_directory": "Vintage Storyのキャッシュディレクトリのパスを入力してください：",
+    "config_invalid_cache_directory": "ディレクトリ '{cache_directory}' は無効か、存在しません。もう一度お試しください。",
+    "config_location_migrated": "通知：整理しやすくするため、設定は '{new_path}' に移行されました。",
+
     "fetch_changelog_unknown_version": "不明なバージョン",
-    
+
     "fetch_mod_info_error_mods_path_missing": "構成にModsPathまたは「path」キーがありません。",
     "fetch_mod_info_error_mods_path_not_found": "Modのパス[dark_goldenrod]{mods_path}[/dark_goldenrod]が見つかりません。",
     "fetch_mod_info_scanning_mods": "Modをスキャン中...",
@@ -53,13 +57,13 @@
     "auto_downloading_mods": "Modをダウンロード中...",
     "auto_downloading_mod_name": "ダウンロード",
     "auto_mods_updated_resume": "以下のModがアップデートされました：",
-    
-    "manual_download_mod_prompt": "このModをダウンロードしますか？",
+
+    "manual_download_mod_prompt": "{0}をバージョン{1}にアップデートしますか？",
     "manual_skipping_download": "ダウンロードをスキップ：",
     "manual_downloading_mod": "ダウンロード",
     "manual_download_completed": "ダウンロード完了：",
     "manual_download_error": "ダウンロードエラー",
-    
+
     "utils_warning_mods_directory_empty": "[indian_red1]警告：Modディレクトリ[magenta]{mods_dir_path}[/magenta]は空です！[/indian_red1]\nModファイルを追加してください。",
     "utils_warning_directory_in_mods_folder": "[indian_red1]警告：Modフォルダにディレクトリが見つかりました：{item_name}。[/indian_red1]\nフォルダではなく、.zipファイルであることを確認してください。",
     "utils_no_valid_mod_files_found": "Modフォルダに有効なModファイルが見つかりませんでした。",
@@ -73,7 +77,7 @@
     "export_pdf_generating_file": "PDFを生成中...",
     "export_pdf_permission_error": "ファイル「{pdf_path}」にアクセスできません。ファイルが開いているか、別のプロセスで使用されている可能性があります。\nこのファイルを使用しているアプリケーションをすべて閉じてから、もう一度お試しください。",
     "export_pdf_installed_mods": "インストール済みMod",
-    
+
     "error": "エラー：",
     "yes": "はい",
     "no": "いいえ",
@@ -93,5 +97,9 @@
     "dry_run_report_installed": "インストール済み",
     "dry_run_report_available": "利用可能",
     "dry_run_report_changelog": "変更履歴",
-    "dry_run_report_changelog_unavailable": "変更履歴：利用不可。"
+    "dry_run_report_changelog_unavailable": "変更履歴：利用不可。",
+
+    "utils_clearing_cache": "Vintage Storyのキャッシュをクリア中...",
+    "utils_cache_cleared_success": "キャッシュディレクトリが正常にクリアされました。",
+    "utils_cache_cleared_with_errors": "キャッシュをクリアしましたが、一部のファイルを削除できませんでした。"
 }

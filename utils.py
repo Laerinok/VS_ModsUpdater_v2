@@ -17,7 +17,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 __author__ = "Laerinok"
-__date__ = "2025-12-29"  # Last update
+__date__ = "2026-06-17"  # Last update
 
 
 # utils.py
@@ -366,14 +366,57 @@ def complete_version(version_string):
 
 
 # Retrieve the last game version
-def get_latest_game_version(url_api='https://mods.vintagestory.at/api'):
+def get_latest_game_version(url_api='https://mods.vintagestory.at/api', stable_only=False):
+    """
+    Retrieves the latest game version from the API.
+    
+    Args:
+        url_api (str): The base URL for the API.
+        stable_only (bool): If True, returns the latest stable version (excludes pre-releases/rc).
+                            If False, returns the absolute latest version.
+    """
     gameversions_api_url = f'{url_api}/gameversions'
     response = client.get(gameversions_api_url)
     response.raise_for_status()  # Checks that the request was successful (status code 200)
     gameversion_data = response.json()  # Retrieves JSON content
     logging.info(f"Game version data retrieved.")
-    # Retrieve the latest version
-    return gameversion_data['gameversions'][-1]['name']
+    
+    versions_data = gameversion_data.get('gameversions', [])
+    if not versions_data:
+        return None
+
+    # Parse versions into (name, VersionObject) tuples
+    valid_versions = []
+    for v_data in versions_data:
+        name = v_data.get('name')
+        if not name:
+            continue
+        try:
+            # Clean up name if necessary (e.g. remove 'v' prefix if present, though Version handles it)
+            ver_obj = Version(name)
+            valid_versions.append((name, ver_obj))
+        except InvalidVersion:
+            logging.debug(f"Skipping invalid version string from API: {name}")
+            continue
+
+    if not valid_versions:
+        logging.warning("No valid version strings found in API response.")
+        return None
+
+    if stable_only:
+        # Filter out prereleases using the library's property
+        stable_versions = [v for v in valid_versions if not v[1].is_prerelease]
+        
+        if stable_versions:
+            # Return the name of the highest version
+            return max(stable_versions, key=lambda x: x[1])[0]
+        else:
+            logging.warning("No stable version found, falling back to latest available version.")
+            # Fallback to the absolute latest if no stable version exists
+            return max(valid_versions, key=lambda x: x[1])[0]
+    else:
+        # Return the absolute latest version
+        return max(valid_versions, key=lambda x: x[1])[0]
 
 
 def extract_filename_from_url(url):
@@ -466,7 +509,7 @@ def get_default_icon_binary():
     """
     Loads and returns the binary data of the default icon ('assets/no_icon.png').
     """
-    default_icon_path = Path(config.APPLICATION_PATH) / 'assets' / 'no_icon.png'
+    default_icon_path = config.ASSETS_PATH / "no_icon.png"
     if default_icon_path.exists():
         with open(default_icon_path, 'rb') as f:
             return f.read()
@@ -624,3 +667,64 @@ def update_mod_and_handle_files(mod, mods_path):
     finally:
         if temp_download_path.exists():
             os.remove(temp_download_path)
+
+
+def clear_vintagestory_cache():
+    """
+    Clears the Vintage Story cache directory if enabled in configuration.
+    """
+    options = global_cache.config_cache.get("Options", {})
+    clear_enabled = options.get("clear_cache_after_update", "true").lower() == "true"
+
+    if not clear_enabled:
+        logging.info("Cache clearing is disabled in configuration.")
+        return
+
+    cache_path_str = global_cache.config_cache.get("ModsPath", {}).get("cache_path")
+    if not cache_path_str:
+        logging.warning("Cache path not specified in configuration.")
+        return
+
+    cache_path = Path(cache_path_str).resolve()
+    if not cache_path.exists():
+        logging.info(f"Cache directory does not exist, no need to clear: {cache_path}")
+        return
+
+    if not cache_path.is_dir():
+        logging.warning(f"Specified cache path is not a directory: {cache_path}")
+        return
+
+    # Fallback values if localization keys are missing
+    msg_clearing = lang.get_translation("utils_clearing_cache") or "Clearing Vintage Story cache..."
+    msg_success = lang.get_translation("utils_cache_cleared_success") or "Cache cleared successfully."
+    msg_errors = lang.get_translation("utils_cache_cleared_with_errors") or "Cache cleared, but some files could not be removed."
+
+    print(f"\n[dodger_blue1]{msg_clearing}[/dodger_blue1]")
+    logging.info(f"Clearing Vintage Story cache directory: {cache_path}")
+
+    success = True
+    for item in cache_path.iterdir():
+        try:
+            if item.is_file() or item.is_symlink():
+                item.unlink()
+            elif item.is_dir():
+                shutil.rmtree(item)
+        except Exception as e:
+            logging.error(f"Failed to delete {item.name} from cache: {e}")
+            success = False
+
+    if success:
+        print(f"[green]{msg_success}[/green]")
+        logging.info("Cache directory cleared successfully.")
+    else:
+        print(f"[orange1]{msg_errors}[/orange1]")
+        logging.warning("Cache directory partially cleared.")
+
+
+def get_app_dir():
+    """Determine the base directory of the application."""
+    if getattr(sys, 'frozen', False):
+        # Path to the executable (Windows/Linux/macOS)
+        return Path(sys.executable).parent
+    # If running as a script, use the script's directory
+    return Path(__file__).resolve().parent

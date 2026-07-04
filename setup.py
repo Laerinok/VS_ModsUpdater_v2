@@ -29,6 +29,7 @@ include_files = [
 # Options for cx_Freeze
 build_exe_options = {
     "include_files": include_files,
+    "packages": ["rich"],
     "excludes": []
 }
 
@@ -42,7 +43,7 @@ exe = Executable(
 
 setup(
     name="VS_ModsUpdater",
-    version="2.5.0",
+    version="2.6.0",
     description="ModsUpdater for Vintage Story",
     author="Laerinok",
     license="GNU GPLv3",

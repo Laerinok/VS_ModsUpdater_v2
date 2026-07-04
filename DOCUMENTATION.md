@@ -1,6 +1,6 @@
 # Vintage Story Mods Updater Documentation
 
-This document provides a comprehensive guide to using and developing the Vintage Story Mods Updater application (v2.5.0+).
+This document provides a comprehensive guide to using and developing the Vintage Story Mods Updater application (v2.6.0+).
 
 ## Table of Contents
 
@@ -135,7 +135,8 @@ The `config.ini` file stores all settings.
 #### `[Game_Version]`
 -   `user_game_version`: The target game version (e.g., `1.20.4`).
     - If set, mods requiring a newer game version will be skipped or flagged.
-    - If empty or `latest_version`, the absolutely latest mod version is fetched, regardless of game compatibility.
+    - If set to `latest_stable_version` (the default), the application will automatically target the latest stable version of the game, ignoring unstable pre-releases and release candidates.
+    - If empty or `None` (which automatically migrate to `latest_stable_version`), or `latest_version`, the absolutely latest mod version is fetched (including for unstable game versions in the case of `latest_version`), regardless of stable game compatibility.
 
 #### `[Mod_Exclusion]`
 -   `mods`: A comma-separated list of filenames to ignore (e.g., `mod_a.zip, my_old_mod.cs`).

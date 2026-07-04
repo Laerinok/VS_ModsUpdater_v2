@@ -26,7 +26,7 @@ API calls, downloading files, and any HTTP requests requiring a persistent sessi
 
 
 __author__ = "Laerinok"
-__date__ = "2025-12-27"  # Last update
+__date__ = "2026-06-20"  # Last update
 
 
 # cli.py
@@ -53,6 +53,7 @@ def parse_args():
     parser.add_argument('--install-modlist', action='store_true', help='Download mods from modlist.json to the mods folder.')
     parser.add_argument('--force-update', action='store_true', help='Force a re-download and re-install of all mods, regardless of version.')
     parser.add_argument('--dry-run', action='store_true', help='List mods with updates without downloading them.')
+    parser.add_argument('--only-modlist', action='store_true', help='Generate modlists locally (JSON, HTML, PDF) ')
 
     args = parser.parse_args()
 
@@ -70,14 +71,9 @@ def parse_args():
 
         args.modspath = path_modspath
 
-    # Checking config-path existence (NOUVEAU BLOC)
+    # Check config-path existence
     if args.config_path:
-        path_config = Path(args.config_path).resolve()
-        # We check if the parent directory exists to allow creating a new config file
-        if not path_config.parent.exists():
-            print(
-                f"Error: The directory for the configuration file '{path_config.parent}' does not exist.")
-            sys.exit(1)
+        path_config = Path(args.config_path)
 
         if path_config.exists() and not path_config.is_file():
             print(f"Error: '{args.config_path}' is a directory, not a file.")

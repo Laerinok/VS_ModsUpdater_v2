@@ -35,7 +35,7 @@ Key functionalities include:
 __author__ = "Laerinok"
 __license__ = "GNU GPL v3"
 __description__ = "Mods Updater for Vintage Story"
-__date__ = "2025-12-27"  # Last update
+__date__ = "2026-06-19"  # Last update
 
 # main.py
 
@@ -87,10 +87,11 @@ def initialize_config():
         config.configure_logging('DEBUG')
         language = config.ask_language_choice()
         # Load translations for the chosen language
-        lang_path = Path(f"{config.LANG_PATH}/{language[0]}.json").resolve()
+        lang_path = config.LANG_PATH / f"{language[0]}.json"
         language_cache = lang.load_translations(lang_path)
 
         mods_dir = config.ask_mods_directory()
+        cache_dir = config.ask_cache_directory(mods_dir)  # <-- AJOUT
         user_game_version = config.ask_game_version()
         auto_update = config.ask_auto_update()
         behavior_choice = config.ask_incompatibility_behavior()
@@ -99,6 +100,8 @@ def initialize_config():
             f"\n- {language_cache['main_language_set_to']}[dodger_blue1]{language[1]}[/dodger_blue1]")
         print(
             f"- {language_cache['main_mods_folder_path']}[dodger_blue1]{mods_dir}[/dodger_blue1]")
+        print(
+            f"- {language_cache['main_cache_folder_path']}[dodger_blue1]{cache_dir}[/dodger_blue1]")  # <-- AJOUT
         print(
             f"- {language_cache['main_game_version']}[dodger_blue1]{user_game_version}[/dodger_blue1]")
         auto_update_choice = lang.get_translation(
@@ -117,8 +120,8 @@ def initialize_config():
         print(
             f"- {language_cache['config_incompatibility_prompt']}: [dodger_blue1]{behavior_summary}[/dodger_blue1]")
 
-        # Create config.ini file
-        config.create_config(language, mods_dir, user_game_version, auto_update, behavior_choice)
+        # Create config.ini file (Ajout de cache_dir en 3e paramètre)
+        config.create_config(language, mods_dir, cache_dir, user_game_version, auto_update, behavior_choice)
         print(f"\n{language_cache['main_config_file_created']}")
 
         # Ask if we continue or quit to modify config.ini (e.g., to add mods to the exception list.)
@@ -141,8 +144,7 @@ def initialize_config():
     config.configure_logging(log_level.upper())
 
     # Load the language translations from the config file into the global cache
-    lang_path = Path(
-        f"{config.LANG_PATH}/{global_cache.config_cache['Language']['language']}.json").resolve()
+    lang_path = config.LANG_PATH / f"{global_cache.config_cache['Language']['language']}.json"
     global_cache.language_cache.update(lang.load_translations(lang_path))
 
     if migration_performed:
@@ -259,8 +261,27 @@ def handle_dry_run():
 if __name__ == "__main__":
     args = cli.parse_args()
 
-    # This must be done before initialize_config() is called
+    # Resolve config_path and profile directory structure
     if args.config_path:
+        path_config = Path(args.config_path)
+
+        # If only a profile name is provided, locate it in the standard profiles directory
+        if len(path_config.parts) == 1:
+            if not path_config.suffix:
+                path_config = config.PROFILES_ROOT / path_config / 'config.ini'
+            else:
+                path_config = config.PROFILES_ROOT / path_config
+        else:
+            path_config = path_config.resolve()
+
+        # Ensure the parent directory exists
+        try:
+            path_config.parent.mkdir(parents=True, exist_ok=True)
+        except Exception as e:
+            print(f"Error: Could not create directory '{path_config.parent}': {e}")
+            sys.exit(1)
+
+        args.config_path = path_config
         config.set_config_file(args.config_path)
 
     # Initialize config
@@ -286,6 +307,46 @@ if __name__ == "__main__":
     # Fetch mods info
     mod_data = fetch_mod_info.scan_and_fetch_mod_info(mods_path)
     excluded_mods = mod_data['excluded_mods']
+
+    # Handle --only-modlist (generate modlists locally and exit immediately)
+    if args.only_modlist:
+        # Generate JSON output of the installed mods data
+        export_json.format_mods_data(global_cache.mods_data['installed_mods'], args)
+
+        # Generate a PDF report of the installed mods
+        export_pdf.generate_pdf(global_cache.mods_data['installed_mods'], args)
+
+        # Generate an HTML report of the installed mods
+        if not args.no_html:
+            export_html.export_mods_to_html()
+
+        # Display excluded mods if any exist
+        if excluded_mods:
+            excluded_title_style = Style(color="dark_goldenrod", bold=True)
+            excluded_mod_style = Style(color="indian_red1")
+            reason_style = Style(color="grey50", italic=True)
+
+            print(Text(f"\n{lang.get_translation('main_excluded_mods_title')}", style=excluded_title_style))
+            for excluded_mod in excluded_mods:
+                mod_name = excluded_mod.get('Name', excluded_mod.get('Filename', 'Unknown name'))
+                reason = excluded_mod.get('Reason')
+                text_to_print = Text()
+                text_to_print.append(f"- {mod_name}", style=excluded_mod_style)
+                if reason:
+                    text_to_print.append(f" ({reason})", style=reason_style)
+                console.print(text_to_print)
+            print()
+
+        # Display logs path
+        log_file_path = global_cache.config_cache.get('LOGS_PATH')
+        if log_file_path:
+            print(f"[dodger_blue1]{lang.get_translation('main_logs_location')}[/dodger_blue1]\n[green]{log_file_path}[/green]\n")
+
+        # Exit program cleanly
+        utils.exit_program(extra_msg="", do_exit=False)
+        if not args.no_pause:
+            input(f"\n{lang.get_translation('main_press_enter_to_exit')}")
+        sys.exit()
 
     # Check for updates and pass the --force-update flag
     mods_update_checker.check_for_mod_updates(args.force_update)
@@ -335,6 +396,9 @@ if __name__ == "__main__":
         else:
             # Manual update mods
             mods_manual_update.perform_manual_updates(mods_to_update_list)
+        # Clear Vintage Story cache
+        utils.clear_vintagestory_cache()
+
     else:
         print(lang.get_translation("main_mods_no_update"))
         logging.info("No updates needed for mods.")
