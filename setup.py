@@ -29,6 +29,7 @@ include_files = [
 # Options for cx_Freeze
 build_exe_options = {
     "include_files": include_files,
+    "packages": ["rich"],
     "excludes": []
 }
 
