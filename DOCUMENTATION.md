@@ -178,21 +178,23 @@ Each profile folder contains its own `config.ini` file.
 
 ### Command-Line Arguments
 
-Execute the updater from the command line with the following options:
+Execute the updater from the command line with the following options to customize or override settings for a single execution:
 
-| Argument               | Description |
-|:-----------------------| :--- |
-| `--config-path <path>` | Specify a full path to a `.ini` file or a simple profile name (e.g., `--config-path server1` which maps to `profiles/server1/config.ini`). |
-| `--modspath "<path>"`  | Override the configured Vintage Story mods directory. |
-| `--no-pause`           | Disable the "Press any key to exit..." console pause at the end of the script. |
-| `--log-level <level>`  | Override the logging level for this run (`DEBUG`, `INFO`, etc.). |
-| `--max-workers <num>`  | Override the maximum concurrent download worker threads. |
-| `--timeout <secs>`     | Override the HTTP request timeout threshold in seconds. |
-| `--dry-run`            | Run a simulated update check. No local files are modified, deleted, or downloaded. |
-| `--only-modlist`       | Skip checking or downloading updates entirely and immediately generate/export the mod lists. |
-| `--force-update`       | Force a download of all local mods matching the selected game version, regardless of current status. |
-| `--install-modlist`       | Reads an existing `modlist.json` and downloads clean versions of all listed mods to the targeted directory. |
-
+| Argument | Description |
+| :--- | :--- |
+| `--config-path <path_or_profile>` | Specify a custom path to a configuration file or a simple profile name (e.g., `--config-path server1` automatically resolves to `profiles/server1/config.ini`). |
+| `--modspath "<path>"` | Temporarily override the configured Vintage Story mods directory. Must be enclosed in quotation marks if the path contains spaces. |
+| `--no-pause` | Disable the "Press any key to exit..." console pause at the end of the script execution (useful for automated scripts). |
+| `--no-json` | Disable the automatic generation of the mod list in JSON format at the end of execution. |
+| `--no-pdf` | Disable the automatic generation of the mod list in PDF format at the end of execution. |
+| `--no-html` | Disable the automatic generation of the mod list in HTML format at the end of execution. |
+| `--log-level <level>` | Override the logging level for this run. Options: `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL` (must be uppercase). |
+| `--max-workers <num>` | Override the maximum concurrent thread count used for mod downloads (min `1`, max `10`). |
+| `--timeout <secs>` | Override the HTTP request timeout threshold in seconds during update checks and downloads. |
+| `--dry-run` | Run a simulated trial. Checks for updates and potential incompatibilities without downloading or modifying any files. |
+| `--only-modlist` | Skip checking or downloading updates entirely; immediately generate and export the mod lists (JSON, PDF, HTML) based on currently installed mods, then exit. |
+| `--force-update` | Force a complete re-download and re-installation of all mods matching the target game version, regardless of their current status. |
+| `--install-modlist` | Read your local `modlist.json` file and download clean versions of all listed mods directly into your target mods folder. |
 ---
 
 ### Output Files
