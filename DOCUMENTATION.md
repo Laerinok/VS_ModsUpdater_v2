@@ -7,20 +7,33 @@ This document provides a comprehensive guide to using and developing the Vintage
 - [User Guide](#user-guide)
   - [Introduction](#introduction)
   - [Key Features](#key-features)
-  - [File Locations](#file-locations)
+  - [File Locations & Profiles](#file-locations--profiles)
   - [Installation & Setup](#installation--setup)
     - [Windows](#windows)
     - [Linux (AppImage & Desktop Integration)](#linux-appimage--desktop-integration)
     - [macOS](#macos)
   - [First-Time Setup](#first-time-setup)
   - [How Mods Are Handled (Zip vs. Directory)](#how-mods-are-handled-zip-vs-directory)
-  - [Configuration (`config.ini`)](#configuration-configini)
+  - [Configuration (config.ini)](#configuration-configini)
+    - [[ModsUpdater]](#modsupdater)
+    - [[Logging]](#logging)
+    - [[Options]](#options)
+    - [[Backup_Mods]](#backup_mods)
+    - [[ModsPath]](#modspath)
+    - [[Language]](#language)
+    - [[Game_Version]](#game_version)
+    - [[Mod_Exclusion]](#mod_exclusion)
   - [Command-Line Arguments](#command-line-arguments)
   - [Output Files](#output-files)
   - [Troubleshooting](#troubleshooting)
 - [Developer Guide](#developer-guide)
   - [Project Architecture](#project-architecture)
   - [Module Overview](#module-overview)
+    - [main.py](#mainpy)
+    - [cli.py](#clipy)
+    - [fetch_mod_info.py](#fetch_mod_infopy)
+    - [utils.py](#utilspy)
+    - [mods_update_checker.py](#mods_update_checkerpy)
   - [Development Setup](#development-setup)
   - [Contributing](#contributing)
 
@@ -30,149 +43,176 @@ This document provides a comprehensive guide to using and developing the Vintage
 
 ### Introduction
 
-The Vintage Story Mods Updater is a powerful command-line tool designed to simplify the management of your mods for the game Vintage Story. It automates checking for updates, downloading new versions, maintaining a clean mods folder, and managing compatibility with specific game versions.
+The Vintage Story Mods Updater is a standalone command-line utility designed to automate the management of your Vintage Story game mods. It interfaces directly with the Vintage Story ModDB API to check for updates, verify compatibility with your targeted game version, safely backup old mod versions, and clean up any residue to prevent conflicts.
 
 ### Key Features
 
-- **Script Update Check:** Checks if a new version of the ModsUpdater tool is available.
-- **Configuration Migration:** Automatically manages the migration of old configuration files to the new format.
-- **Update Check:** Compares local mod versions with the latest versions on ModDB.
-- **Smart Incompatibility Handling:**
-  - **Downgrade Support:** Offers to downgrade a mod if the installed version is too new for your game version.
-  - **Incompatibility Warning:** Alerts you if a mod is incompatible with your defined game version.
-- **Automatic Download:** Automatically downloads available updates (configurable).
-- **Manual Download:** Displays changelogs and allows you to choose which updates to download.
-- **Backup Management:** Creates backups of your mods before updating them, with a configurable retention policy.
-- **Detailed Exclusion Management:** Allows you to ignore certain mods. The summary explains *why* a mod was excluded (User config, API missing, etc.).
-- **Mod List Generation:** Creates PDF, JSON, and HTML documents listing your installed mods.
-- **Command Line Interface (CLI):** robust arguments to customize execution, including "Dry Run" and "Force Update" modes.
-- **Multilingual Support:** The interface is available in over 10 languages.
+* **Multi-Profile Support:** Isolate different configurations, modlists, backups, and logs for multiple server or client instances using separate profiles.
+* **Auto-Migration:** Automatically migrates legacy config files and asset folders into the new structured profile-based directories.
+* **Compatibility & Downgrading:** Safely alerts you to incompatible mods and can automatically offer to downgrade a mod if your installed version is too new for the selected game version.
+* **Auto-Clearing Cache:** Automatically deletes the local Vintage Story game cache after updating mods to prevent texture errors or startup crashes.
+* **Detailed Logs & Summaries:** Generates clean command-line outputs, session log files, and rich mod summaries including reasons for exclusion.
+* **Mod List Generation:** Exports details of your installed mods into PDF, HTML, and JSON formats.
 
-### File Locations
+### File Locations & Profiles
 
-The location of configuration and data files differs between operating systems to follow platform standards.
+To support multiple game/server instances, all settings and files are organized into **profiles**. By default, the application loads the `default` profile. 
 
-| File / Directory | Windows Location | Linux & macOS Location |
+All files associated with a profile (configuration, logs, backups, reports) are stored inside its respective profile directory.
+
+#### Profile Folder Locations
+
+| Platform | Profile Root Directory | Active Default Profile Directory |
 | :--- | :--- | :--- |
-| **`config.ini`** | Same directory as `.exe` | `~/.config/VS_ModsUpdater/config.ini` |
-| **`logs/`** | Same directory as `.exe` | `~/.local/share/VS_ModsUpdater/logs/` |
-| **`backup_mods/`** | Same directory as `.exe` | `~/.local/share/VS_ModsUpdater/backup_mods/` |
-| **`modlist/`** | Same directory as `.exe` | `~/.local/share/VS_ModsUpdater/modlist/` |
+| **Windows** | `profiles/` (relative to the executable) | `profiles/default/` |
+| **Linux & macOS** | `~/.config/VS_ModsUpdater/profiles/` | `~/.config/VS_ModsUpdater/profiles/default/` |
 
-> **Note:**
-> - On Linux/macOS, these paths respect `XDG_CONFIG_HOME` and `XDG_DATA_HOME` environment variables if set.
-> - **You can override the default location of `config.ini` by using the `--config-path` command-line argument.**
+#### Files within a Profile Directory
+
+Unless an absolute path is explicitly defined in `config.ini`, the following files reside inside the active profile directory (e.g., `profiles/{profile_name}/`):
+
+* **`config.ini`:** The localized configuration file for the profile.
+* **`logs/`:** Folder containing execution log files (e.g., `updater.log`).
+* **`backup_mods/`:** Directory holding zip archives of mods backed up prior to an update.
+* **`modlist/`:** Directory holding exported mod list files (JSON, PDF, HTML).
+
+> **Note:** On Linux and macOS, these paths respect the `XDG_CONFIG_HOME` and `XDG_DATA_HOME` environment variables if set.
+
+---
 
 ### Installation & Setup
 
 #### Windows
-1.  Download the latest `.zip` from the [ModDB page](https://mods.vintagestory.at/modsupdater).
-2.  Extract the archive to a folder of your choice.
-3.  Run `VS_ModsUpdater.exe`.
+
+1. Download the latest release `.zip` from the [ModDB project page](https://mods.vintagestory.at/modsupdater).
+2. Extract the archive to a folder of your choice (do not place the application inside the Vintage Story mods directory itself).
+3. Run `VS_ModsUpdater.exe`.
 
 #### Linux (AppImage & Desktop Integration)
-1.  Download the `VS_ModsUpdater.AppImage` from ModDB or GitHub.
-2.  Make the file executable: `chmod +x VS_ModsUpdater.AppImage`.
-3.  **Desktop Integration:** To verify or add the application to your system menu:
-    - Place the AppImage and the `vs-mods-updater.desktop` file (provided in the release) in the same directory.
-    - (Optional) Move the `.desktop` file to `~/.local/share/applications/` to make it appear in your launcher.
+
+1. Download the `VS_ModsUpdater.AppImage` and `vs-mods-updater.desktop` files.
+2. Make the AppImage executable:
+   ```bash
+   chmod +x VS_ModsUpdater.AppImage
+3. To integrate the updater into your desktop application menu, place the `vs-mods-updater.desktop` file into `~/.local/share/applications/` and verify the icon and executable paths inside the file align with your AppImage location.
 
 #### macOS
-**Note:** The macOS version is built automatically via GitHub Actions and is provided "as is" without direct testing by the author (due to lack of hardware).
-1.  Download the binary from the **GitHub Releases** page (due to file size limits on ModDB).
-2.  Extract and run via terminal.
+
+The macOS release is built automatically via GitHub Actions and is provided "as is" on the GitHub Releases page (due to upload limits on ModDB). Extract the archive and launch the binary via your terminal.
+
+---
 
 ### First-Time Setup
 
-When you run the application for the first time, it will guide you through a setup process:
+On its initial run, the updater initiates an interactive setup process in the console:
 
-1.  **Language Selection:** Select your preferred interface language.
-2.  **Mods Directory:** Provide the path to your Vintage Story `Mods` directory.
-3.  **Game Version:** Specify your target game version (e.g., `1.20.1`). The updater will use this to determine mod compatibility.
-4.  **Update Mode:** Choose between automatic or manual updates.
+1. **Language Selection:** Choose your interface language from over 10 supported options.
+2. **Mods Directory Location:** Specify the absolute path to your Vintage Story `Mods` directory.
+3. **Cache Directory Location:** The application automatically attempts to detect your local game cache path. You will be prompted to confirm or specify it.
+4. **Target Game Version:** Choose your target game version (or select the default `latest_stable_version`).
+5. **Update Mode:** Decide between automatic downloads or a manual prompt system.
+
+---
 
 ### How Mods Are Handled (Zip vs. Directory)
 
-The updater is flexible and supports mods in different formats:
+The updater handles mods in various formats:
 
--   **.zip Files**: Standard format. The updater replaces the old `.zip` with the new one.
--   **.cs Files**: Simple code mods. Replaced directly.
--   **Directories**: Supported primarily for **Mod Organizer 2** users.
-    - The updater identifies a folder as a mod if it contains a `modinfo.json`.
-    - **Important:** When updating a directory mod, the **contents** are replaced, but the **folder name remains unchanged**. This ensures compatibility with mod managers that rely on specific folder naming (e.g., preserving the `modid`).
+* **`.zip` files:** The standard format. The updater compares metadata, downloads the new file, and deletes the older `.zip` file from your mods folder.
+* **`.cs` files:** Plain C# script mods are verified and updated directly.
+* **Directories (Folders):** Intended primarily for Mod Organizer 2 users. A folder is recognized as a mod if it contains a valid `modinfo.json`. When updated, the contents of the directory are overwritten, but the folder name remains unchanged to preserve stability for external managers.
 
-### Configuration (`config.ini`)
+---
 
-The `config.ini` file stores all settings.
+### Configuration (config.ini)
 
-#### `[ModsUpdater]`
--   `version`: The current version of the application. (Informational)
+Each profile folder contains its own `config.ini` file.
 
-#### `[Logging]`
--   `log_level`: Detail level for logs. Options: `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`.
+#### [ModsUpdater]
 
-#### `[Options]`
--   `exclude_prerelease_mods`: `true` to ignore beta/rc versions.
--   `auto_update`: `true` for automatic downloads, `false` for manual selection.
--   `max_workers`: Max parallel threads for downloading. (Limit: 10).
--   `timeout`: Timeout in seconds for network requests. (Recommended: 5-30).
--   `incompatibility_behavior`: Defines how to handle mods incompatible with `user_game_version`.
-    - `0` (Ask): Prompts the user for action. (Default)
-    - `1` (Abort): Stops the process if incompatibility is found.
-    - `2` (Ignore): Continues processing, ignoring the warning.
+* **`version`**: Current version of the application (e.g., `2.6.0`).
 
-#### `[Backup_Mods]`
--   `backup_folder`: Directory for backups. Can be a name (relative) or full path.
--   `max_backups`: Number of backups to keep before deleting old ones.
--   `modlist_folder`: Directory for generated mod lists.
+#### [Logging]
 
-#### `[ModsPath]`
--   `path`: The full path to your Vintage Story `Mods` directory.
+* **`log_level`**: Sets the level of logging detail recorded in `logs/updater.log`. Options: `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`.
 
-#### `[Language]`
--   `language`: The language code (e.g., `en_US`, `fr_FR`).
+#### [Options]
 
-#### `[Game_Version]`
--   `user_game_version`: The target game version (e.g., `1.20.4`).
-    - If set, mods requiring a newer game version will be skipped or flagged.
-    - If set to `latest_stable_version` (the default), the application will automatically target the latest stable version of the game, ignoring unstable pre-releases and release candidates.
-    - If empty or `None` (which automatically migrate to `latest_stable_version`), or `latest_version`, the absolutely latest mod version is fetched (including for unstable game versions in the case of `latest_version`), regardless of stable game compatibility.
+* **`exclude_prerelease_mods`**: `true` to exclude pre-release mod versions, `false` to include them.
+* **`auto_update`**: `true` to download updates automatically; `false` to prompt the user before each download.
+* **`max_workers`**: Maximum number of parallel threads used for downloading mods (min `1`, max `10`).
+* **`timeout`**: Timeout limit in seconds for network API requests.
+* **`incompatibility_behavior`**: Actions to take when a mod is incompatible with the target game version:
+  * `0` (Ask): Prompt the user on how to proceed.
+  * `1` (Abort): Terminate the updater execution safely.
+  * `2` (Ignore): Proceed with the update loop despite the mismatch warning.
+* **`clear_cache_after_update`**: `true` to automatically purge the Vintage Story cache folder upon successful updates, reducing UI or texture glitch risks.
 
-#### `[Mod_Exclusion]`
--   `mods`: A comma-separated list of filenames to ignore (e.g., `mod_a.zip, my_old_mod.cs`).
+#### [Backup_Mods]
+
+* **`backup_folder`**: Relative path (inside the profile folder) or absolute path where old mods are zipped up before being updated.
+* **`max_backups`**: Maximum number of mod backup archives to retain. Set to `0` to disable automatic cleanup.
+* **`modlist_folder`**: Directory where generated mod lists are exported.
+
+#### [ModsPath]
+
+* **`path`**: Absolute path to your Vintage Story `Mods` folder.
+* **`cache_path`**: Absolute path to your Vintage Story `Cache` directory (crucial if `clear_cache_after_update` is enabled).
+
+#### [Language]
+
+* **`language`**: The active language locale code (e.g., `en_US`, `fr_FR`, `de_DE`).
+
+#### [Game_Version]
+
+* **`user_game_version`**: The game version target for mod updates:
+  * Set to `latest_stable_version` (Default) to update only to mods compatible with the newest stable release.
+  * Set a specific version (e.g., `1.20.1`) to pin updates to that version.
+  * Set to `latest_version` to target absolute newest releases, including experimental pre-releases or release candidates.
+
+#### [Mod_Exclusion]
+
+* **`mods`**: Comma-separated list of mod filenames (e.g., `mod_a.zip, old_mod.cs`) to completely ignore during checks and updates.
+
+---
 
 ### Command-Line Arguments
 
-Override `config.ini` settings or trigger specific modes for a single run:
+Execute the updater from the command line with the following options:
 
--   `--modspath "<path>"`: Specifies a different `Mods` directory.
--   `--config-path "<path>"`: Specifies a custom configuration file location (useful for multi-instance servers).
--   `--install-modlist`: Downloads and installs mods listed in `modlist.json` to the mods folder.
--   `--force-update`: Forces a re-download/re-install of all mods, regardless of version comparison.
--   `--dry-run`: Simulates the update process (checks versions and incompatibilities) without downloading or deleting files.
--   `--no-pause`: Disables the "Press Enter to exit" message.
--   `--no-json` / `--no-pdf` / `--no-html`: Disables generation of specific mod list formats.
--   `--log-level <level>`: Overrides logging level.
--   `--max-workers <number>`: Overrides thread count.
--   `--timeout <seconds>`: Overrides network timeout.
+| Argument | Description |
+| :--- | :--- |
+| `--config-path <path>` | Specify a full path to a `.ini` file or a simple profile name (e.g., `--config-path server1` which maps to `profiles/server1/config.ini`). |
+| `--modspath "<path>"` | Override the configured Vintage Story mods directory. |
+| `--no-pause` | Disable the "Press any key to exit..." console pause at the end of the script. |
+| `--log-level <level>` | Override the logging level for this run (`DEBUG`, `INFO`, etc.). |
+| `--max-workers <num>` | Override the maximum concurrent download worker threads. |
+| `--timeout <secs>` | Override the HTTP request timeout threshold in seconds. |
+| `--dry-run` | Run a simulated update check. No local files are modified, deleted, or downloaded. |
+| `--only-modlist` | Skip checking or downloading updates entirely and immediately generate/export the mod lists. |
+| `--forceupdate` | Force a download of all local mods matching the selected game version, regardless of current status. |
+| `--makepdf` | Enforce generation of the PDF report (overriding configuration restrictions). |
+| `--install-mods` | Reads an existing `modlist.json` and downloads clean versions of all listed mods to the targeted directory. |
 
-**Example:**
-```bash
-# Run a simulation using a specific config file
-VS_ModsUpdater.exe --config-path "C:\Server1\config.ini" --dry-run
-```
+---
 
 ### Output Files
 
-Files generated in the `modlist_folder`:
--   **`modlist.json`**: Machine-readable mod data.
--   **`modlist.pdf`**: Visual document with icons and descriptions.
--   **`modlist.html`**: Web-viewable list with direct links.
+Upon execution, the updater can write several files to your profile folder:
+
+* **`logs/updater.log`**: Detailed traceback, debug, and network events.
+* **`updated_mods_changelog.txt`**: Saved in your active profile directory, this document aggregates the release notes/changelogs of all mods updated during the execution.
+* **`modlist/modlist.json`**: Structural JSON document representing all currently active local mods and versions.
+* **`modlist/modlist.html`**: Interactive web page listing active mods.
+* **`modlist/modlist.pdf`**: Styled document list summarizing your active mods.
+
+---
 
 ### Troubleshooting
 
--   **"Mods directory not found"**: Check the `path` in `config.ini` or your `--modspath` argument.
--   **Network errors**: Increase the `timeout` value in `config.ini` if your connection is slow.
+* **Crash due to timestamp errors (Linux/macOS):** Ensure you are using v2.5.0+. Older versions crashed during backup creation on Linux because zip files did not support file modification timestamps prior to 1980.
+* **Application closes instantly on Linux:** This occurs when executed directly via double-click and the script has no active updates to perform. Run the AppImage from an active terminal context (`./VS_ModsUpdater.AppImage`) to inspect the final summary output.
+* **Mod conflicts or visual issues after updating:** Ensure `clear_cache_after_update` is set to `true` inside your configuration file, or delete your Vintage Story game cache manually.
 
 ---
 
@@ -180,47 +220,71 @@ Files generated in the `modlist_folder`:
 
 ### Project Architecture
 
-The application uses a modular architecture:
+The application is built in Python. When packaged for distribution, PyInstaller bundle scripts package the runtime dependencies, platform-specific icons, and translation files (`lang/*.json`) into standalone executables.
 
-- **Entry & Config:** `main.py` (entry point), `config.py` (settings management), `cli.py` (argument parsing).
-- **Core Logic:**
-  - `fetch_mod_info.py`: Scans directories and queries the ModDB API.
-  - `mods_update_checker.py`: Logic for version comparison and compatibility checks.
-  - `mods_auto_update.py` / `mods_manual_update.py`: Execution of download and installation.
-- **Data & Utils:**
-  - `global_cache.py`: Shared memory state (config, mod data).
-  - `utils.py`: Helper functions (File I/O, Zip handling, Version parsing).
-  - `lang.py`: Internationalization system.
-- **Exporters:** `export_json.py`, `export_pdf.py`, `export_html.py`.
+The update pipeline flow:
+
+1. **CLI Parsing:** `cli.py` handles input arguments.
+2. **Config Initialization:** `config.py` runs, verifying profile folders. It handles automatic migrations from legacy configurations.
+3. **Scanning & Local Check:** The mods directory is scanned. Mod files are parsed to extract metadata.
+4. **API Sync:** `fetch_mod_info.py` makes parallel requests to ModDB, fetching mod profiles and sorting eligible version tables.
+5. **Logic Resolution:** `mods_update_checker.py` evaluates versions (updating, downgrading, or marking exclusions), filtering out user-specified ignore lists.
+6. **Execution:** Backups are written, files are replaced, cache is cleaned, and reports are compiled.
 
 ### Module Overview
 
-#### `main.py`
-Orchestrates the lifecycle. Initializes config, checks for self-updates, and calls the update pipeline.
+#### main.py
 
-#### `cli.py`
-Defines `argparse` logic. now handles complex flags like `--force-update` and `--dry-run` to modify global state before execution.
+The orchestrator. Initializes profiling, config migration, updates checks, self-update validations, file actions, and report triggers.
 
-#### `fetch_mod_info.py`
-Enhanced in v2.x to handle `InvalidVersion` exceptions and perform robust API lookups. It populates `global_cache.mods_data`.
+#### cli.py
 
-#### `utils.py`
-Contains critical file handling.
-- **Key Update:** `backup_mods` now uses `strict_timestamps=False` to prevent crashes on Linux systems with zero-epoch file dates.
-- **Key Update:** `get_latest_game_version` iterates backwards to find the latest *valid* semantic version from the API.
+Defines options, overrides defaults, validates inputs, and maps CLI-defined profile names to the active directories.
 
-#### `mods_update_checker.py`
-Implements the logic for `VersionCompareState`. It determines if a mod is `LOCAL_VERSION_BEHIND`, `AHEAD`, or `IDENTICAL`, and checks against `user_game_version`.
+#### fetch_mod_info.py
+
+Provides thread-safe utilities to query ModDB JSON API, formats version records, validates semantic version strings, and catches network failures.
+
+#### utils.py
+
+A comprehensive utility library that handles semantic version comparisons, operating system specific directory defaults, localized console messages, file structure validation, and directory manipulation.
+
+#### mods_update_checker.py
+
+Centralizes update logic comparisons, handles complex version pinning requirements, assesses compatibility parameters, and constructs lists of files designated for upgrade/downgrade.
+
+---
 
 ### Development Setup
 
-1.  Clone the repository.
-2.  Install dependencies: `pip install -r requirements.txt`.
-3.  Run: `python main.py`.
+1. **Clone the repository:**
+   ```bash
+   git clone -b dev https://github.com/Laerinok/VS_ModsUpdater_v2.git
+   cd VS_ModsUpdater_v2
+   ```
+2. **Create and activate a virtual environment:**
+   ```bash
+   python -m venv venv
+   ```
+   * **On Windows:**
+     ```cmd
+     venv\Scripts\activate
+     ```
+   * **On Linux/macOS:**
+     ```bash
+     source venv/bin/activate
+     ```
+3. **Install package dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. **Run the program locally:**
+   ```bash
+   python main.py
+   ```
+
+---
 
 ### Contributing
 
-1.  Fork the repository.
-2.  Create a feature branch.
-3.  Submit a Pull Request.
-4.  **Translations:** Add new JSON files to the `/lang/` directory to support new languages.
+Pull Requests must be targeted against the `dev` branch. Please ensure all modifications conform to clean code standards and preserve compatibility with Windows, Linux (AppImage), and macOS compilation patterns.
