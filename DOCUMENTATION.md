@@ -180,19 +180,18 @@ Each profile folder contains its own `config.ini` file.
 
 Execute the updater from the command line with the following options:
 
-| Argument | Description |
-| :--- | :--- |
+| Argument               | Description |
+|:-----------------------| :--- |
 | `--config-path <path>` | Specify a full path to a `.ini` file or a simple profile name (e.g., `--config-path server1` which maps to `profiles/server1/config.ini`). |
-| `--modspath "<path>"` | Override the configured Vintage Story mods directory. |
-| `--no-pause` | Disable the "Press any key to exit..." console pause at the end of the script. |
-| `--log-level <level>` | Override the logging level for this run (`DEBUG`, `INFO`, etc.). |
-| `--max-workers <num>` | Override the maximum concurrent download worker threads. |
-| `--timeout <secs>` | Override the HTTP request timeout threshold in seconds. |
-| `--dry-run` | Run a simulated update check. No local files are modified, deleted, or downloaded. |
-| `--only-modlist` | Skip checking or downloading updates entirely and immediately generate/export the mod lists. |
-| `--forceupdate` | Force a download of all local mods matching the selected game version, regardless of current status. |
-| `--makepdf` | Enforce generation of the PDF report (overriding configuration restrictions). |
-| `--install-mods` | Reads an existing `modlist.json` and downloads clean versions of all listed mods to the targeted directory. |
+| `--modspath "<path>"`  | Override the configured Vintage Story mods directory. |
+| `--no-pause`           | Disable the "Press any key to exit..." console pause at the end of the script. |
+| `--log-level <level>`  | Override the logging level for this run (`DEBUG`, `INFO`, etc.). |
+| `--max-workers <num>`  | Override the maximum concurrent download worker threads. |
+| `--timeout <secs>`     | Override the HTTP request timeout threshold in seconds. |
+| `--dry-run`            | Run a simulated update check. No local files are modified, deleted, or downloaded. |
+| `--only-modlist`       | Skip checking or downloading updates entirely and immediately generate/export the mod lists. |
+| `--force-update`       | Force a download of all local mods matching the selected game version, regardless of current status. |
+| `--install-modlist`       | Reads an existing `modlist.json` and downloads clean versions of all listed mods to the targeted directory. |
 
 ---
 
